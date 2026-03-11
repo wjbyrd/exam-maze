@@ -202,6 +202,35 @@ mediumBoss: [],
 finalBoss: []
 }
 
+// MATH GENERATORS
+function rand(min, max) { 
+    return Math.floor(Math.random() * (max - min + 1)) + min; 
+}
+
+function generateMUDollarQuestion() {
+    let MU = rand(20, 80);
+    let P = rand(2, 10);
+    let correct = Math.round((MU / P) * 10) / 10;
+
+    let options = [
+        correct,
+        Math.round((correct + 1.2) * 10) / 10,
+        Math.round(Math.abs(correct - 0.8) * 10) / 10,
+        Math.round((MU / (P + 1)) * 10) / 10
+    ];
+
+    options = shuffleArray([...new Set(options)]); 
+    while(options.length < 4) { options.push(Math.round(rand(1, 10) * 10) / 10); }
+
+    let answerIndex = options.indexOf(correct);
+
+    return {
+        q: `A consumer receives Marginal Utility (MU) of ${MU} from a good. The price is $${P}. What is the marginal utility per dollar?`,
+        options: options.map(o => o.toString()),
+        a: answerIndex
+    };
+}
+
 const questionBanks = {
 
 easy:[
@@ -224,6 +253,11 @@ easy:[
 {q:"Bundles inside the budget constraint are...",options:["Affordable but not utility maximizing","Impossible","Always optimal","Always inefficient"],a:0},
 {q:"Utility maximization occurs where...",options:["MRS equals the price ratio","Demand equals supply","Income equals spending","Marginal utility is zero"],a:0},
 {q:"If the marginal rate of substitution exceeds the price ratio...",options:["The consumer should consume more of good X","The consumer should consume less of good X","Utility falls","Income changes"],a:0},
+{q:"A bundle of goods refers to...",options:["A set of goods a consumer may consume","A firm's production level","Total market demand","A supply schedule"],a:0},
+{q:"Utility refers to...",options:["Satisfaction a consumer receives","Total income","Market demand","Firm profit"],a:0},
+{q:"The budget constraint shows...",options:["All affordable combinations of goods","Only preferred bundles","Production possibilities","Market equilibrium"],a:0},
+{q:"If both goods become cheaper, the budget line...",options:["Shifts outward","Rotates inward","Becomes vertical","Does not change"],a:0},
+{q:"A steeper budget line means...",options:["One good has become relatively more expensive","Income increased","Utility increased","Demand increased"],a:0},
 {q:"A steeper indifference curve indicates...",options:["Higher willingness to trade Y for X","Lower utility","Higher income","Lower demand"],a:0}
 ],
 
@@ -232,7 +266,7 @@ medium:[
 {q:"When price falls, the optimal bundle typically moves...",options:["Along the demand curve","Off the demand curve","To a different market","Randomly"],a:0},
 {q:"A price change affects consumption through...",options:["Income and substitution effects","Supply effects","Production effects","Random effects"],a:0},
 {q:"The substitution effect occurs because...",options:["Relative prices change","Income changes","Preferences change","Demand shifts"],a:0},
-{q:"The income effect occurs because...",options:["Purchasing power changes","Relative prices change","Utility disappears","Demand becomes elastic"],a:0},
+{q:"The income effect occurs because...",options:["Purchasing power changes","Relative prices change","Utility disappears","Demand becomes elastic"],a:1},
 {q:"If a good is normal, an income increase causes demand to...",options:["Increase","Decrease","Stay constant","Disappear"],a:0},
 {q:"If a good is inferior, an income increase causes demand to...",options:["Increase","Decrease","Stay constant","Become vertical"],a:1},
 {q:"Demand shifts outward when...",options:["Income rises for a normal good","Price increases","Technology improves","Costs rise"],a:0},
@@ -243,12 +277,16 @@ medium:[
 {q:"A Giffen good occurs when...",options:["Income effect outweighs substitution effect","Substitution effect dominates","Demand becomes perfectly elastic","Income rises"],a:0},
 {q:"If income rises and demand increases, the good is...",options:["Normal","Inferior","Elastic","Substitute"],a:0},
 {q:"If the price of coffee rises and demand for tea increases, the goods are...",options:["Substitutes","Complements","Inferior","Normal"],a:0},
-{q:"If the price of printers rises and demand for ink falls, the goods are...",options:["Complements","Substitutes","Inferior","Giffen"],a:0}
+{q:"If the price of printers rises and demand for ink falls, the goods are...",options:["Complements","Substitutes","Inferior","Giffen"],a:0},
+{q:"The marginal rate of substitution equals...",options:["Slope of the indifference curve","Slope of the budget line","Income divided by price","Demand elasticity"],a:0},
+{q:"Consumer equilibrium occurs when...",options:["MRS equals price ratio","Utility is zero","Income is maximized","Demand equals supply"],a:0},
+{q:"A normal good is one where...",options:["Demand rises as income rises","Demand falls as income rises","Price always rises","Utility is constant"],a:0},
+{q:"An inferior good is one where...",options:["Demand falls as income rises","Price falls with income","Utility decreases","Consumers avoid it"],a:0}
 ],
 
 hard:[
 {q:"Consumer surplus measures...",options:["Difference between willingness to pay and price","Firm profits","Producer costs","Market revenue"],a:0},
-{q:"When price falls, consumer surplus typically...",options:["Increases","Decreases","Stays constant","Becomes zero"],a:0},
+{q:"When price falls, consumer surplus typically...",options:["Increases","Decreases","Stay constant","Becomes zero"],a:0},
 {q:"Market demand is obtained by...",options:["Summing individual demand curves horizontally","Summing vertically","Multiplying prices","Averaging costs"],a:0},
 {q:"Price elasticity of demand measures...",options:["Responsiveness of quantity demanded to price change","Firm profit","Consumer income","Market supply"],a:0},
 {q:"If elasticity is greater than 1, demand is...",options:["Elastic","Inelastic","Unitary","Vertical"],a:0},
@@ -262,7 +300,12 @@ hard:[
 {q:"When demand is inelastic, a price increase will...",options:["Increase total revenue","Decrease total revenue","Leave revenue unchanged","Reduce profit"],a:0},
 {q:"Consumer surplus represents...",options:["Willingness to pay minus price","Price minus cost","Total revenue","Producer surplus"],a:0},
 {q:"A price decrease increases consumer surplus because...",options:["More consumers buy and existing consumers pay less","Income rises","Supply increases","Costs fall"],a:0},
-{q:"Market demand is obtained by...",options:["Horizontal summation of individual demands","Vertical summation","Averaging prices","Multiplying quantities"],a:0}
+{q:"Market demand is obtained by...",options:["Horizontal summation of individual demands","Vertical summation","Averaging prices","Multiplying quantities"],a:0},
+{q:"If the price of X falls, the substitution effect...",options:["Moves consumption toward X","Moves consumption toward Y","Has no effect","Reduces income"],a:0},
+{q:"The income effect occurs because...",options:["A price change alters purchasing power","Prices change utility","Consumers prefer cheaper goods","Demand shifts randomly"],a:0},
+{q:"For a Giffen good...",options:["Income effect outweighs substitution effect","Demand always rises","Substitution effect dominates","Price has no effect"],a:0},
+{q:"Price rises from $10 to $12 and quantity demanded falls from 100 to 80. What is the approximate price elasticity of demand?",options:["1","2","0.5","4"],a:0},
+{q:"A buyer is willing to pay $50 for a good but buys it for $30. What is consumer surplus?", options:["$20","$50","$30","$80"],a:0}
 ],
 
 easyBoss:[
@@ -289,6 +332,11 @@ return "finalBoss"
 }
 
 function randomQuestion(poolName){
+// Dynamic math for final 4 rooms of Hard difficulty (Rooms 26, 27, 28, 29)
+if(poolName === "hard" && room >= 26 && room <= 29){
+    return generateMUDollarQuestion();
+}
+
 let pool = questionBanks[poolName]
 let used = usedQuestions[poolName]
 let available = pool.filter(q => !used.includes(q))
@@ -397,26 +445,19 @@ document.getElementById("message").innerText="Correct!"
 room = Math.min(room,31) 
 }
 if(room > 30){
-    updateMazeTrack();
-    // Clear the lingering room and boss text
+    updateMazeTrack(); // Ensure final tile turns green
     document.getElementById("roomDisplay").innerText = "";
     document.getElementById("bossMessage").innerText = "";
-
     document.getElementById("mazeTrack").classList.add("victory");
-    
-    // Ensure the maze track is centered and clean
     document.getElementById("mazeTrack").style.textAlign = "center";
 
     let code = generateCode();
-
-    // Calculate time
     let endTime = Date.now();
     let seconds = Math.floor((endTime - startTime)/1000);
     let minutes = Math.floor(seconds/60);
     let remaining = seconds % 60;
     let timeString = minutes + "m " + remaining + "s";
 
-    // Clear saved progress
     localStorage.removeItem("gauntletRoom");
 
     document.getElementById("question").innerHTML =
@@ -447,7 +488,6 @@ localStorage.setItem("gauntletRoom", room);
 loadQuestion()
 }
 
-// START THE GAME
 loadQuestion();
 
 </script>
