@@ -356,8 +356,7 @@ track += "<br>";
 }
 
 }
-
-document.getElementById("mazeTrack").innerText = track;
+document.getElementById("mazeTrack").innerHTML = track;
 
 }
   
@@ -436,6 +435,13 @@ if(choice===currentQuestion.a){
 
 let bonusRoll = Math.random()
 
+if(diff.includes("Boss")){
+room++
+document.getElementById("message").innerText="Correct!"
+}
+
+else{
+
 if(bonusRoll < 0.025){
 room += 3
 document.getElementById("message").innerText="Correct! 🚪 Secret Passage! Skip three rooms."
@@ -456,6 +462,10 @@ room += 1
 document.getElementById("message").innerText="Correct! ✨ Healing Fountain restores momentum."
 }
 
+room = Math.min(room,30)
+
+}
+
 if(room>30){
 
 let code = generateCode();
@@ -469,6 +479,7 @@ document.getElementById("message").innerHTML=
 "Enter this code in the Canvas bonus quiz to claim your points.";
 
 return;
+
 }
 
 }else{
