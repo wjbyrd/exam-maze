@@ -7,46 +7,68 @@
 
 body{
 font-family:Arial;
-background:#0b0b0b;
+background:linear-gradient(180deg,#0b0b0b,#111827);
 color:white;
 text-align:center;
+margin:0;
+padding:0;
 }
 
 #gameBox{
 width:750px;
 margin:auto;
 margin-top:40px;
-padding:25px;
-background:#1a1a1a;
-border-radius:12px;
+padding:30px;
+background:#1f2937;
+border-radius:14px;
+box-shadow:0 0 20px rgba(0,0,0,0.6);
+border:1px solid rgba(255,255,255,0.05);
 }
 
 button{
-padding:10px 20px;
+padding:12px 22px;
 margin:8px;
 font-size:16px;
 cursor:pointer;
+background:#374151;
+color:white;
+border:none;
+border-radius:8px;
+transition:all 0.2s ease;
 }
 
+button:hover{
+background:#4b5563;
+transform:translateY(-2px);
+}
+
+#mazeTrack{
+font-size:22px;
+letter-spacing:3px;
+margin-bottom:10px;
+}
+  
 #progressBar{
 width:100%;
-background:#333;
-height:20px;
-border-radius:10px;
-margin-bottom:15px;
+background:#2d3748;
+height:22px;
+border-radius:12px;
+margin-bottom:20px;
+overflow:hidden;
 }
 
 #progressFill{
 height:100%;
 width:0%;
-background:#4CAF50;
-border-radius:10px;
+background:linear-gradient(90deg,#22c55e,#16a34a);
+transition:width 0.4s ease;
 }
 
 .boss{
-color:#ffcc00;
+color:#fbbf24;
 font-weight:bold;
-font-size:20px;
+font-size:22px;
+text-shadow:0 0 8px rgba(251,191,36,0.7);
 }
 
 </style>
