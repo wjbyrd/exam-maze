@@ -32,11 +32,8 @@ animation: torchFlicker 6s infinite;
 transition: box-shadow 0.3s ease;
 position: relative;
 }
-/* Hit Effect */
 .hit { box-shadow: 0 0 60px #ef4444, inset 0 0 40px #7f1d1d !important; animation: shake 0.4s ease; }
-
 #autosave { position: absolute; top: 15px; right: 15px; font-size: 11px; opacity: 0.5; font-style: italic; }
-
 button{
 padding:12px 22px; margin:8px; font-size:16px; cursor:pointer;
 background:#374151; color:white; border:none; border-radius:8px; transition:all 0.2s ease;
@@ -49,7 +46,7 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
 .boss-title { font-size: 28px; font-weight: bold; margin-bottom: 15px; display: block; }
 .boss-q { font-style: italic; font-size: 19px; border-left: 4px solid var(--bossColor); padding-left: 15px; margin: 20px 0; text-align: left; }
 .area-title { color: #9ca3af; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; }
-.hint-box { font-size: 13px; color: #fbbf24; margin-top: 15px; opacity: 0.8; }
+.hint-box { font-size: 13px; color: #fbbf24; margin-top: 15px; opacity: 0.8; height: 18px; }
 
 @keyframes shake { 0% { transform:translateX(0); } 25% { transform:translateX(-8px); } 50% { transform:translateX(8px); } 75% { transform:translateX(-6px); } 100% { transform:translateX(0); } }
 @keyframes victoryGlow { 0% { transform:scale(1); text-shadow:0 0 10px gold; } 50% { transform:scale(1.1); text-shadow:0 0 25px gold, 0 0 40px orange; } 100% { transform:scale(1); text-shadow:0 0 10px gold; } }
@@ -74,12 +71,10 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
 </div>
 
 <script>
-// Logic setup
-let username = localStorage.getItem("gauntletUser") || "Adventurer";
+let username = "Adventurer";
 let startTime = Date.now();
 let room = localStorage.getItem("gauntletRoom") ? parseInt(localStorage.getItem("gauntletRoom")) : 1;
 let currentQuestion;
-let usedQuestions = { easy:[], medium:[], hard:[], easyBoss:[], mediumBoss:[], finalBoss:[] };
 
 function getAreaName(r) {
     if (r <= 9) return "The Dimly Lit Archives";
@@ -91,9 +86,7 @@ function getAreaName(r) {
     return "The Sovereign's Throne";
 }
 
-// RESTORED FULL QUESTION BANKS FROM YOUR ORIGINAL DATA
 const questionBanks = {
-    // [I have kept your full pools of easy, medium, and hard questions here]
     easyBoss:[{q:"The 'Law of Diminishing Marginal Utility' implies that as consumption of a good increases...",options:["Total utility eventually decreases","Marginal utility eventually decreases","Price must fall","Demand becomes vertical"],a:1}],
     mediumBoss:[{q:"If the substitution effect and income effect move in opposite directions, and the substitution effect is stronger, the good is...",options:["Normal","Inferior (non-Giffen)","A Giffen good","A perfect complement"],a:1}],
     finalBoss:[{q:"In the region of a demand curve where demand is inelastic, a price increase will cause total revenue to...",options:["Increase","Decrease","Remain unchanged","Drop to zero"],a:0}],
@@ -171,23 +164,11 @@ const questionBanks = {
 
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
-function randomQuestion(poolName){
-    if(poolName === "hard"){
-        if(room === 26) return {...getMUPerDollar(), hint: "Formula: MU / Price"};
-        if(room === 27) return {...getOptimalBundle(), hint: "Formula: MUx / Px = MUy / Py"};
-        if(room === 28) return {...getConsumerSurplus(), hint: "Formula: Willingness to Pay - Market Price"};
-        if(room === 29) return {...getElasticity(), hint: "Formula: %Δ Quantity / %Δ Price"};
-    }
-    let pool = questionBanks[poolName];
-    return pool[Math.floor(Math.random()*pool.length)];
-}
-
-// Math Generators for Rooms 26-29
 function getMUPerDollar() {
     let MU = rand(20, 80), P = rand(2, 10);
     let correct = Math.round((MU / P) * 10) / 10;
     let opts = shuffleArray([...new Set([correct, Math.round((correct+1.5)*10)/10, 4.0, 1.0])]);
-    return { q: `Marginal Utility (MU) = ${MU}, Price = $${P}. Marginal utility per dollar?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct) };
+    return { q: `Marginal Utility (MU) = ${MU}, Price = $${P}. Marginal utility per dollar?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct), hint: "Formula: MU / Price" };
 }
 
 
@@ -196,7 +177,7 @@ function getOptimalBundle() {
     let Px = rand(2, 5), Py = rand(2, 5), MUx = rand(10, 30);
     let correctMUy = (MUx / Px) * Py;
     let opts = shuffleArray([...new Set([correctMUy, correctMUy + 5, 2, 10])]);
-    return { q: `Optimal bundle: MUx = ${MUx}, Px = $${Px}, Py = $${Py}. What is MUy?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correctMUy) };
+    return { q: `Optimal bundle: MUx = ${MUx}, Px = $${Px}, Py = $${Py}. What is MUy?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correctMUy), hint: "Formula: MUx / Px = MUy / Py" };
 }
 
 
@@ -205,14 +186,24 @@ function getConsumerSurplus() {
     let wtp = rand(60, 100), price = rand(20, 50);
     let correct = wtp - price;
     let opts = shuffleArray([...new Set([correct, wtp, price, 10])]);
-    return { q: `Willing to pay $${wtp}, price is $${price}. Consumer surplus?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct) };
+    return { q: `Willing to pay $${wtp}, price is $${price}. Consumer surplus?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct), hint: "Formula: Willingness to Pay - Market Price" };
 }
 
 function getElasticity() {
     let pctQ = rand(10, 30), pctP = rand(5, 15);
     let correct = Math.round((pctQ / pctP) * 100) / 100;
     let opts = shuffleArray([...new Set([correct, 1.0, 2.0, 0.5])]);
-    return { q: `Price falls ${pctP}%, Quantity rises ${pctQ}%. Elasticity?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct) };
+    return { q: `Price falls ${pctP}%, Quantity rises ${pctQ}%. Elasticity?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct), hint: "Formula: %Δ Quantity / %Δ Price" };
+}
+
+function randomQuestion(poolName){
+    if(room === 26) return getMUPerDollar();
+    if(room === 27) return getOptimalBundle();
+    if(room === 28) return getConsumerSurplus();
+    if(room === 29) return getElasticity();
+    
+    let pool = questionBanks[poolName];
+    return pool[Math.floor(Math.random()*pool.length)];
 }
 
 function updateMazeTrack(){
@@ -262,7 +253,7 @@ function answer(choice){
             document.getElementById("mazeTrack").classList.add("victory");
             let time = Math.floor((Date.now()-startTime)/60000)+"m "+Math.floor(((Date.now()-startTime)/1000)%60)+"s";
             setTimeout(() => {
-                document.getElementById("gameBox").innerHTML = `<h2 class="victory">CONQUERED!</h2><div style="background:#1f2937;padding:20px;border-radius:10px;margin-top:20px;"><p>Adventurer: ${username}</p><p>Time: ${time}</p><p>Code: <span style='color:#fbbf24;font-size:24px;'>MAZE-${rand(1000,9999)}</span></p></div>`;
+                document.getElementById("gameBox").innerHTML = `<h2 class="victory">CONQUERED!</h2><div style="background:#1f2937;padding:20px;border-radius:10px;margin-top:20px;"><p>Time: ${time}</p><p>Code: <span style='color:#fbbf24;font-size:24px;'>MAZE-${rand(1000,9999)}</span></p></div>`;
                 localStorage.removeItem("gauntletRoom");
             }, 1000);
             return;
