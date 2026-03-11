@@ -356,10 +356,12 @@ let q=randomQuestion(diff)
 currentQuestion=q
 
 document.getElementById("roomDisplay").innerText="Room "+room+" of 30"
-
+  
 if(diff.includes("Boss")){
-document.getElementById("question").innerHTML='<span class="boss">Guardian of Utility Maximization</span><br>'+q.q
-}
+
+document.getElementById("question").innerHTML =
+'<span class="boss">Guardian of Utility Maximization</span><br>'+q.q
+
 let box = document.getElementById("gameBox")
 
 box.classList.add("bossFlash")
@@ -369,6 +371,7 @@ setTimeout(()=>{
 box.classList.remove("bossFlash")
 box.classList.remove("shake")
 },600)
+
 }
 else{
 document.getElementById("question").innerText=q.q
