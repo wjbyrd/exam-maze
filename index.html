@@ -397,6 +397,8 @@ room = Math.min(room,31)
 }
 
 if(room > 30){
+document.getElementById("bossMessage").innerText = "";
+document.getElementById("roomDisplay").innerText = "";
 document.getElementById("mazeTrack").classList.add("victory");
 let code = generateCode();
 let endTime = Date.now();
