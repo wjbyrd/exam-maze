@@ -109,7 +109,19 @@ function getAreaName(r) {
 const questionBanks = {
     easyBoss:[{q:"The 'Law of Diminishing Marginal Utility' implies that as consumption of a good increases...",options:["Total utility eventually decreases","Marginal utility eventually decreases","Price must fall","Demand becomes vertical"],a:1}],
     mediumBoss:[{q:"If the substitution effect and income effect move in opposite directions, and the substitution effect is stronger, the good is...",options:["Normal","Inferior (non-Giffen)","A Giffen good","A perfect complement"],a:1}],
-    finalBoss:[{q:"In the region of a demand curve where demand is inelastic, a price increase will cause total revenue to...",options:["Increase","Decrease","Remain unchanged","Drop to zero"],a:0}],
+    finalBoss: [
+    {
+        q: "A firm currently faces a price of $10 and a quantity demanded of 100 units. After increasing the price to $12, the quantity demanded falls to 70 units. Based on the change in Total Revenue, what is the nature of the demand in this region?",
+        options: [
+            "Elastic (Total Revenue decreased)",
+            "Inelastic (Total Revenue increased)",
+            "Unit Elastic (Total Revenue stayed same)",
+            "Perfectly Inelastic (Quantity didn't change)"
+        ],
+        a: 0,
+        hint: "Calculate (Price * Quantity) for both scenarios first. If revenue and price move in opposite directions, it's elastic!"
+    }
+],
     easy: [
         {q:"A theory of choice assumes individuals...",options:["Make random decisions","Choose the most preferred affordable bundle","Always maximize income","Always minimize work"],a:1},
         {q:"Consumer preferences are typically represented using...",options:["Demand curves","Indifference curves","Supply curves","Cost curves"],a:1},
@@ -374,7 +386,7 @@ if (streak === 5 || streak === 10 || streak === 20) {
             const totalTimeMs = Date.now() - startTime;
             const timeString = formatTime(totalTimeMs);
             const topScores = updateHighScores(totalTimeMs);
-            const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
+            window.currentAccuracy = Math.round((correctAnswers / totalAttempts) * 100);
             const isPerfect = accuracy === 100 && room > 30;
             
             setTimeout(() => {
@@ -453,7 +465,8 @@ function formatTime(ms) {
     const totalTimeMs = Date.now() - startTime;
     const timeString = formatTime(totalTimeMs);
     const code = document.querySelector('.victory + div span').innerText;
-    
+    const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
+        
     const shareText = `🎮 Microeconomics Gauntlet Conquered!\n👤 Adventurer: ${username}\n⏱️ Time: ${timeString}\n🎯 Accuracy: ${accuracy}%\n🔥 Best Streak: ${maxStreak}\n📝 Total Questions: ${totalAttempts}\n🔑 Verification Code: ${code}`;
     
     navigator.clipboard.writeText(shareText).then(() => {
