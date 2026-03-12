@@ -88,7 +88,6 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
     <div id="progressBar"><div id="progressFill"></div></div>
     <div id="mazeTrack"></div>
      <div id="streakDisplay" style="font-weight:bold; color:#60a5fa; height:24px; margin-top:5px;"></div>
-    <p id="roomDisplay"></p>
     <p id="bossMessage"></p>
     <div id="questionContainer">
         <p id="question"></p>
@@ -364,13 +363,12 @@ function updateMazeTrack(){
 function loadQuestion(){
     updateMazeTrack();
     document.getElementById("progressFill").style.width=(room/30*100)+"%";
-    document.getElementById("areaDisplay").innerText = getAreaName(room);
+    document.getElementById("areaDisplay").innerText = `${getAreaName(room)} (${room}/30)`;
     
     let diff = (room<=9) ? "easy" : (room==10) ? "easyBoss" : (room<=19) ? "medium" : (room==20) ? "mediumBoss" : (room<=29) ? "hard" : "finalBoss";
     let q = randomQuestion(diff);
     currentQuestion = q;
     
-    document.getElementById("roomDisplay").innerText = "Room " + room + " of 30";
     document.getElementById("formulaHint").innerText = q.hint ? "💡 Hint: " + q.hint : "";
     
     if (room === 9 || room === 19 || room === 29) {
