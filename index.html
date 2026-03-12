@@ -171,45 +171,92 @@ const questionBanks = {
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
 function getMUPerDollar() {
-    let MU = rand(20, 80), P = rand(2, 10);
-    let correct = Math.round((MU / P) * 10) / 10;
-    let opts = shuffleArray([...new Set([correct, Math.round((correct+1.5)*10)/10, 4.0, 1.0])]);
-    return { q: `Marginal Utility (MU) = ${MU}, Price = $${P}. Marginal utility per dollar?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct), hint: "Formula: MU / Price" };
+    const mu = Math.floor(Math.random() * 50) + 10;
+    const price = [2, 5, 10][Math.floor(Math.random() * 3)];
+    return {
+        q: `A consumer receives MUx = ${mu} from good X. The price of X is $${price}. What is the Marginal Utility per dollar?`,
+        options: [`${(mu/price).toFixed(1)}`, `${mu}`, `${price}`, `${(mu*price)}`],
+        a: 0
+    };
 }
 
-
-
-function getOptimalBundle() {
-    let Px = rand(2, 5), Py = rand(2, 5), MUx = rand(10, 30);
-    let correctMUy = (MUx / Px) * Py;
-    let opts = shuffleArray([...new Set([correctMUy, correctMUy + 5, 2, 10])]);
-    return { q: `Optimal bundle: MUx = ${MUx}, Px = $${Px}, Py = $${Py}. What is MUy?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correctMUy), hint: "Formula: MUx / Px = MUy / Py" };
-}
-
-
-
-function getConsumerSurplus() {
-    let wtp = rand(60, 100), price = rand(20, 50);
-    let correct = wtp - price;
-    let opts = shuffleArray([...new Set([correct, wtp, price, 10])]);
-    return { q: `Willing to pay $${wtp}, price is $${price}. Consumer surplus?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct), hint: "Formula: Willingness to Pay - Market Price" };
-}
-
-function getElasticity() {
-    let pctQ = rand(10, 30), pctP = rand(5, 15);
-    let correct = Math.round((pctQ / pctP) * 100) / 100;
-    let opts = shuffleArray([...new Set([correct, 1.0, 2.0, 0.5])]);
-    return { q: `Price falls ${pctP}%, Quantity rises ${pctQ}%. Elasticity?`, options: opts.map(o=>o.toString()), a: opts.indexOf(correct), hint: "Formula: %Δ Quantity / %Δ Price" };
-}
-
-function randomQuestion(poolName){
-    if(room === 26) return getMUPerDollar();
-    if(room === 27) return getOptimalBundle();
-    if(room === 28) return getConsumerSurplus();
-    if(room === 29) return getElasticity();
+function getEquilibriumCheck() {
+    const muX = Math.floor(Math.random() * 20) + 10;
+    const pX = [2, 5][Math.floor(Math.random() * 2)];
+    const ratio = muX / pX;
+    // We want the student to find the MUy that satisfies MUx/Px = MUy/Py
+    const pY = 10;
+    const correctMUy = ratio * pY;
     
+    return {
+        q: `A consumer is in equilibrium. MUx = ${muX} and Px = $${pX}. If the price of Good Y (Py) is $${pY}, what must be the Marginal Utility of Good Y (MUy)?`,
+        options: [`${correctMUy}`, `${correctMUy / 2}`, `${correctMUy + 10}`, `${muX}`],
+        a: 0
+    };
+}
+
+function getElasticityCalc() {
+    const pctQ = (Math.floor(Math.random() * 4) + 1) * 10; // 10, 20, 30, 40
+    const pctP = [5, 10, 20][Math.floor(Math.random() * 3)];
+    const elasticity = (pctQ / pctP).toFixed(1);
+    const isElastic = (pctQ / pctP) > 1 ? "Elastic" : "Inelastic";
+
+    return {
+        q: `If the price of a good increases by ${pctP}% and the quantity demanded falls by ${pctQ}%, what is the price elasticity of demand?`,
+        options: [
+            `${elasticity} (${isElastic})`, 
+            `${(pctP / pctQ).toFixed(1)}`, 
+            `${pctQ - pctP}`, 
+            "0.0 (Perfectly Inelastic)"
+        ],
+        a: 0
+    };
+}
+
+function getConsumerSurplusCalc() {
+    const wtp = Math.floor(Math.random() * 20) + 30;
+    const price = Math.floor(Math.random() * 15) + 5;
+    return {
+        q: `A buyer is willing to pay $${wtp} for a widget but purchases it for $${price}. What is the consumer surplus?`,
+        options: [`$${wtp - price}`, `$${wtp}`, `$${price}`, `$${wtp + price}`],
+        a: 0
+    };
+}
+
+// Keep track of the last few questions to prevent repeats
+let questionHistory = {
+    easy: [], medium: [], hard: [], 
+    easyBoss: [], mediumBoss: [], finalBoss: []
+};
+
+function randomQuestion(poolName) {
+    // --- SPECIAL CALCULATED ROOMS (26-29) ---
+    // These ensure the student practices specific math skills before the boss
+    if (room === 26) return getMUPerDollar();
+    if (room === 27) return getEquilibriumCheck();
+    if (room === 28) return getConsumerSurplusCalc();
+    if (room === 29) return getElasticityCalc();
+
     let pool = questionBanks[poolName];
-    return pool[Math.floor(Math.random()*pool.length)];
+    let history = questionHistory[poolName];
+    let selected;
+
+    // Filter out recently used questions
+    let available = pool.filter(q => !history.includes(q));
+
+    // If we ran out of "new" questions, clear history and start over
+    if (available.length === 0) {
+        history.length = 0; 
+        available = pool;
+    }
+
+    selected = available[Math.floor(Math.random() * available.length)];
+    
+    // Add to history and keep history size manageable (e.g., last 5 questions)
+    history.push(selected);
+    if (history.length > 5) history.shift();
+
+    return selected;
 }
 
 function updateMazeTrack(){
@@ -255,16 +302,35 @@ function answer(choice){
     if(choice === currentQuestion.a){
         room++;
         document.getElementById("message").innerText = "Correct!";
-        if(room > 30){
-            document.getElementById("mazeTrack").classList.add("victory");
-            let time = Math.floor((Date.now()-startTime)/60000)+"m "+Math.floor(((Date.now()-startTime)/1000)%60)+"s";
-            setTimeout(() => {
-               document.getElementById("gameBox").innerHTML = `<h2 class="victory">CONQUERED!</h2><div style="background:#1f2937;padding:20px;border-radius:10px;margin-top:20px;"><p>Adventurer: <strong>${username}</strong></p>     <p>Time: ${time}</p>
-        <p>Code: <span style='color:#fbbf24;font-size:24px;'>MAZE-${rand(1000,9999)}</span></p></div>`;
-                localStorage.removeItem("gauntletRoom");
-            }, 1000);
-            return;
-        }
+if (room > 30) {
+    document.getElementById("mazeTrack").classList.add("victory");
+    const totalTimeMs = Date.now() - startTime;
+    const timeString = formatTime(totalTimeMs);
+    const topScores = updateHighScores(totalTimeMs);
+
+    setTimeout(() => {
+        let scoreRows = topScores.map((s, i) => 
+            `<tr style="${s.time === totalTimeMs ? 'color:#fbbf24;' : ''}">
+                <td>${i + 1}. ${s.name}</td>
+                <td>${formatTime(s.time)}</td>
+            </tr>`).join("");
+
+        document.getElementById("gameBox").innerHTML = `
+            <h2 class="victory">CONQUERED!</h2>
+            <div style="background:#1f2937;padding:20px;border-radius:10px;margin-top:20px;">
+                <p>Well done, <strong>${username}</strong>! Your time: ${timeString}</p>
+                <hr style="border:0; border-top:1px solid #374151; margin:15px 0;">
+                <h3 style="margin-top:0;">🏆 Local Hall of Fame</h3>
+                <table style="width:100%; text-align:left; border-collapse:collapse;">
+                    ${scoreRows}
+                </table>
+                <p style="margin-top:20px;">Verification Code: <span style='color:#fbbf24;font-size:20px;'>MAZE-${rand(1000, 9999)}</span></p>
+                <button onclick="location.reload()">Try Again</button>
+            </div>`;
+        localStorage.removeItem("gauntletRoom");
+    }, 1000);
+    return;
+}
     } else {
         let setback = (room >= 26) ? 5 : (room === 10 || room === 20 || room === 30) ? 6 : 3;
         room = Math.max(1, room - setback);
@@ -281,6 +347,23 @@ function shuffleArray(arr){
     return arr;
 }
 
+function updateHighScores(newTimeMs) {
+    let scores = JSON.parse(localStorage.getItem("gauntletHighScores")) || [];
+    scores.push({ name: username, time: newTimeMs, date: new Date().toLocaleDateString() });
+    
+    // Sort by time (lowest/fastest first) and keep top 5
+    scores.sort((a, b) => a.time - b.time);
+    scores = scores.slice(0, 5);
+    
+    localStorage.setItem("gauntletHighScores", JSON.stringify(scores));
+    return scores;
+}
+
+function formatTime(ms) {
+    let mins = Math.floor(ms / 60000);
+    let secs = Math.floor((ms / 1000) % 60);
+    return `${mins}m ${secs}s`;
+}
 loadQuestion();
 </script>
 </body>
