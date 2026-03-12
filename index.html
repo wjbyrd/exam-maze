@@ -222,22 +222,36 @@ function getEquilibriumCheck() {
         a: 0
     };
 }
-
 function getElasticityCalc() {
-    const pctQ = (Math.floor(Math.random() * 4) + 1) * 10; // 10, 20, 30, 40
-    const pctP = [5, 10, 20][Math.floor(Math.random() * 3)];
-    const elasticity = (pctQ / pctP).toFixed(1);
-    const isElastic = (pctQ / pctP) > 1 ? "Elastic" : "Inelastic";
+    // Generate two price points
+    const p1 = (Math.floor(Math.random() * 5) + 4) * 2; // e.g., $8, $10, $12
+    const p2 = p1 + 2; // e.g., $10, $12, $14
+    
+    // Generate two quantity points (Inverse relationship)
+    const q1 = (Math.floor(Math.random() * 5) + 8) * 10; // e.g., 80, 90, 100
+    const q2 = q1 - 20; // e.g., 60, 70, 80
+
+    // Midpoint Formula calculation
+    const chgQ = q2 - q1;
+    const midQ = (q1 + q2) / 2;
+    const chgP = p2 - p1;
+    const midP = (p1 + p2) / 2;
+
+    // Elasticity = |(ΔQ / midQ) / (ΔP / midP)|
+    const elasticityVal = Math.abs((chgQ / midQ) / (chgP / midP));
+    const elasticity = elasticityVal.toFixed(2);
+    const isElastic = elasticityVal > 1 ? "Elastic" : "Inelastic";
 
     return {
-        q: `If the price of a good increases by ${pctP}% and the quantity demanded decreases by ${pctQ}%, what is the price elasticity of demand?`,
+        q: `When the price of a good increases from $${p1} to $${p2}, the quantity demanded decreases from ${q1} units to ${q2} units. Using the Midpoint (Arc) Method, what is the price elasticity of demand?`,
         options: [
             `${elasticity} (${isElastic})`, 
-            `${(pctP / pctQ).toFixed(1)}`, 
-            `${pctQ - pctP}`, 
-            "0.0 (Perfectly Inelastic)"
+            `${(1/elasticityVal).toFixed(2)}`, 
+            `${(Math.abs(chgQ)/q1 / (chgP/p1)).toFixed(2)}`, // Distractor: simple % change
+            "1.00 (Unit Elastic)"
         ],
-        a: 0
+        a: 0,
+        hint: "Arc Elasticity = [(Q2-Q1) / ((Q1+Q2)/2)] / [(P2-P1) / ((P1+P2)/2)]"
     };
 }
 
