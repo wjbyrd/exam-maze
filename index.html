@@ -106,20 +106,9 @@ function getAreaName(r) {
 }
 
 const questionBanks = {
-    easyBoss:[{q:"The 'Law of Diminishing Marginal Utility' implies that as consumption of a good increases...",options:["Total utility eventually decreases","Marginal utility eventually decreases","Price must fall","Demand becomes vertical"],a:1}],
+    easyBoss:[{q:"The 'Law of Diminishing Marginal Utility' implies that as consumption of a good increases...",options:["Marginal utility eventually decreases","Total utility eventually becomes negative","Price must fall","Demand becomes vertical"],a:0}],
     mediumBoss:[{q:"If the substitution effect and income effect move in opposite directions, and the substitution effect is stronger, the good is...",options:["Normal","Inferior (non-Giffen)","A Giffen good","A perfect complement"],a:1}],
-    finalBoss: [
-    {
-        q: "A firm currently faces a price of $10 and a quantity demanded of 100 units. After increasing the price to $12, the quantity demanded falls to 70 units. Based on the change in Total Revenue, what is the nature of the demand in this region?",
-        options: [
-            "Elastic (Total Revenue decreased)",
-            "Inelastic (Total Revenue increased)",
-            "Unit Elastic (Total Revenue stayed same)",
-            "Perfectly Inelastic (Quantity didn't change)"
-        ],
-        a: 0,
-        hint: "Calculate (Price * Quantity) for both scenarios first. If revenue and price move in opposite directions, it's elastic!"
-    }
+    finalBoss:[{q:"A firm observes that when it lowers price, total revenue rises. What must be true about demand at the original price?",options:["Demand was elastic","Demand was inelastic","Demand was perfectly inelastic","Demand was unit elastic"],a:0}
 ],
     easy: [
         {q:"A theory of choice assumes individuals...",options:["Make random decisions","Choose the most preferred affordable bundle","Always maximize income","Always minimize work"],a:1},
@@ -139,21 +128,26 @@ const questionBanks = {
         {q:"If the price of good X falls, the budget constraint...",options:["Rotates outward on the X-axis","Shifts outward parallel","Shifts inward","Becomes vertical"],a:0},
         {q:"Bundles outside the budget constraint are...",options:["Unaffordable","Optimal","Preferred","Efficient"],a:0},
         {q:"Bundles inside the budget constraint are...",options:["Affordable but not utility maximizing","Impossible","Always optimal","Always inefficient"],a:0},
-        {q:"Utility maximization occurs where...",options:["MRS equals the price ratio","Demand equals supply","Income equals spending","Marginal utility is zero"],a:0},
-        {q:"If the marginal rate of substitution exceeds the price ratio...",options:["The consumer should consume more of good X","The consumer should consume less of good X","Utility falls","Income changes"],a:0},
         {q:"A bundle of goods refers to...",options:["A set of goods a consumer may consume","A firm's production level","Total market demand","A supply schedule"],a:0},
         {q:"Utility refers to...",options:["Satisfaction a consumer receives","Total income","Market demand","Firm profit"],a:0},
         {q:"The budget constraint shows...",options:["All affordable combinations of goods","Only preferred bundles","Production possibilities","Market equilibrium"],a:0},
         {q:"If both goods become cheaper, the budget line...",options:["Shifts outward","Rotates inward","Becomes vertical","Does not change"],a:0},
-        {q:"A steeper budget line means...",options:["One good has become relatively more expensive","Income increased","Utility increased","Demand increased"],a:0},
-        {q:"A steeper indifference curve indicates...",options:["Higher willingness to trade Y for X","Lower utility","Higher income","Lower demand"],a:0}
+        {q:"Consumer surplus measures...",options:["Difference between willingness to pay and price","Firm profits","Producer costs","Market revenue"],a:0},
+        {q:"Market demand is obtained by...",options:["Summing individual demand curves horizontally","Summing vertically","Multiplying prices","Averaging costs"],a:0},
+        {q:"Price elasticity of demand measures...",options:["Responsiveness of quantity demanded to price change","Firm profit","Consumer income","Market supply"],a:0},
+        {q:"Demand represents...",options:["Quantity consumers are willing and able to buy at different prices","Total production of firms","Government price controls","Consumer income levels"],a:0},
+        {q:"A demand curve typically slopes...",options:["Downward","Upward","Vertically","Perfectly flat"],a:0},
+        {q:"When price increases, quantity demanded typically...",options:["Falls","Rises","Stays constant","Becomes infinite"],a:0},
+        {q:"Consumer surplus is highest when...",options:["Price is much lower than willingness to pay","Price equals cost","Income falls","Demand disappears"],a:0},
+        {q:"If many consumers enter a market, market demand will...",options:["Increase","Decrease","Remain unchanged","Become perfectly inelastic"],a:0},
+        {q:"If two goods are substitutes, an increase in the price of one good will...",options:["Increase demand for the other good","Decrease demand for the other good","Not affect demand","Eliminate demand"],a:0},
+        {q:"If two goods are complements, an increase in the price of one good will...",options:["Decrease demand for the other good","Increase demand for the other good","Have no effect","Make demand perfectly elastic"],a:0}
     ],
     medium: [
         {q:"An individual demand curve is derived from...",options:["Budget constraints only","Optimal consumption bundles at different prices","Utility levels only","Production functions"],a:1},
         {q:"When price falls, the optimal bundle typically moves...",options:["Along the demand curve","Off the demand curve","To a different market","Randomly"],a:0},
         {q:"A price change affects consumption through...",options:["Income and substitution effects","Supply effects","Production effects","Random effects"],a:0},
         {q:"The substitution effect occurs because...",options:["Relative prices change","Income changes","Preferences change","Demand shifts"],a:0},
-        {q:"The income effect occurs because...",options:["Purchasing power changes","Relative prices change","Utility disappears","Demand becomes elastic"],a:0},
         {q:"If a good is normal, an income increase causes demand to...",options:["Increase","Decrease","Stay constant","Disappear"],a:0},
         {q:"If a good is inferior, an income increase causes demand to...",options:["Increase","Decrease","Stay constant","Become vertical"],a:1},
         {q:"Demand shifts outward when...",options:["Income rises for a normal good","Price increases","Technology improves","Costs rise"],a:0},
@@ -168,28 +162,37 @@ const questionBanks = {
         {q:"The marginal rate of substitution equals...",options:["Slope of the indifference curve","Slope of the budget line","Income divided by price","Demand elasticity"],a:0},
         {q:"Consumer equilibrium occurs when...",options:["MRS equals price ratio","Utility is zero","Income is maximized","Demand equals supply"],a:0},
         {q:"A normal good is one where...",options:["Demand rises as income rises","Demand falls as income rises","Price always rises","Utility is constant"],a:0},
-        {q:"An inferior good is one where...",options:["Demand falls as income rises","Price falls with income","Utility decreases","Consumers avoid it"],a:0}
-    ],
-    hard: [
-        {q:"Consumer surplus measures...",options:["Difference between willingness to pay and price","Firm profits","Producer costs","Market revenue"],a:0},
-        {q:"When price falls, consumer surplus typically...",options:["Increases","Decreases","Stays constant","Becomes zero"],a:0},
-        {q:"Market demand is obtained by...",options:["Summing individual demand curves horizontally","Summing vertically","Multiplying prices","Averaging costs"],a:0},
-        {q:"Price elasticity of demand measures...",options:["Responsiveness of quantity demanded to price change","Firm profit","Consumer income","Market supply"],a:0},
+        {q:"An inferior good is one where...",options:["Demand falls as income rises","Price falls with income","Utility decreases","Consumers avoid it"],a:0},
+        {q:"A steeper budget line means...",options:["One good has become relatively more expensive","Income increased","Utility increased","Demand increased"],a:0},
+        {q:"A steeper indifference curve indicates...",options:["Higher willingness to trade Y for X","Lower utility","Higher income","Lower demand"],a:0},
+        {q:"If the marginal rate of substitution exceeds the price ratio...",options:["The consumer should consume more of good X","The consumer should consume less of good X","Utility falls","Income changes"],a:0},
+        {q:"Utility maximization occurs where...",options:["MRS equals the price ratio","Demand equals supply","Income equals spending","Marginal utility is zero"],a:0},
         {q:"If elasticity is greater than 1, demand is...",options:["Elastic","Inelastic","Unitary","Vertical"],a:0},
         {q:"If demand is perfectly inelastic...",options:["Quantity demanded does not change with price","Price does not change","Income is constant","Demand disappears"],a:0},
-        {q:"A price increase reduces consumer surplus because...",options:["Consumers pay more and buy less","Income increases","Costs rise","Supply falls"],a:0},
         {q:"Elastic demand implies...",options:["Large quantity response to price change","Small quantity response","No quantity response","Infinite supply"],a:0},
-        {q:"Market demand becomes flatter when...",options:["More consumers enter the market","Costs rise","Firms exit","Supply shifts"],a:0},
         {q:"Price elasticity of demand equals...",options:["Percent change in quantity divided by percent change in price","Price divided by quantity","Demand divided by supply","Income divided by price"],a:0},
         {q:"If elasticity equals 1, demand is...",options:["Unit elastic","Perfectly elastic","Inelastic","Vertical"],a:0},
+        {q:"The income effect occurs because...",options:["A price change alters purchasing power","Prices change utility","Consumers prefer cheaper goods","Demand shifts randomly"],a:0},
+        {q:"A perfectly elastic demand curve implies...",options:["Consumers will only buy at one price","Quantity never changes","Demand is fixed","Consumers buy regardless of price"],a:0},
+        {q:"If the price of X falls, the substitution effect...",options:["Moves consumption toward X","Moves consumption toward Y","Has no effect","Reduces income"],a:0},
+    ],
+    hard: [   
+        {q:"A price increase reduces consumer surplus because...",options:["Consumers pay more and buy less","Income increases","Costs rise","Supply falls"],a:0},
+        {q:"Market demand becomes flatter when...",options:["More consumers enter the market","Costs rise","Firms exit","Supply shifts"],a:0},
         {q:"When demand is elastic, a price decrease will...",options:["Increase total revenue","Decrease total revenue","Leave revenue unchanged","Eliminate demand"],a:0},
         {q:"When demand is inelastic, a price increase will...",options:["Increase total revenue","Decrease total revenue","Leave revenue unchanged","Reduce profit"],a:0},
-        {q:"Consumer surplus represents...",options:["Willingness to pay minus price","Price minus cost","Total revenue","Producer surplus"],a:0},
         {q:"A price decrease increases consumer surplus because...",options:["More consumers buy and existing consumers pay less","Income rises","Supply increases","Costs fall"],a:0},
-        {q:"Market demand is obtained by...",options:["Horizontal summation of individual demands","Vertical summation","Averaging prices","Multiplying quantities"],a:0},
-        {q:"If the price of X falls, the substitution effect...",options:["Moves consumption toward X","Moves consumption toward Y","Has no effect","Reduces income"],a:0},
-        {q:"The income effect occurs because...",options:["A price change alters purchasing power","Prices change utility","Consumers prefer cheaper goods","Demand shifts randomly"],a:0},
-        {q:"For a Giffen good...",options:["Income effect outweighs substitution effect","Demand always rises","Substitution effect dominates","Price has no effect"],a:0}
+        {q:"For a Giffen good...",options:["Income effect outweighs substitution effect","Demand always rises","Substitution effect dominates","Price has no effect"],a:0},
+        {q:"If demand is elastic, a price increase will cause total revenue to...",options:["Decrease","Increase","Stay the same","Become zero"],a:0},
+        {q:"If demand is inelastic, a price decrease will cause total revenue to...",options:["Decrease","Increase","Stay the same","Become infinite"],a:0},
+        {q:"If demand becomes more elastic, a firm raising price is more likely to...",options:["Lose revenue","Gain revenue","Keep revenue constant","Eliminate demand"],a:0},
+        {q:"A good with many close substitutes will tend to have demand that is...",options:["More elastic","More inelastic","Perfectly inelastic","Vertical"],a:0},
+        {q:"A necessity with few substitutes tends to have demand that is...",options:["Inelastic","Elastic","Perfectly elastic","Horizontal"],a:0},
+        {q:"If the demand curve shifts outward while price remains constant, consumer surplus will...",options:["Increase","Decrease","Remain unchanged","Become zero"],a:0},
+        {q:"If the demand curve becomes steeper, demand has become...",options:["More inelastic","More elastic","Unit elastic","Perfectly elastic"],a:0},
+        {q:"If price rises and total revenue rises, demand must be...",options:["Inelastic","Elastic","Unit elastic","Perfectly elastic"],a:0},
+        {q:"If price falls and total revenue rises, demand must be...",options:["Elastic","Inelastic","Perfectly inelastic","Vertical"],a:0},
+        {q:"If a good takes a large share of income, its demand tends to be...",options:["More elastic","More inelastic","Perfectly inelastic","Vertical"],a:0}
     ]
 };
 
@@ -200,7 +203,7 @@ function getMUPerDollar() {
     const price = [2, 5, 10][Math.floor(Math.random() * 3)];
     return {
         q: `A consumer receives MUx = ${mu} from good X. The price of X is $${price}. What is the Marginal Utility per dollar?`,
-        options: [`${(mu/price).toFixed(1)}`, `${mu}`, `${price}`, `${(mu*price)}`],
+        options: [`${(mu/price).toFixed(1)}`, `${mu}`, `${price/mu}`, `${(mu*price)}`],
         a: 0
     };
 }
@@ -227,7 +230,7 @@ function getElasticityCalc() {
     const isElastic = (pctQ / pctP) > 1 ? "Elastic" : "Inelastic";
 
     return {
-        q: `If the price of a good increases by ${pctP}% and the quantity demanded falls by ${pctQ}%, what is the price elasticity of demand?`,
+        q: `If the price of a good increases by ${pctP}% and the quantity demanded decreases by ${pctQ}%, what is the price elasticity of demand?`,
         options: [
             `${elasticity} (${isElastic})`, 
             `${(pctP / pctQ).toFixed(1)}`, 
@@ -239,12 +242,25 @@ function getElasticityCalc() {
 }
 
 function getConsumerSurplusCalc() {
-    const wtp = Math.floor(Math.random() * 20) + 30;
-    const price = Math.floor(Math.random() * 15) + 5;
+    const wtp = Math.floor(Math.random() * 20) + 40; // Higher WTP to ensure positive surplus
+    const initialPrice = Math.floor(Math.random() * 10) + 20; // e.g., $20 - $30
+    const priceDrop = Math.floor(Math.random() * 5) + 5; // e.g., $5 - $10 drop
+    const finalPrice = initialPrice - priceDrop;
+
+    // The increase in surplus is the difference between the price points
+    // New Surplus (wtp - finalPrice) - Old Surplus (wtp - initialPrice) = initialPrice - finalPrice
+    const surplusIncrease = initialPrice - finalPrice;
+
     return {
-        q: `A buyer is willing to pay $${wtp} for a widget but purchases it for $${price}. What is the consumer surplus?`,
-        options: [`$${wtp - price}`, `$${wtp}`, `$${price}`, `$${wtp + price}`],
-        a: 0
+        q: `A buyer is willing to pay $${wtp} for a product. The market price falls from $${initialPrice} to $${finalPrice}. How much does the consumer surplus increase for this buyer?`,
+        options: [
+            `$${surplusIncrease}`, 
+            `$${wtp - finalPrice}`, 
+            `$${priceDrop + 10}`, 
+            `$${wtp - initialPrice}`
+        ],
+        a: 0,
+        hint: "Consumer surplus increase is the old price minus the new price for a single unit."
     };
 }
 
