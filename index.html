@@ -555,137 +555,110 @@ function loadQuestion(){
 function answer(choice) {
     totalAttempts++;
     const msgElement = document.getElementById("message");
+
     if (bgMusic.paused) {
         bgMusic.play();
-    } 
+    }
+
     if (choice === currentQuestion.a) {
+        // --- CORRECT ANSWER LOGIC ---
         correctAnswers++;
         streak++;
         if (streak > maxStreak) maxStreak = streak;
-        if (room === 30) {
-            handleVictory(); // Trigger the victory screen
-            return;          // Stop the rest of the function
-        }
-      room++; // Move to next room
-        localStorage.setItem("gauntletRoom", room);
-        
-        // Visual feedback for correct answer
-        msgElement.innerHTML = "<span class='fade-out-text'>Correct! Moving deeper...</span>";
-        
-        loadQuestion(); 
-    } else {
-        let streakMsg = "";
-        let streakColor = "#60a5fa";
 
-        if (streak === 5 || streak === 10 || streak === 20) {
-            sfxMilestone.currentTime = 0;
-            sfxMilestone.play();
-            
-            if (streak === 5) {
-                streakMsg = "🔥 STREAK: Economic Insight!";
-                streakColor = "#fbbf24"; 
-            } else if (streak === 10) {
-                streakMsg = "⚡ STREAK: Market Shock!";
-                streakColor = "#f87171";
-            } else if (streak === 20) {
-                streakMsg = "🌌 STREAK: Policy Reform!";
-                streakColor = "#a855f7";
-            }
+        // 1. Handle Streak Milestones
+        handleStreakVisuals();
+
+        // 2. Check for Boss/Knowledge Rooms (10, 20, 30)
+        // We check the CURRENT room before incrementing it
+        if (room === 10 || room === 20 || room === 30) {
+            showKnowledgeRoom(room);
+            return; // Stop here so the knowledge room can display
         }
 
-        if (streakMsg) {
-            document.getElementById("streakDisplay").innerText = streakMsg;
-            document.getElementById("streakDisplay").style.color = streakColor;
-            document.getElementById("streakDisplay").animate([
-                { transform: 'scale(1)' },
-                { transform: 'scale(1.2)' },
-                { transform: 'scale(1)' }
-            ], { duration: 500 });
-        } else if (streak > 0) {
-            document.getElementById("streakDisplay").innerText = `Streak: ${streak}`;
-            document.getElementById("streakDisplay").style.color = "#60a5fa";
-        }
-
-        document.getElementById("message").innerText = "Correct!";
-
-      // Apply Fade-Out Feedback
-        msgElement.innerText = `Correct! ${currentQuestion.feedback || ""}`;
-        msgElement.className = "fade-out-text";
-        
-        // Remove and re-add class to restart animation for consecutive correct answers
-        msgElement.style.animation = 'none';
-        msgElement.offsetHeight; 
-        msgElement.style.animation = null;
-
-        // Check if this was a Boss Room (10, 20, 30)
-          if (room === 10 || room === 20 || room === 30) {
-            showKnowledgeRoom(room); // New function instead of an alert
-            return; 
-        }
+        // 3. Normal Room Progression
         room++;
-        if (room > 30) {
-            bgMusic.pause();
-            document.getElementById("mazeTrack").classList.add("victory");
-            const totalTimeMs = Date.now() - startTime;
-            const timeString = formatTime(totalTimeMs);
-            const topScores = updateHighScores(totalTimeMs);
-            const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
-            const isPerfect = accuracy === 100 && room > 30;
+        localStorage.setItem("gauntletRoom", room);
+        msgElement.innerHTML = "<span class='fade-out-text'>Correct! Moving deeper...</span>";
+        loadQuestion();
 
-            setTimeout(() => {
-                sfxVictory.play();
-                let scoreRows = topScores.map((s, i) => 
-                    `<tr style="${s.time === totalTimeMs ? 'color:#fbbf24;' : ''}">
-                        <td>${i + 1}. ${s.name}</td>
-                        <td>${formatTime(s.time)}</td>
-                    </tr>`).join("");
-
-                document.getElementById("gameBox").innerHTML = `
-                    <h2 class="victory">${isPerfect ? "👑 FLAWLESS CONQUEST! 👑" : "CONQUERED!"}</h2>
-                    <div style="background:#1f2937; padding:20px; border-radius:10px; margin-top:20px; ${isPerfect ? 'border: 3px solid gold;' : ''}">
-                        <p>Well done, <strong>${username}</strong>!</p>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; font-size: 14px;">
-                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">⏱️ Time: ${timeString}</div>
-                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">🔥 Best Streak: ${maxStreak}</div>
-                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">🎯 Accuracy: ${accuracy}%</div>
-                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">📝 Total Questions: ${totalAttempts}</div>
-                        </div>
-                        ${isPerfect ? "<p style='color:gold; font-weight:bold;'>✨ LEGENDARY STATUS ACHIEVED: PERFECT RUN ✨</p>" : ""}
-                        <hr style="border:0; border-top:1px solid #374151; margin:15px 0;">
-                        <table style="width:100%; text-align:left; border-collapse:collapse;">
-                            ${scoreRows}
-                        </table>
-                        <p style="margin-top:20px;">Verification Code: <span style='color:#fbbf24;font-size:20px;'>MAZE-${Math.floor(Math.random() * 9000) + 1000}</span></p>
-                        
-                        <div style="display:flex; justify-content:center; gap:10px; margin-top:20px;">
-                            <button id="shareBtn" onclick="copyResults()">📋 Copy Results for Canvas</button>
-                            <button onclick="location.reload()">Try Again</button>
-                        </div>
-                    </div>`;
-                localStorage.removeItem("gauntletRoom");
-            }, 1000);
-            return;
-        }
-    else {
+    } else {
+        // --- INCORRECT ANSWER LOGIC ---
         streak = 0;
-        const isBossRoom = (room === 10 || room === 20 || room === 30);
+        document.getElementById("streakDisplay").innerText = "";
         
-        if (isBossRoom) {
+        // Penalties for failing
+        if (room === 10 || room === 20 || room === 30) {
             room = Math.max(1, room - 3); 
         } else if (room >= 21) {
             room = Math.max(1, room - 2); 
         } else {
             room = Math.max(1, room - 1); 
         }
-        
+
         localStorage.setItem("gauntletRoom", room);
-        // Removed sfxFail call here
         alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
+        loadQuestion();
     }
-    loadQuestion();
-}
 }
 
+// Helper to keep the answer function clean
+function handleStreakVisuals() {
+    let streakMsg = "";
+    let streakColor = "#60a5fa";
+
+    if (streak === 5) { streakMsg = "🔥 STREAK: Economic Insight!"; streakColor = "#fbbf24"; }
+    else if (streak === 10) { streakMsg = "⚡ STREAK: Market Shock!"; streakColor = "#f87171"; }
+    else if (streak === 20) { streakMsg = "🌌 STREAK: Policy Reform!"; streakColor = "#a855f7"; }
+
+    if (streakMsg) {
+        sfxMilestone.currentTime = 0;
+        sfxMilestone.play();
+        document.getElementById("streakDisplay").innerText = streakMsg;
+        document.getElementById("streakDisplay").style.color = streakColor;
+    } else if (streak > 0) {
+        document.getElementById("streakDisplay").innerText = `Streak: ${streak}`;
+        document.getElementById("streakDisplay").style.color = "#60a5fa";
+    }
+}
+
+function handleVictory() {
+    if (typeof bgMusic !== 'undefined') bgMusic.pause();
+    if (typeof sfxVictory !== 'undefined') {
+        sfxVictory.currentTime = 0;
+        sfxVictory.play();
+    }
+    
+    const totalTimeMs = Date.now() - startTime;
+    const timeString = formatTime(totalTimeMs);
+    const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
+    const verificationCode = "ARCH-" + Math.floor(1000 + Math.random() * 9000);
+    
+    const gameBox = document.getElementById("gameBox");
+    // FIXED: changed totalAttemps to totalAttempts below
+    gameBox.innerHTML = `
+        <div style="text-align:center; padding:30px;">
+            <h1 class="victory" style="color:gold; text-shadow: 0 0 20px gold;">👑 CONQUEST COMPLETE 👑</h1>
+            
+            <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid #374151;">
+                <p>👤 Adventurer: <strong>${username}</strong></p>
+                <p>🎯 Accuracy: <strong>${accuracy}%</strong> | 🔥 Best Streak: <strong>${maxStreak}</strong></p>
+                <p>⏱️ Time: <strong>${timeString}</strong> | 📝 Total Questions: <strong>${totalAttempts}</strong></p>
+                <p style="font-size: 0.8em; color: #9ca3af;">🔑 Verification Code: <span id="vCode">${verificationCode}</span></p>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                <button id="shareBtn" onclick="copyResults()" style="background:#4ade80; color:black; font-weight:bold; padding:12px 24px; border:none; border-radius:6px; cursor:pointer;">
+                    📋 Copy Results
+                </button>
+                <button onclick="location.reload()" style="background:transparent; color:white; border:1px solid white; padding:12px 24px; border-radius:6px; cursor:pointer;">
+                    Try Again
+                </button>
+            </div>
+        </div>
+    `;
+    localStorage.removeItem("gauntletRoom");
+}
+  
 function showKnowledgeRoom(bossRoom) {
     const qContainer = document.getElementById("question");
     const aContainer = document.getElementById("answers");
@@ -725,47 +698,7 @@ function showKnowledgeRoom(bossRoom) {
                 ${buttonLabel}
         </button>`;
 }
-
-  
-function handleVictory() {
-    if (typeof bgMusic !== 'undefined') bgMusic.pause();
-    if (typeof sfxVictory !== 'undefined') {
-        sfxVictory.currentTime = 0;
-        sfxVictory.play();
-    }
     
-    const totalTimeMs = Date.now() - startTime;
-    const timeString = formatTime(totalTimeMs);
-    const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
-    
-    // Generate a flavor verification code (e.g., ARCH-1234)
-    const verificationCode = "ARCH-" + Math.floor(1000 + Math.random() * 9000);
-
-    const gameBox = document.getElementById("gameBox");
-    gameBox.innerHTML = `
-        <div style="text-align:center; padding:30px;">
-            <h1 class="victory" style="color:gold; text-shadow: 0 0 20px gold;">👑 CONQUEST COMPLETE 👑</h1>
-            
-            <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid #374151;">
-                <p>👤 Adventurer: <strong>${username}</strong></p>
-                <p>🎯 Accuracy: <strong>${accuracy}%</strong> | 🔥Best Streak: <strong>${maxStreak}</strong></p>
-                <p>⏱️Time: <strong>${timeString}</strong> | 📝 Total Questions: <strong>${totalAttemps}</strong></p>
-                <p style="font-size: 0.8em; color: #9ca3af;">🔑 Verification Code: <span>${verificationCode}</span></p>
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
-                <button id="shareBtn" onclick="copyResults()" style="background:#4ade80; color:black; font-weight:bold; padding:12px 24px; border:none; border-radius:6px; cursor:pointer;">
-                    📋 Copy Results
-                </button>
-                
-                <button onclick="location.reload()" style="background:transparent; color:white; border:1px solid white; padding:12px 24px; border-radius:6px; cursor:pointer;">
-                    Try Again
-                </button>
-            </div>
-        </div>
-    `;
-    
-    localStorage.removeItem("gauntletRoom");
-}
   
 function shuffleArray(arr){
     for(let i=arr.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
