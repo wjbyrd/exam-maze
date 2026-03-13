@@ -236,7 +236,7 @@ let username = "";
 let streak = 0; 
 let startTime; // Will be set in startGame()
 let room = localStorage.getItem("gauntletRoom") ? parseInt(localStorage.getItem("gauntletRoom")) : 1;
-let currentQuestion;
+let currentQuestion = null;
 
 // 3. Entry Logic
 function startGame() {
@@ -540,9 +540,10 @@ function loadQuestion() {
     const questionElement = document.getElementById("question");
     const msgElement = document.getElementById("message");
     const gameBox = document.getElementById("gameBox");
+    const bossMsg = document.getElementById("bossMessage");
 
     // 1. Determine Difficulty and Boss Status
-    let diff = (room <= 9) ? "easy" : (room == 10) ? "easyBoss" : (room <= 19) ? "medium" : (room == 20) ? "mediumBoss" : (room <= 29) ? "hard" : "finalBoss";
+    let diff = (room <= 9) ? "easy" : (room === 10) ? "easyBoss" : (room <= 19) ? "medium" : (room === 20) ? "mediumBoss" : (room <= 29) ? "hard" : "finalBoss";
     const isBoss = diff.includes("Boss");
     
     // 2. UI & Progress Updates
@@ -550,124 +551,95 @@ function loadQuestion() {
     document.getElementById("progressFill").style.width = (room / 30 * 100) + "%";
     document.getElementById("areaDisplay").innerText = `${getAreaName(room)} (${room}/30)`;
 
-    // 3. Select the Question (Boss Logic vs Normal Logic)
+    // 3. Select the Question
     if (isBoss) {
-        // Prepare the pool only if health is full
         if (bossHealth === 3) {
             const pool = questionBanks[diff];
             bossPool = [...pool].sort(() => Math.random() - 0.5);
         }
-        // Select question based on health remaining
         currentQuestion = bossPool[3 - bossHealth];
-    } else {
-        // Normal room selection
-        const pool = questionBanks[diff];
-        currentQuestion = pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    // 4. Handle Boss Messaging & Titles
-    if (room === 9 || room === 19 || room === 29) {
-        document.getElementById("bossMessage").innerText = "⚠️ DANGER: BOSS DETECTED IN NEXT ROOM ⚠️";
-        document.getElementById("bossMessage").style.color = "#ef4444";
-    } else if (isBoss) {
-        let bTitle = room == 10 ? "WARDEN OF INDIFFERENCE" : room == 20 ? "THE DECOMPOSER OF CHOICE" : "SOVEREIGN OF ELASTICITY";
-        let bColor = room == 10 ? "#fbbf24" : room == 20 ? "#a855f7" : "#ef4444";
-        document.getElementById("bossMessage").innerText = "⚠ BOSS ENCOUNTER ⚠";
-        document.getElementById("bossMessage").style.color = bColor;
+        
+        let bTitle = room === 10 ? "WARDEN OF INDIFFERENCE" : room === 20 ? "THE DECOMPOSER OF CHOICE" : "SOVEREIGN OF ELASTICITY";
+        let bColor = room === 10 ? "#fbbf24" : room === 20 ? "#a855f7" : "#ef4444";
+        
+        bossMsg.innerText = "⚠ BOSS ENCOUNTER ⚠";
+        bossMsg.style.color = bColor;
         gameBox.style.setProperty('--bossColor', bColor);
         questionElement.innerHTML = `<span class="boss-title" style="color:${bColor}">${bTitle}</span><div class="boss-q" style="--bossColor:${bColor}">${currentQuestion.q}</div>`;
     } else {
-        document.getElementById("bossMessage").innerText = "";
-        questionElement.innerText = currentQuestion.q;
+        const pool = questionBanks[diff];
+        currentQuestion = pool[Math.floor(Math.random() * pool.length)];
+        
+        bossMsg.innerText = (room === 9 || room === 19 || room === 29) ? "⚠️ DANGER: BOSS DETECTED IN NEXT ROOM ⚠️" : "";
+        bossMsg.style.color = "#ef4444";
+        questionElement.innerText = `Room ${room}: ` + currentQuestion.q;
     }
 
-    // 5. Render the Answers and Formula Hint
+    // 4. Update Hints and Draw Buttons
     document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
-    displayQuestion(); // This handles the shuffling and button generation
+    displayQuestion();
 }
-
+    
 function displayQuestion() {
     const choicesElement = document.getElementById("choices");
-    choicesElement.innerHTML = ""; // Clear old buttons
+    choicesElement.innerHTML = ""; 
 
-    // Create a mapped array of options so we can track the original index after shuffling
     let optionsMapped = currentQuestion.options.map((opt, index) => {
         return { text: opt, originalIndex: index };
     });
 
-    // Shuffle them so the correct answer isn't always in the same spot
     optionsMapped = shuffleArray(optionsMapped);
 
     optionsMapped.forEach(option => {
         const btn = document.createElement("button");
         btn.innerText = option.text;
-        // We pass the originalIndex so the answer() function knows if it's correct
         btn.onclick = () => answer(option.originalIndex);
         choicesElement.appendChild(btn);
     });
 }
+    
 function answer(choice) {
     totalAttempts++;
     const msgElement = document.getElementById("message");
     if (bgMusic.paused) bgMusic.play();
 
     if (choice === currentQuestion.a) {
-        // --- CORRECT ANSWER LOGIC ---
         correctAnswers++;
         streak++;
         if (streak > maxStreak) maxStreak = streak;
         handleStreakVisuals();
 
-        // 1. Boss Battle Progression
         if (room === 10 || room === 20 || room === 30) {
             bossHealth--;
-            
             if (bossHealth > 0) {
-                // Boss takes a hit
                 sfxMilestone.play(); 
                 msgElement.innerHTML = `<span class='fade-out-text' style='color:#f87171;'>HIT! Boss Health: ${bossHealth}/3</span>`;
-                
-                // Move to the next specific question in the boss pool
-                currentQuestion = bossPool[3 - bossHealth]; 
-                displayQuestion();
+                loadQuestion(); // Refresh to next boss question
                 return; 
             } else {
-                // Boss defeated!
                 showKnowledgeRoom(room);
-                bossHealth = 3; // Reset health for the next boss
+                bossHealth = 3;
                 return;
             }
         }
 
-        // 2. Normal Room Progression
-        // Uses the specific feedback from your question bank or a default message
-        const feedbackText = currentQuestion.feedback || "Correct! Moving deeper...";
+        const feedbackText = "Correct! " + currentQuestion.feedback + " Moving deeper...";
         msgElement.innerHTML = `<span class='fade-out-text'>${feedbackText}</span>`;
-        
         room++;
         localStorage.setItem("gauntletRoom", room);
-        loadQuestion();
-
+        setTimeout(loadQuestion, 1000); // Small delay to read feedback
     } else {
-        // --- INCORRECT ANSWER LOGIC ---
         streak = 0;
         document.getElementById("streakDisplay").innerText = "";
+        bossHealth = 3; // Reset boss health on fail
         
-        // Penalties: Bosses reset to full health and kick you back further
-        if (room === 10 || room === 20 || room === 30) {
-            bossHealth = 3; 
-            room = Math.max(1, room - 3); 
-        } else if (room >= 21) {
-            room = Math.max(1, room - 2); 
-        } else {
-            room = Math.max(1, room - 1); 
-        }
-
+        room = Math.max(1, room - (room % 10 === 0 ? 3 : (room >= 21 ? 2 : 1)));
         localStorage.setItem("gauntletRoom", room);
         alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
         loadQuestion();
     }
 }
+    
 // Helper to keep the answer function clean
 function handleStreakVisuals() {
     let streakMsg = "";
