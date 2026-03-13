@@ -384,16 +384,24 @@ hard: [
 
 function shuffleOptions(question){
 
-let correct = question.options[question.a]
+let q = {
+    q: question.q,
+    options: [...question.options],
+    a: question.a,
+    feedback: question.feedback,
+    hint: question.hint
+};
 
-for(let i = question.options.length-1;i>0;i--){
-let j = Math.floor(Math.random()*(i+1))
-[question.options[i],question.options[j]]=[question.options[j],question.options[i]]
+let correct = q.options[q.a];
+
+for(let i=q.options.length-1;i>0;i--){
+let j=Math.floor(Math.random()*(i+1));
+[q.options[i],q.options[j]]=[q.options[j],q.options[i]];
 }
 
-question.a = question.options.indexOf(correct)
+q.a = q.options.indexOf(correct);
 
-return question
+return q;
 }
     
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
@@ -498,8 +506,8 @@ const calculationGenerators = [
     
 // Keep track of the last few questions to prevent repeats
 let questionHistory = {
-    easy: [], medium: [], hard: [], 
-    easyBoss: [], mediumBoss: [], finalBoss: []
+easy: [], medium: [], hard: [], calculation: [],
+easyBoss: [], mediumBoss: [], finalBoss: []
 };
 
 function randomQuestion(poolName) {
