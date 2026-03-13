@@ -562,7 +562,18 @@ function answer(choice) {
         correctAnswers++;
         streak++;
         if (streak > maxStreak) maxStreak = streak;
+        if (room === 30) {
+            handleVictory(); // Trigger the victory screen
+            return;          // Stop the rest of the function
+        }
+      room++; // Move to next room
+        localStorage.setItem("gauntletRoom", room);
         
+        // Visual feedback for correct answer
+        msgElement.innerHTML = "<span class='fade-out-text'>Correct! Moving deeper...</span>";
+        
+        loadQuestion(); 
+    } else {
         let streakMsg = "";
         let streakColor = "#60a5fa";
 
