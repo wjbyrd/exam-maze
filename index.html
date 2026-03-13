@@ -577,7 +577,7 @@ function answer(choice) {
 
         // 3. Normal Room Progression with Dynamic Feedback
         // This looks for your specific feedback in the question pool
-        const feedbackText = currentQuestion.feedback || "Correct! Moving deeper...";
+        const feedbackText = "Correct" + currentQuestion.feedback + "Moving deeper..."|| "Correct! Moving deeper...";
         msgElement.innerHTML = `<span class='fade-out-text'>${feedbackText}</span>`;
 
         room++;
