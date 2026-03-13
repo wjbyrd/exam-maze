@@ -618,30 +618,32 @@ function answer(choice) {
         if (streak > maxStreak) maxStreak = streak;
         handleStreakVisuals();
 
-        // Check if we are in a Boss Battle
+        // 1. Boss Battle Progression
         if (room === 10 || room === 20 || room === 30) {
             bossHealth--;
             
             if (bossHealth > 0) {
-                // Boss is still alive!
-                sfxMilestone.play(); // Play a "hit" sound
+                // Boss takes a hit
+                sfxMilestone.play(); 
                 msgElement.innerHTML = `<span class='fade-out-text' style='color:#f87171;'>HIT! Boss Health: ${bossHealth}/3</span>`;
                 
-                // Load the next question from the boss pool
+                // Move to the next specific question in the boss pool
                 currentQuestion = bossPool[3 - bossHealth]; 
                 displayQuestion();
                 return; 
             } else {
-                // Boss Defeated!
+                // Boss defeated!
                 showKnowledgeRoom(room);
-                bossHealth = 3; // Reset for next boss
+                bossHealth = 3; // Reset health for the next boss
                 return;
             }
         }
 
-        // Normal Room Progression
+        // 2. Normal Room Progression
+        // Uses the specific feedback from your question bank or a default message
         const feedbackText = currentQuestion.feedback || "Correct! Moving deeper...";
         msgElement.innerHTML = `<span class='fade-out-text'>${feedbackText}</span>`;
+        
         room++;
         localStorage.setItem("gauntletRoom", room);
         loadQuestion();
@@ -651,20 +653,21 @@ function answer(choice) {
         streak = 0;
         document.getElementById("streakDisplay").innerText = "";
         
-        // Penalties (Bosses reset your progress more severely)
+        // Penalties: Bosses reset to full health and kick you back further
         if (room === 10 || room === 20 || room === 30) {
-            bossHealth = 3; // Reset boss health on failure
+            bossHealth = 3; 
             room = Math.max(1, room - 3); 
+        } else if (room >= 21) {
+            room = Math.max(1, room - 2); 
         } else {
-            room = Math.max(1, room - (room >= 21 ? 2 : 1)); 
+            room = Math.max(1, room - 1); 
         }
 
         localStorage.setItem("gauntletRoom", room);
-        alert(`Incorrect! The Boss repels you! Back to Room ${room}.`);
+        alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
         loadQuestion();
     }
 }
-
 // Helper to keep the answer function clean
 function handleStreakVisuals() {
     let streakMsg = "";
