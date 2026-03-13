@@ -607,9 +607,9 @@ function answer(choice) {
         msgElement.style.animation = null;
 
         // Check if this was a Boss Room (10, 20, 30)
-        if (room === 10 || room === 20 || room === 30) {
-            showThematicFeedback(room);
-            return; // Stop here; showThematicFeedback will handle the next room
+          if (room === 10 || room === 20 || room === 30) {
+            showKnowledgeRoom(room); // New function instead of an alert
+            return; 
         }
         room++;
         if (room > 30) {
@@ -674,23 +674,44 @@ function answer(choice) {
     loadQuestion();
 }
 
-  function showThematicFeedback(bossRoom) {
+function showKnowledgeRoom(bossRoom) {
+    const qContainer = document.getElementById("question");
+    const aContainer = document.getElementById("answers");
+    const msgElement = document.getElementById("message");
+
+    // Clear the "Correct!" fade-out so it doesn't overlap the summary
+    msgElement.innerText = "";
+    msgElement.className = "";
+    
     let title = "";
-    let message = "";
+    let summary = "";
 
     if (bossRoom === 10) {
-        title = "WARDEN OF INDIFFERENCE DEFEATED";
-        message = "Consumers have consistent preferences represented by indifference curves. They face trade-offs determined by their budget constraint. Optimal consumption occurs where the marginal rate of substitution equals the price ratio. The Labyrinth grows deeper...";
+        title = "WARDEN OF INDIFFERENCE DEFEATED (Archive 10.1)";
+        summary = "Consumers have consistent preferences represented by indifference curves. They face trade-offs determined by their budget constraint. Optimal consumption occurs where the marginal rate of substitution equals the price ratio. The Labyrinth grows deeper...";
     } else if (bossRoom === 20) {
-        title = "DECOMPOSER OF CHOICE DEFEEATED";
-        message = "You have conquered the dual nature of price changes. You now distinguish between how price changes affect purchasing power (Income Effect) and relative attractiveness (Substitution Effect).";
+        title = "DECOMPOSER OF CHOICE DEFEATED (Archive 20.1)";
+        summary = "You have conquered the dual nature of price changes. You now distinguish between how price changes affect purchasing power (Income Effect) and relative attractiveness (Substitution Effect).";
     } else if (bossRoom === 30) {
-        title = "SOVEREIGN OF ELASTICITY DEFEATED";
-        message = "The final seal is broken. You have proven your mastery over Market Responsiveness and the mathematical laws that govern Demand, Elasticity, and Total Revenue.";
+        // For the final boss, we can go straight to victory or show one last summary
+        title = "SOVEREIGN OF ELASTICITY DEFEATED (Final Archive)";
+        summary = "The final seal is broken. You have proven your mastery over Market Responsiveness and the mathematical laws that govern Demand, Elasticity, and Total Revenue.";
     }
 
-    // Using an alert for the "Old School" dungeon feel, or you can use a custom modal
-    alert(`🏆 ${title} 🏆\n\n${message}`);
+    // Update the UI to show the "Knowledge Room" content
+    qContainer.innerHTML = `
+        <span class="boss-title" style="color:#60a5fa; text-shadow: 0 0 15px #60a5fa;">${title}</span>
+        <div class="boss-q" style="--bossColor:#60a5fa; font-style: normal; border-left-color: #60a5fa;">${summary}</div>
+    `;
+    
+    // Replace answer buttons with the "Descend" navigation button
+    let nextAction = bossRoom === 30 ? "handleVictory()" : "room++; loadQuestion();";
+    aContainer.innerHTML = `
+        <button onclick="${nextAction}" 
+                style="background:#60a5fa; color:black; font-weight:bold; width:100%; padding:20px; font-size:18px; box-shadow: 0 0 20px rgba(96, 165, 250, 0.5);">
+                CONTINUE TO ROOM ${bossRoom === 30 ? 'FINALE' : bossRoom + 1} →
+        </button>`;
+}
     
     room++;
     loadQuestion();
