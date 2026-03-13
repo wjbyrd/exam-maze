@@ -472,6 +472,13 @@ function getConsumerSurplusCalc() {
     };
 }
 
+const calculationGenerators = [
+    getMUPerDollar,
+    getEquilibriumCheck,
+    getElasticityCalc,
+    getConsumerSurplusCalc
+];
+    
 // Keep track of the last few questions to prevent repeats
 let questionHistory = {
     easy: [], medium: [], hard: [], 
@@ -543,7 +550,7 @@ function loadQuestion() {
     const bossMsg = document.getElementById("bossMessage");
 
     // 1. Determine Difficulty and Boss Status
-    let diff = (room <= 9) ? "easy" : (room === 10) ? "easyBoss" : (room <= 19) ? "medium" : (room === 20) ? "mediumBoss" : (room <= 29) ? "hard" : "finalBoss";
+    let diff = (room <= 9) ? "easy" : (room === 10) ? "easyBoss" : (room <= 19) ? "medium" : (room === 20) ? "mediumBoss" : (room <= 25) ? "hard" : (room <= 29) ? "calculation" : "finalBoss";
     const isBoss = diff.includes("Boss");
     
     // 2. UI & Progress Updates
@@ -567,9 +574,16 @@ function loadQuestion() {
         gameBox.style.setProperty('--bossColor', bColor);
         questionElement.innerHTML = `<span class="boss-title" style="color:${bColor}">${bTitle}</span><div class="boss-q" style="--bossColor:${bColor}">${currentQuestion.q}</div>`;
     } else {
-        const pool = questionBanks[diff];
-        currentQuestion = pool[Math.floor(Math.random() * pool.length)];
-        
+    if(diff === "calculation"){
+    const generator = calculationGenerators[
+        Math.floor(Math.random() * calculationGenerators.length)
+    ];
+    currentQuestion = generator();
+}
+else{
+    const pool = questionBanks[diff];
+    currentQuestion = pool[Math.floor(Math.random() * pool.length)];
+}
         bossMsg.innerText = (room === 9 || room === 19 || room === 29) ? "⚠️ DANGER: BOSS DETECTED IN NEXT ROOM ⚠️" : "";
         bossMsg.style.color = "#ef4444";
         questionElement.innerText = currentQuestion.q;
