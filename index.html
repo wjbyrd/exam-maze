@@ -127,6 +127,12 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
 </style>
 </head>
 <body>
+<div id="startScreen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:radial-gradient(circle, #111827, #000); z-index:100; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+    <h1 style="color:gold; text-shadow:0 0 20px rgba(251,191,36,0.5); font-size:40px; margin-bottom:10px;">THE MICROECONOMICS GAUNTLET</h1>
+    <p style="color:#9ca3af; letter-spacing:2px; margin-bottom:30px; font-style:italic;">Identify yourself, Adventurer</p>
+    <input type="text" id="usernameInput" placeholder="Enter Name..." style="padding:15px; border-radius:8px; border:1px solid #374151; background:#1f2937; color:white; font-size:20px; margin-bottom:20px; text-align:center; outline:none; width:300px; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
+    <button onclick="startGame()" style="background:#fbbf24; color:#000; font-weight:bold; padding:15px 50px; font-size:20px; cursor:pointer; border-radius:8px; border:none; transition: transform 0.2s;">ENTER THE ARCHIVES</button>
+</div>
     <div class="dungeon-container">
     <img src="torch.gif" class="torch left-torch">
 <div id="gameBox">
@@ -156,15 +162,38 @@ const sfxVictory = new Audio('220184__gameaudio__win-spacey.wav'); // New Victor
 let totalAttempts = 0;
 let correctAnswers = 0; 
 let maxStreak = 0; 
-let username = localStorage.getItem("gauntletUser");
 
-if (!username) {
-    username = prompt("Identify yourself, Adventurer:", "Hero");
-    if (!username) username = "Adventurer"; // Fallback if they hit cancel
-    localStorage.setItem("gauntletUser", username);
-}
-bgMusic.play().catch(e => console.log("Music waiting for first interaction"));
+// Initial state: hide the game until the start screen is cleared
+document.getElementById("gameBox").style.display = "none";
+document.querySelectorAll(".torch").forEach(t => t.style.display = "none");
+
+let username = "";
+let streak = 0; 
+let startTime;
+let room = localStorage.getItem("gauntletRoom") ? parseInt(localStorage.getItem("gauntletRoom")) : 1;
+let currentQuestion;
+
+function startGame() {
+    let inputName = document.getElementById("usernameInput").value.trim();
+    if (!inputName) {
+        alert("A name is required to bind your soul to the archives.");
+        return;
+    }
     
+    username = inputName;
+    localStorage.setItem("gauntletUser", username);
+    
+    // Reveal the game and torches
+    document.getElementById("startScreen").style.display = "none";
+    document.getElementById("gameBox").style.display = "block";
+    document.querySelectorAll(".torch").forEach(t => t.style.display = "block");
+    
+    // Start the atmosphere and timer
+    bgMusic.play().catch(e => console.log("Audio started"));
+    startTime = Date.now(); 
+    loadQuestion();
+}
+  
 let streak = 0; // Add this with your other variables
 let startTime = Date.now();
 let room = localStorage.getItem("gauntletRoom") ? parseInt(localStorage.getItem("gauntletRoom")) : 1;
@@ -614,7 +643,13 @@ function formatTime(ms) {
         }, 2000);
     });
 }
-loadQuestion();
+  // Allow the 'Enter' key to trigger the start of the game
+document.getElementById("usernameInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault(); // Prevents the page from refreshing
+        startGame();
+    }
+});
 </script>
 </body>
 </html>
