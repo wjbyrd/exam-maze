@@ -581,20 +581,15 @@ function loadQuestion() {
 }
     
 function displayQuestion() {
-    const choicesElement = document.getElementById("choices");
-    choicesElement.innerHTML = ""; 
-
-    let optionsMapped = currentQuestion.options.map((opt, index) => {
-        return { text: opt, originalIndex: index };
-    });
-
-    optionsMapped = shuffleArray(optionsMapped);
-
-    optionsMapped.forEach(option => {
+    const optionsElement = document.getElementById("options");
+    optionsElement.innerHTML = "";
+    
+    // Use .answers because that is what is in your questionBank arrays
+    currentQuestion.answers.forEach(option => { 
         const btn = document.createElement("button");
-        btn.innerText = option.text;
-        btn.onclick = () => answer(option.originalIndex);
-        choicesElement.appendChild(btn);
+        btn.innerText = option;
+        btn.onclick = () => checkAnswer(option);
+        optionsElement.appendChild(btn);
     });
 }
     
