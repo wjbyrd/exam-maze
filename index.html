@@ -113,6 +113,17 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
     border: 2px solid #ef4444;
     box-shadow: 0 0 50px rgba(239, 68, 68, 0.4), inset 0 0 20px rgba(239, 68, 68, 0.2);
 }
+   
+.torch {
+    position: absolute;
+    width: 90px;
+    top: 100px;
+    z-index: 10;
+    animation: torchFlicker 3s infinite alternate;
+}
+
+.left-torch { left: calc(50% - 475px); }
+.right-torch { right: calc(50% - 475px); transform: scaleX(-1); }
 
 #startScreen {
 position: fixed;
@@ -132,17 +143,6 @@ justify-content: center;
 align-items: center;
 text-align: center;
 }
-    
-.torch {
-    position: absolute;
-    width: 90px;
-    top: 100px;
-    z-index: 10;
-    animation: torchFlicker 3s infinite alternate;
-}
-
-.left-torch { left: calc(50% - 475px); }
-.right-torch { right: calc(50% - 475px); transform: scaleX(-1); }
 </style>
 </head>
 <body>
