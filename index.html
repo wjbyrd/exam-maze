@@ -509,34 +509,31 @@ function answer(choice) {
     if (choice === currentQuestion.a) {
         correctAnswers++;
         room++;
-        streak++; // Increment streak
+        streak++;
         if (streak > maxStreak) maxStreak = streak;
         
-        // Handle Streak Announcements
         let streakMsg = "";
-        let streakColor = "#60a5fa"; // Default Blue
-if (streak === 5 || streak === 10 || streak === 20) {
-    sfxMilestone.currentTime = 0; // Reset to start
-    sfxMilestone.play();
-    
-    // Existing milestone message logic
-    if (streak === 5) {
-        streakMsg = "🔥 STREAK: Economic Insight!";
-        streakColor = "#fbbf24"; 
-    } else if (streak === 10) {
-        streakMsg = "⚡ STREAK: Market Shock!";
-        streakColor = "#f87171";
-    } else if (streak === 20) {
-        streakMsg = "🌌 STREAK: Policy Reform!";
-        streakColor = "#a855f7";
-    }
-}
+        let streakColor = "#60a5fa";
 
+        if (streak === 5 || streak === 10 || streak === 20) {
+            sfxMilestone.currentTime = 0;
+            sfxMilestone.play();
+            
+            if (streak === 5) {
+                streakMsg = "🔥 STREAK: Economic Insight!";
+                streakColor = "#fbbf24"; 
+            } else if (streak === 10) {
+                streakMsg = "⚡ STREAK: Market Shock!";
+                streakColor = "#f87171";
+            } else if (streak === 20) {
+                streakMsg = "🌌 STREAK: Policy Reform!";
+                streakColor = "#a855f7";
+            }
+        }
 
         if (streakMsg) {
             document.getElementById("streakDisplay").innerText = streakMsg;
             document.getElementById("streakDisplay").style.color = streakColor;
-            // Pulse effect
             document.getElementById("streakDisplay").animate([
                 { transform: 'scale(1)' },
                 { transform: 'scale(1.2)' },
@@ -549,7 +546,6 @@ if (streak === 5 || streak === 10 || streak === 20) {
 
         document.getElementById("message").innerText = "Correct!";
 
-        // Victory Logic
         if (room > 30) {
             bgMusic.pause();
             document.getElementById("mazeTrack").classList.add("victory");
@@ -558,7 +554,7 @@ if (streak === 5 || streak === 10 || streak === 20) {
             const topScores = updateHighScores(totalTimeMs);
             const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
             const isPerfect = accuracy === 100 && room > 30;
-            
+
             setTimeout(() => {
                 sfxVictory.play();
                 let scoreRows = topScores.map((s, i) => 
@@ -567,49 +563,50 @@ if (streak === 5 || streak === 10 || streak === 20) {
                         <td>${formatTime(s.time)}</td>
                     </tr>`).join("");
 
-document.getElementById("gameBox").innerHTML = `
-    <h2 class="victory">${isPerfect ? "👑 FLAWLESS CONQUEST! 👑" : "CONQUERED!"}</h2>
-    <div style="background:#1f2937; padding:20px; border-radius:10px; margin-top:20px; ${isPerfect ? 'border: 3px solid gold;' : ''}">
-        <p>Well done, <strong>${username}</strong>!</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; font-size: 14px;">
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">⏱️ Time: ${timeString}</div>
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">🔥 Best Streak: ${maxStreak}</div>
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">🎯 Accuracy: ${accuracy}%</div>
-            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">📝 Total Questions: ${totalAttempts}</div>
-        </div>
-        ${isPerfect ? "<p style='color:gold; font-weight:bold;'>✨ LEGENDARY STATUS ACHIEVED: PERFECT RUN ✨</p>" : ""}
-        <hr style="border:0; border-top:1px solid #374151; margin:15px 0;">
-        <table style="width:100%; text-align:left; border-collapse:collapse;">
-            ${scoreRows}
-        </table>
-        <p style="margin-top:20px;">Verification Code: <span style='color:#fbbf24;font-size:20px;'>MAZE-${rand(1000, 9999)}</span></p>
-        
-        <div style="display:flex; justify-content:center; gap:10px; margin-top:20px;">
-            <button id="shareBtn" onclick="copyResults()">📋 Copy Results for Canvas</button>
-            <button onclick="location.reload()">Try Again</button>
-        </div>
-    </div>`;
+                document.getElementById("gameBox").innerHTML = `
+                    <h2 class="victory">${isPerfect ? "👑 FLAWLESS CONQUEST! 👑" : "CONQUERED!"}</h2>
+                    <div style="background:#1f2937; padding:20px; border-radius:10px; margin-top:20px; ${isPerfect ? 'border: 3px solid gold;' : ''}">
+                        <p>Well done, <strong>${username}</strong>!</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; font-size: 14px;">
+                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">⏱️ Time: ${timeString}</div>
+                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">🔥 Best Streak: ${maxStreak}</div>
+                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">🎯 Accuracy: ${accuracy}%</div>
+                            <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:5px;">📝 Total Questions: ${totalAttempts}</div>
+                        </div>
+                        ${isPerfect ? "<p style='color:gold; font-weight:bold;'>✨ LEGENDARY STATUS ACHIEVED: PERFECT RUN ✨</p>" : ""}
+                        <hr style="border:0; border-top:1px solid #374151; margin:15px 0;">
+                        <table style="width:100%; text-align:left; border-collapse:collapse;">
+                            ${scoreRows}
+                        </table>
+                        <p style="margin-top:20px;">Verification Code: <span style='color:#fbbf24;font-size:20px;'>MAZE-${Math.floor(Math.random() * 9000) + 1000}</span></p>
+                        
+                        <div style="display:flex; justify-content:center; gap:10px; margin-top:20px;">
+                            <button id="shareBtn" onclick="copyResults()">📋 Copy Results for Canvas</button>
+                            <button onclick="location.reload()">Try Again</button>
+                        </div>
+                    </div>`;
                 localStorage.removeItem("gauntletRoom");
             }, 1000);
             return;
         }
-} else {
+    } else {
         streak = 0;
         const isBossRoom = (room === 10 || room === 20 || room === 30);
         
         if (isBossRoom) {
-            room = Math.max(1, room - 3); // Boss setback: 3
+            room = Math.max(1, room - 3); 
         } else if (room >= 21) {
-            room = Math.max(1, room - 2); // Corridor setback: 2
+            room = Math.max(1, room - 2); 
         } else {
-            room = Math.max(1, room - 1); // Standard setback: 1
+            room = Math.max(1, room - 1); 
         }
         
         localStorage.setItem("gauntletRoom", room);
-        sfxFail.play().catch(e => {}); 
+        // Removed sfxFail call here
         alert(`Incorrect! The Archives reject your answer. You fall back to Room ${room}.`);
-        loadQuestion();
     }
+    loadQuestion();
+}
 
 function shuffleArray(arr){
     for(let i=arr.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
@@ -634,12 +631,11 @@ function formatTime(ms) {
     return `${mins}m ${secs}s`;
 }
 
-    function copyResults() {
+function copyResults() {
     const totalTimeMs = Date.now() - startTime;
     const timeString = formatTime(totalTimeMs);
     const code = document.querySelector('.victory + div span').innerText;
     const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
-        
     const shareText = `🎮 Microeconomics Gauntlet Conquered!\n👤 Adventurer: ${username}\n⏱️ Time: ${timeString}\n🎯 Accuracy: ${accuracy}%\n🔥 Best Streak: ${maxStreak}\n📝 Total Questions: ${totalAttempts}\n🔑 Verification Code: ${code}`;
     
     navigator.clipboard.writeText(shareText).then(() => {
