@@ -751,7 +751,10 @@ function answer(choice) {
 
         const pool = easyConceptPools[currentQuestion.tag];
         currentQuestion = shuffleOptions(pickRandom(pool));
-
+            
+        document.getElementById("question").innerText = "Concept Check: " + currentQuestion.q;
+        document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
+        
         const msgElement = document.getElementById("message");
         msgElement.innerHTML = `<span class='fade-out-text'>You falter… The labyrinth demands a concept check.</span>`;
 
