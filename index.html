@@ -268,43 +268,43 @@ function getAreaName(r) {
 
 // --- Question Pools follow below ---
 const questionBanks = {
-    easyBoss:[{q:"The 'Law of Diminishing Marginal Utility' implies that as consumption of a good increases...",options:["Marginal utility eventually decreases","Total utility eventually becomes negative","Price must fall","Demand becomes vertical"],a:0}],
+    easyBoss:[{q:"A consumer maximizes utility when...",options:["The marginal rate of substitution equals the price ratio","Income is completely spent","Utility is highest possible","Prices are equal across goods"],a:0,feedback:"Utility maximization occurs where the marginal rate of substitution equals the price ratio."}]
     mediumBoss:[{q:"If the substitution effect and income effect move in opposite directions, and the substitution effect is stronger, the good is...",options:["Normal","Inferior (non-Giffen)","A Giffen good","A perfect complement"],a:1}],
     finalBoss:[{q:"A firm observes that when it lowers price, total revenue rises. What must be true about demand at the original price?",options:["Demand was elastic","Demand was inelastic","Demand was perfectly inelastic","Demand was unit elastic"],a:0}
 ],
     easy: [
-        {q:"A theory of choice assumes individuals...",options:["Make random decisions","Choose the most preferred affordable bundle","Always maximize income","Always minimize work"],a:1},
-        {q:"Consumer preferences are typically represented using...",options:["Demand curves","Indifference curves","Supply curves","Cost curves"],a:1},
-        {q:"Indifference curves represent...",options:["Bundles giving equal utility","Bundles giving equal price","Bundles giving equal income","Bundles giving equal production"],a:0},
-        {q:"If a consumer prefers bundle A to bundle B and B to C, preferences are...",options:["Complete","Transitive","Non-rational","Random"],a:1},
-        {q:"The slope of the budget constraint reflects...",options:["Relative prices of goods","Income level","Utility level","Demand elasticity"],a:0},
-        {q:"If income increases, the budget constraint...",options:["Rotates","Shifts outward","Shifts inward","Becomes vertical"],a:1},
-        {q:"If the price of good X increases, the budget line...",options:["Rotates inward on the X-axis","Shifts outward","Rotates outward","Does not change"],a:0},
-        {q:"Consumers maximize utility where...",options:["Indifference curve is tangent to budget line","Income is highest","Prices are equal","Demand is highest"],a:0},
-        {q:"Marginal rate of substitution represents...",options:["Rate consumers trade one good for another","Price ratio","Income ratio","Demand elasticity"],a:0},
-        {q:"A complete preference ordering means...",options:["Consumers can compare any two bundles","Consumers always prefer cheaper goods","Consumers never change preferences","Consumers prefer equal bundles"],a:0},
-        {q:"Transitive preferences imply...",options:["If A is preferred to B and B to C, then A is preferred to C","Consumers prefer cheaper goods","Income increases utility automatically","Demand curves shift"],a:0},
-        {q:"If two bundles lie on the same indifference curve...",options:["They provide equal utility","They cost the same","They contain equal goods","They maximize income"],a:0},
-        {q:"Indifference curves are typically downward sloping because...",options:["Consumers trade one good for another","Prices fall","Income increases","Demand increases"],a:0},
-        {q:"Convex indifference curves imply...",options:["Diminishing marginal rate of substitution","Increasing marginal cost","Constant utility","Perfect substitutes"],a:0},
-        {q:"If the price of good X falls, the budget constraint...",options:["Rotates outward on the X-axis","Shifts outward parallel","Shifts inward","Becomes vertical"],a:0},
-        {q:"Bundles outside the budget constraint are...",options:["Unaffordable","Optimal","Preferred","Efficient"],a:0},
-        {q:"Bundles inside the budget constraint are...",options:["Affordable but not utility maximizing","Impossible","Always optimal","Always inefficient"],a:0},
-        {q:"A bundle of goods refers to...",options:["A set of goods a consumer may consume","A firm's production level","Total market demand","A supply schedule"],a:0},
-        {q:"Utility refers to...",options:["Satisfaction a consumer receives","Total income","Market demand","Firm profit"],a:0},
-        {q:"The budget constraint shows...",options:["All affordable combinations of goods","Only preferred bundles","Production possibilities","Market equilibrium"],a:0},
-        {q:"If both goods become cheaper, the budget line...",options:["Shifts outward","Rotates inward","Becomes vertical","Does not change"],a:0},
-        {q:"Consumer surplus measures...",options:["Difference between willingness to pay and price","Firm profits","Producer costs","Market revenue"],a:0},
-        {q:"Market demand is obtained by...",options:["Summing individual demand curves horizontally","Summing vertically","Multiplying prices","Averaging costs"],a:0},
-        {q:"Price elasticity of demand measures...",options:["Responsiveness of quantity demanded to price change","Firm profit","Consumer income","Market supply"],a:0},
-        {q:"Demand represents...",options:["Quantity consumers are willing and able to buy at different prices","Total production of firms","Government price controls","Consumer income levels"],a:0},
-        {q:"A demand curve typically slopes...",options:["Downward","Upward","Vertically","Perfectly flat"],a:0},
-        {q:"When price increases, quantity demanded typically...",options:["Falls","Rises","Stays constant","Becomes infinite"],a:0},
-        {q:"Consumer surplus is highest when...",options:["Price is much lower than willingness to pay","Price equals cost","Income falls","Demand disappears"],a:0},
-        {q:"If many consumers enter a market, market demand will...",options:["Increase","Decrease","Remain unchanged","Become perfectly inelastic"],a:0},
-        {q:"If two goods are substitutes, an increase in the price of one good will...",options:["Increase demand for the other good","Decrease demand for the other good","Not affect demand","Eliminate demand"],a:0},
-        {q:"If two goods are complements, an increase in the price of one good will...",options:["Decrease demand for the other good","Increase demand for the other good","Have no effect","Make demand perfectly elastic"],a:0}
-    ],
+        {q:"A theory of choice assumes individuals...",options:["Make random decisions","Choose the most preferred affordable bundle","Always maximize income","Always minimize work"],a:1,feedback:"Consumers choose the most preferred bundle they can afford given their budget constraint."},
+{q:"Consumer preferences are typically represented using...",options:["Demand curves","Indifference curves","Supply curves","Cost curves"],a:1,feedback:"Indifference curves show combinations of goods that give the consumer the same level of satisfaction."},
+{q:"Indifference curves represent...",options:["Bundles giving equal utility","Bundles giving equal price","Bundles giving equal income","Bundles giving equal production"],a:0,feedback:"Each point on an indifference curve provides the same level of utility to the consumer."},
+{q:"If a consumer prefers bundle A to bundle B and B to C, preferences are...",options:["Complete","Transitive","Non-rational","Random"],a:1,feedback:"Transitivity means consistent ranking: if A > B and B > C, then A > C."},
+{q:"The slope of the budget constraint reflects...",options:["Relative prices of goods","Income level","Utility level","Demand elasticity"],a:0,feedback:"The slope equals the price ratio between the two goods."},
+{q:"If income increases, the budget constraint...",options:["Rotates","Shifts outward","Shifts inward","Becomes vertical"],a:1,feedback:"Higher income allows consumers to afford more of both goods."},
+{q:"If the price of good X increases, the budget line...",options:["Rotates inward on the X-axis","Shifts outward","Rotates outward","Does not change"],a:0,feedback:"A higher price reduces how much X can be purchased, causing the budget line to rotate inward."},
+{q:"Consumers maximize utility where...",options:["Indifference curve is tangent to budget line","Income is highest","Prices are equal","Demand is highest"],a:0,feedback:"Utility is maximized where the marginal rate of substitution equals the price ratio."},
+{q:"Marginal rate of substitution represents...",options:["Rate consumers trade one good for another","Price ratio","Income ratio","Demand elasticity"],a:0,feedback:"The MRS shows how much of one good a consumer is willing to give up for another."},
+{q:"A complete preference ordering means...",options:["Consumers can compare any two bundles","Consumers always prefer cheaper goods","Consumers never change preferences","Consumers prefer equal bundles"],a:0,feedback:"Completeness means any two bundles can be ranked by the consumer."},
+{q:"Transitive preferences imply...",options:["If A is preferred to B and B to C, then A is preferred to C","Consumers prefer cheaper goods","Income increases utility automatically","Demand curves shift"],a:0,feedback:"Transitivity ensures preferences are logically consistent."},
+{q:"If two bundles lie on the same indifference curve...",options:["They provide equal utility","They cost the same","They contain equal goods","They maximize income"],a:0,feedback:"All bundles on the same indifference curve provide the same satisfaction."},
+{q:"Indifference curves are typically downward sloping because...",options:["Consumers trade one good for another","Prices fall","Income increases","Demand increases"],a:0,feedback:"To keep utility constant, more of one good requires giving up some of the other."},
+{q:"Convex indifference curves imply...",options:["Diminishing marginal rate of substitution","Increasing marginal cost","Constant utility","Perfect substitutes"],a:0,feedback:"Convex curves reflect diminishing willingness to substitute one good for another."},
+{q:"If the price of good X falls, the budget constraint...",options:["Rotates outward on the X-axis","Shifts outward parallel","Shifts inward","Becomes vertical"],a:0,feedback:"A lower price lets consumers buy more of good X."},
+{q:"Bundles outside the budget constraint are...",options:["Unaffordable","Optimal","Preferred","Efficient"],a:0,feedback:"Points outside the budget line cost more than the consumer can afford."},
+{q:"Bundles inside the budget constraint are...",options:["Affordable but not utility maximizing","Impossible","Always optimal","Always inefficient"],a:0,feedback:"These bundles are affordable but may not maximize utility."},
+{q:"A bundle of goods refers to...",options:["A set of goods a consumer may consume","A firm's production level","Total market demand","A supply schedule"],a:0,feedback:"A bundle is simply a combination of goods a consumer chooses."},
+{q:"Utility refers to...",options:["Satisfaction a consumer receives","Total income","Market demand","Firm profit"],a:0,feedback:"Utility measures the satisfaction a consumer receives from consumption."},
+{q:"The budget constraint shows...",options:["All affordable combinations of goods","Only preferred bundles","Production possibilities","Market equilibrium"],a:0,feedback:"The budget constraint shows what a consumer can afford given income and prices."},
+{q:"If both goods become cheaper, the budget line...",options:["Shifts outward","Rotates inward","Becomes vertical","Does not change"],a:0,feedback:"Lower prices increase purchasing power for both goods."},
+{q:"Consumer surplus measures...",options:["Difference between willingness to pay and price","Firm profits","Producer costs","Market revenue"],a:0,feedback:"Consumer surplus is the extra benefit buyers receive when paying less than they were willing to pay."},
+{q:"Market demand is obtained by...",options:["Summing individual demand curves horizontally","Summing vertically","Multiplying prices","Averaging costs"],a:0,feedback:"Market demand adds together the quantities demanded by all consumers at each price."},
+{q:"Price elasticity of demand measures...",options:["Responsiveness of quantity demanded to price change","Firm profit","Consumer income","Market supply"],a:0,feedback:"Elasticity shows how sensitive quantity demanded is to price changes."},
+{q:"Demand represents...",options:["Quantity consumers are willing and able to buy at different prices","Total production of firms","Government price controls","Consumer income levels"],a:0,feedback:"Demand reflects willingness and ability to purchase at various prices."},
+{q:"A demand curve typically slopes...",options:["Downward","Upward","Vertically","Perfectly flat"],a:0,feedback:"As price rises, consumers typically buy less."},
+{q:"When price increases, quantity demanded typically...",options:["Falls","Rises","Stays constant","Becomes infinite"],a:0,feedback:"Higher prices discourage consumption."},
+{q:"Consumer surplus is highest when...",options:["Price is much lower than willingness to pay","Price equals cost","Income falls","Demand disappears"],a:0,feedback:"The bigger the gap between willingness to pay and price, the larger the surplus."},
+{q:"If many consumers enter a market, market demand will...",options:["Increase","Decrease","Remain unchanged","Become perfectly inelastic"],a:0,feedback:"More buyers increase total demand in the market."},
+{q:"If two goods are substitutes, an increase in the price of one good will...",options:["Increase demand for the other good","Decrease demand for the other good","Not affect demand","Eliminate demand"],a:0,feedback:"When one substitute becomes expensive, consumers switch to the other."},
+{q:"If two goods are complements, an increase in the price of one good will...",options:["Decrease demand for the other good","Increase demand for the other good","Have no effect","Make demand perfectly elastic"],a:0,feedback:"Complements are used together, so higher price reduces demand for both."}
+      ],
     medium: [
         {q:"An individual demand curve is derived from...",options:["Budget constraints only","Optimal consumption bundles at different prices","Utility levels only","Production functions"],a:1},
         {q:"When price falls, the optimal bundle typically moves...",options:["Along the demand curve","Off the demand curve","To a different market","Randomly"],a:0},
@@ -679,14 +679,14 @@ function answer(choice) {
     let message = "";
 
     if (bossRoom === 10) {
-        title = "MASTER OF THE ARCHIVES";
-        message = "You have mastered the Fundamentals of Choice. You understand that rational actors maximize utility by balancing marginal gains against costs. The Labyrinth grows deeper...";
+        title = "WARDEN OF INDIFFERENCE DEFEATED";
+        message = "Consumers have consistent preferences represented by indifference curves. They face trade-offs determined by their budget constraint. Optimal consumption occurs where the marginal rate of substitution equals the price ratio. The Labyrinth grows deeper...";
     } else if (bossRoom === 20) {
-        title = "DECODER OF SUBSTITUTIONS";
+        title = "DECOMPOSER OF CHOICE DEFEEATED";
         message = "You have conquered the dual nature of price changes. You now distinguish between how price changes affect purchasing power (Income Effect) and relative attractiveness (Substitution Effect).";
     } else if (bossRoom === 30) {
-        title = "SOVEREIGN OF ELASTICITY";
-        message = "The final seal is broken. You have proven your mastery over Market Responsiveness and the mathematical laws that govern Total Revenue.";
+        title = "SOVEREIGN OF ELASTICITY DEFEATED";
+        message = "The final seal is broken. You have proven your mastery over Market Responsiveness and the mathematical laws that govern Demand, Elasticity, and Total Revenue.";
     }
 
     // Using an alert for the "Old School" dungeon feel, or you can use a custom modal
