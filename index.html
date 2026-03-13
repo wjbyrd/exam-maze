@@ -575,6 +575,17 @@ function shuffle(arr){
     return arr;
 }
 
+let calcBag = [];
+
+function pickCalcGenerator(){
+
+    if(calcBag.length === 0){
+        calcBag = shuffle([...calculationGenerators]);
+    }
+
+    return calcBag.pop();
+}
+    
 function pickRandom(pool){
     if(!pool._remaining || pool._remaining.length === 0){
         pool._remaining = shuffle([...pool]);
@@ -615,10 +626,8 @@ function loadQuestion() {
         questionElement.innerHTML = `<span class="boss-title" style="color:${bColor}">${bTitle}</span><div class="boss-q" style="--bossColor:${bColor}">${currentQuestion.q}</div>`;
     } else {
 if(diff === "calculation"){
-    const generator = calculationGenerators[
-        Math.floor(Math.random() * calculationGenerators.length)
-    ];
-    currentQuestion = shuffleOptions(generator());
+const generator = pickCalcGenerator();
+currentQuestion = shuffleOptions(generator());
 }
 else{
     const pool = questionBanks[diff];
