@@ -334,9 +334,10 @@ bossMusic.play().catch(e=>console.log("Boss music blocked"));
 
 function playExplorationMusic(){
 
+bossMusic.pause();
+
 if(!bgMusic.paused) return;
 
-bossMusic.pause();
 bgMusic.currentTime = 0;
 bgMusic.play().catch(e=>console.log("Music blocked"));
 
@@ -834,8 +835,8 @@ playExplorationMusic();
 }
 
 if(diff === "finalBoss"){
-triggerBossShake();
-setTimeout(triggerBossShake,400);
+setTimeout(triggerBossShake, 250);
+setTimeout(triggerBossShake,650);
 }
     const isBoss = diff.includes("Boss");
     
