@@ -302,8 +302,32 @@ const bgMusic = new Audio('545057__szegvari__monk-chant-fantasy.wav');
 bgMusic.loop = true; 
 bgMusic.volume = 0.1; 
 
+const bossMusic = new Audio('boss_battle_music.wav');
+bossMusic.loop = true;
+bossMusic.volume = 0.10;
+  
 const sfxMilestone = new Audio('387232__steaq__badge-coin-win.wav');
 const sfxVictory = new Audio('220184__gameaudio__win-spacey.wav');
+
+function playBossMusic(){
+
+if(!bossMusic.paused) return;
+
+bgMusic.pause();
+bossMusic.currentTime = 0;
+bossMusic.play().catch(e=>console.log("Boss music blocked"));
+
+}
+
+function playExplorationMusic(){
+
+if(!bgMusic.paused) return;
+
+bossMusic.pause();
+bgMusic.currentTime = 0;
+bgMusic.play().catch(e=>console.log("Music blocked"));
+
+}
 
 const hallwayImages = [
 "hallway1.png",
@@ -790,6 +814,11 @@ function loadQuestion() {
 
     // 1. Determine Difficulty and Boss Status
     let diff = (room <= 9) ? "easy" : (room === 10) ? "easyBoss" : (room <= 19) ? "medium" : (room === 20) ? "mediumBoss" : (room <= 25) ? "hard" : (room <= 29) ? "calculation" : "finalBoss";
+    if(diff.includes("Boss")){
+    playBossMusic();
+    }else{
+    playExplorationMusic();
+  }
     const isBoss = diff.includes("Boss");
     
     // 2. UI & Progress Updates
@@ -979,7 +1008,8 @@ loadQuestion();
 }
   
 function handleVictory() {
-    if (typeof bgMusic !== 'undefined') bgMusic.pause();
+    bgMusic.pause();
+    bossMusic.pause();
     if (typeof sfxVictory !== 'undefined') {
         sfxVictory.currentTime = 0;
         sfxVictory.play();
