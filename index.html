@@ -31,12 +31,14 @@ font-family: Arial, sans-serif;
 100% { filter: brightness(1); }
 }
 #gameBox{
-width:750px;
+max-width:750px;
+width:95%;
 margin:auto;
 margin-top:40px;
-padding:30px;
+padding:20px;
 background:#111827;
 border-radius:14px;
+box-sizing:border-box;
 box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(251, 191, 36, 0.1), inset 0 0 30px rgba(0,0,0,0.6);
 border:1px solid rgba(255,255,255,0.05);
 animation: torchFlicker 6s infinite;
@@ -90,6 +92,18 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
     text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Adds depth for readability */
 }
 
+.answers{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:10px;
+}
+
+.answers button{
+flex:1 1 200px;
+max-width:320px;
+}
+    
 /* Also updating the Boss question text specifically */
 .boss-q {
     font-style: italic;
@@ -101,13 +115,20 @@ h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); 
 }
   
 #mazeTrack {
-    display: grid;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content:center;
     grid-template-columns: repeat(10, 1fr); /* 10 columns per row */
-    gap: 12px;
+    gap: 6px;
     max-width: 500px;
     margin: 25px auto;
 }
-
+    
+#mazeTrack div{
+width:26px;
+height:26px;
+}
+    
 .maze-box {
     width: 36px;
     height: 36px;
@@ -184,7 +205,22 @@ align-items: center;
 text-align: center;
 }
 
+@media (max-width:600px){
 
+#mazeTrack div{
+width:20px;
+height:20px;
+}
+
+#gameBox{
+padding:15px;
+}
+
+.answers button{
+flex:1 1 100%;
+}
+}
+    
 </style>
 </head>
 <body>
