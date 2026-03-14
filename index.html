@@ -280,6 +280,11 @@ transform: scale(1.08);
 </style>
 </head>
 <body>
+  <div id="srAnnouncements"
+     aria-live="assertive"
+     aria-atomic="true"
+     style="position:absolute; left:-9999px; height:1px; width:1px; overflow:hidden;">
+</div>
 <div id="hallwayTransition">
 <div id="hallwayText"></div>
 </div>
@@ -302,11 +307,11 @@ transform: scale(1.08);
     <div id="streakDisplay" style="font-weight:bold; color:#60a5fa; height:24px; margin-top:5px;"></div>
     <p id="bossMessage"></p>
     <div id="questionContainer">
-        <p id="question"></p>
+        <p id="question" aria-live="polite"></p>
         <div id="formulaHint" class="hint-box"></div>
     </div>
     <div id="answers"></div>
-    <p id="message"></p>
+    <p id="message" aria-live="polite"></p>
 </div>
      <img src="torch.gif" class="torch right-torch">
 </div>
@@ -764,6 +769,8 @@ function updateMazeTrack() {
     
     for (let i = 1; i <= 30; i++) {
         const box = document.createElement("div");
+        box.setAttribute("role","img");
+        box.setAttribute("aria-label",`Room ${i} of 30`);
         box.className = "maze-box";
         
         // Determine the icon and state
@@ -772,6 +779,7 @@ function updateMazeTrack() {
             box.style.opacity = "0.6";
         } else if (i === room) {
             box.classList.add("active"); // Trigger the gold pulse
+            box.setAttribute("aria-label",`Current room ${i} of 30`);
             box.innerText = "🟥";
         } else {
             // Boss icons for future rooms
@@ -832,6 +840,7 @@ playExplorationMusic();
     gameBox.classList.toggle("boss-mode", isBoss);
     document.getElementById("progressFill").style.width = (room / 30 * 100) + "%";
     document.getElementById("areaDisplay").innerText = `${getAreaName(room)} (${room}/30)`;
+    document.getElementById("srAnnouncements").innerText = `Entering ${getAreaName(room)}. Room ${room} of 30.`;
 
     // 3. Select the Question
     if (isBoss) {
@@ -843,7 +852,7 @@ playExplorationMusic();
         
         let bTitle = room === 10 ? "WARDEN OF INDIFFERENCE" : room === 20 ? "THE DECOMPOSER OF CHOICE" : "SOVEREIGN OF ELASTICITY";
         let bColor = room === 10 ? "#fbbf24" : room === 20 ? "#a855f7" : "#ef4444";
-        
+        document.getElementById("srAnnouncements").innerText =`Boss encounter. ${bTitle}.`;
         bossMsg.innerText = "⚠ BOSS ENCOUNTER ⚠";
         bossMsg.style.color = bColor;
         gameBox.style.setProperty('--bossColor', bColor);
@@ -883,6 +892,7 @@ function displayQuestion() {
     currentQuestion.options.forEach((option, index) => { 
         const btn = document.createElement("button");
         btn.innerText = option;
+        btn.setAttribute("aria-label",`Answer option: ${option}`);
         btn.onclick = () => answer(index);
         optionsElement.appendChild(btn);
     });
@@ -1014,6 +1024,8 @@ text.innerHTML = `
 `;
 
 overlay.classList.add("active");
+
+document.getElementById("srAnnouncements").innerText =`Correct. ${feedback}`;
 
 setTimeout(()=>{
 overlay.classList.remove("active");
