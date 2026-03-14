@@ -23,6 +23,7 @@ font-family: Arial, sans-serif;
     background-attachment: fixed; /* Keeps the image from scrolling with the page */
     color: white;
     text-align: center;
+    min-height:100vh;
 }
 @keyframes torchFlicker {
 0%   { filter: brightness(1); }
@@ -263,7 +264,7 @@ const sfxMilestone = new Audio('387232__steaq__badge-coin-win.wav');
 const sfxVictory = new Audio('220184__gameaudio__win-spacey.wav');
 
 function goFullscreen(){
-document.getElementById("gameBox").requestFullscreen();
+document.documentElement.requestFullscreen();
 }
     
 // 1. Initial UI State: Hide game until startGame runs
