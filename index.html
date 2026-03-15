@@ -1088,9 +1088,9 @@ function updateMazeTrack() {
             box.innerText = "🟥";
         } else {
             // Boss icons for future rooms
-            if (i === 10) box.innerText = "⚔";
-            else if (i === 20) box.innerText = "👹";
-            else if (i === 30) box.innerText = "👑";
+            if (i === 10) box.innerText = "🧿"; box.classList.add("boss10");
+            else if (i === 20) box.innerText = "⚡"; box.classList.add("boss20");
+            else if (i === 30) box.innerText = "👑"; box.classList.add("boss30");
             else box.innerText = "⬛";
         }
         
