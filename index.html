@@ -157,17 +157,23 @@ max-width:320px;
     box-shadow: 0 0 50px rgba(239, 68, 68, 0.4), inset 0 0 20px rgba(239, 68, 68, 0.2);
 }
    
-.torch {
-    position: absolute;
-    width: 90px;
-    top: 100px;
-    z-index: 10;
-    animation: torchFlicker 3s infinite alternate;
+.torch{
+position:absolute;
+width:40px;
+top:100px;
+z-index:10;
+animation: torchFlicker 3s infinite alternate;
+pointer-events:none;
 }
 
-.left-torch { left: max(10px, calc(50% - 410px)); }
-.right-torch { right: max(10px, calc(50% - 410px)); 
-             transform: scaleX(-1);}
+.left-torch{
+left:-50px;
+}
+
+.right-torch{
+right:-50px;
+transform: scaleX(-1);
+}
   
 @keyframes bossShake {
 0% { transform: translate(0,0); }
@@ -296,12 +302,13 @@ filter: drop-shadow(0 0 12px rgba(56,189,248,.8));
 }
 
 #artifactVault{
-margin-top:25px;
-padding:15px;
-border-radius:10px;
+width:260px;
+padding:18px;
+border-radius:12px;
 background:#020617;
 border:1px solid rgba(56,189,248,.25);
 text-align:center;
+box-shadow:0 0 25px rgba(0,0,0,.6);
 }
 
 #artifactVault h3{
@@ -311,8 +318,8 @@ margin-bottom:10px;
 
 .artifactSlot{
 display:inline-block;
-width:110px;
-margin:0 10px;
+width:80px;
+margin:0 8px;
 opacity:.25;
 }
 
