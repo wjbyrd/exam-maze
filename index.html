@@ -313,16 +313,19 @@ background:linear-gradient(180deg,#020617,#020617 60%,#020617 100%);
 box-shadow:0 0 25px rgba(56,189,248,.15);
 border:1px solid rgba(56,189,248,.25);
 text-align:center;
-display:flex;
-justify-content:space-around;
-align-items:flex-start;
-gap:20px;
 display:none;
 }
 
 #artifactVault h3{
 color:#60a5fa;
-margin-bottom:10px;
+margin:0 0 14px 0;
+}
+
+.vaultRow{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:18px;
 }
 
 .artifactSlot{
@@ -331,7 +334,6 @@ flex-direction:column;
 align-items:center;
 justify-content:flex-start;
 width:110px;
-margin:0 10px;
 opacity:.25;
 transition:all .4s ease;
 text-align:center;
@@ -351,7 +353,7 @@ margin-top:8px;
 line-height:1.2;
 text-align:center;
 }
-  
+
 /* UNLOCKED STATE */
 .artifactSlot.unlocked{
 opacity:1;
@@ -365,8 +367,8 @@ transform:scale(1.05);
 }
 
 .artifactSlot.unlocked img{
-filter: drop-shadow(0 0 14px rgba(56,189,248,.9));
-animation: relicPulse 3s infinite;
+filter:drop-shadow(0 0 14px rgba(56,189,248,.9));
+animation:relicPulse 3s infinite;
 }
 
 .artifactSlot.unlocked span{
@@ -416,25 +418,26 @@ font-weight:600;
     <p id="artifactText"></p>
 </div>
 </div>
-      <div id="artifactVault">
+<div id="artifactVault">
     <h3>Relics Recovered</h3>
 
-    <div id="vaultSeal" class="artifactSlot">
-        <img src="seal_of_preferences.png">
-        <span>Seal of Preferences</span>
-    </div>
+    <div class="vaultRow">
+        <div id="vaultSeal" class="artifactSlot">
+            <img src="seal_of_preferences.png">
+            <span>Seal of Preferences</span>
+        </div>
 
-    <div id="vaultPrism" class="artifactSlot">
-        <img src="prism_of_tradeoffs.png">
-        <span>Prism of Tradeoffs</span>
-    </div>
+        <div id="vaultPrism" class="artifactSlot">
+            <img src="prism_of_tradeoffs.png">
+            <span>Prism of Tradeoffs</span>
+        </div>
 
-    <div id="vaultScepter" class="artifactSlot">
-        <img src="scepter_of_elasticity.png">
-        <span>Scepter of Elasticity</span>
+        <div id="vaultScepter" class="artifactSlot">
+            <img src="scepter_of_elasticity.png">
+            <span>Scepter of Elasticity</span>
+        </div>
     </div>
 </div>
-    </div>
 <script>
 const bgMusic = new Audio('545057__szegvari__monk-chant-fantasy.wav'); 
 bgMusic.loop = true; 
