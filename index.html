@@ -165,15 +165,17 @@ top:120px;
 z-index:10;
 animation: torchFlicker 3s infinite alternate;
 pointer-events:none;
+opacity:.9;
+filter:drop-shadow(0 0 12px rgba(255,180,80,.7));
 }
 
 .left-torch{
-left:-50px;
+left:-70px;
 }
 
 .right-torch{
-right:-50px;
-transform: scaleX(-1);
+right:-70px;
+transform:scaleX(-1);
 }
   
 @keyframes bossShake {
@@ -364,11 +366,11 @@ filter:drop-shadow(0 0 10px #38bdf8);
     <button onclick="startGame()" style="background:#30bbdd; color:#000; font-weight:bold; padding:15px 50px; font-size:20px; cursor:pointer; border-radius:8px; border:none; transition: transform 0.2s;">ENTER THE ARCHIVES</button>
 </div>
     <div class="dungeon-container">
-    <img src="torch.gif" class="torch left-torch">
-     <img src="torch.gif" class="torch right-torch">
     <button class="fullscreenBtn" onclick="goFullscreen()">Fullscreen</button>
     <div id="autosave">💾 Progress Autosaved</div>
 <div id="gameBox">
+      <img src="torch.gif" class="torch left-torch">
+     <img src="torch.gif" class="torch right-torch">
     <h2>The Labyrinth of Choice</h2>
     <p id="areaDisplay" class="area-title"></p>
     <div id="progressBar"><div id="progressFill"></div></div>
