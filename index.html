@@ -1364,7 +1364,6 @@ function answer(choice) {
     totalAttempts++;
     const msgElement = document.getElementById("message");
     if (bgMusic.paused) bgMusic.play();
-
     if (choice === currentQuestion.a) {
         // If this was a concept detour question, return player to main path
         if(detourActive){
@@ -1375,60 +1374,51 @@ function answer(choice) {
         setTimeout(loadQuestion, 1000);
         return;
     }
-
         correctAnswers++;
         streak++;
         if (streak > maxStreak) maxStreak = streak;
         handleStreakVisuals();
 
-         // --- BOSS HIT LOGIC ---
+       // --- BOSS HIT LOGIC ---
         if (room === 10 || room === 20 || room === 30) {
-                 sfxBossHit.pause();
-                sfxBossHit.currentTime = 0;
-                sfxBossHit.play();
-                msgElement.innerHTML = `<span style='color:#f87171;font-weight:bold;'>⚔ HIT! Boss Health: ${bossHealth}/3</span>`;
-                // CALL THE SHAKE FUNCTION HERE
-                triggerBossShake();
-                setTimeout(loadQuestion, 900); // Refresh to next boss question
-                return; 
-            } else {
+        bossHealth--;
+        sfxBossHit.pause();
+        sfxBossHit.currentTime = 0;
+        sfxBossHit.play();
 
-    if(room === 10){
-      document.getElementById("vaultSeal").classList.add("unlocked");
-      localStorage.setItem("vaultSeal", "true");
-      showArtifact(
-            artifacts.seal.img,
-            artifacts.seal.title,
-            artifacts.seal.text
-        );
-    }
+        msgElement.innerHTML = `<span style='color:#f87171;font-weight:bold;'>⚔ HIT! Boss Health: ${bossHealth}/3</span>`;
 
-    if(room === 20){
-      document.getElementById("vaultPrism").classList.add("unlocked");
-      localStorage.setItem("vaultPrism", "true");
-      showArtifact(
-            artifacts.prism.img,
-            artifacts.prism.title,
-            artifacts.prism.text
-        );
-    }
+        triggerBossShake();
 
-    if(room === 30){
-       document.getElementById("vaultScepter").classList.add("unlocked");
-      localStorage.setItem("vaultScepter", "true");
-      showArtifact(
-            artifacts.scepter.img,
-            artifacts.scepter.title,
-            artifacts.scepter.text
-        );
-    }
+        if (bossHealth > 0) {
+        setTimeout(loadQuestion, 900);
+        return;
+        }
+
+        // Boss defeated
+        if(room === 10){
+        document.getElementById("vaultSeal").classList.add("unlocked");
+        localStorage.setItem("vaultSeal", "true");
+        showArtifact(artifacts.seal.img, artifacts.seal.title, artifacts.seal.text);
+        }
+
+        if(room === 20){
+        document.getElementById("vaultPrism").classList.add("unlocked");
+        localStorage.setItem("vaultPrism", "true");
+        showArtifact(artifacts.prism.img, artifacts.prism.title, artifacts.prism.text);
+        }
+
+        if(room === 30){
+        document.getElementById("vaultScepter").classList.add("unlocked");
+        localStorage.setItem("vaultScepter", "true");
+        showArtifact(artifacts.scepter.img, artifacts.scepter.title, artifacts.scepter.text);
+        }
 
     showKnowledgeRoom(room);
     bossHealth = 3;
     return;
-}
-        }
-
+            }
+        
 msgElement.innerHTML = "";
 
 room++;
@@ -1439,8 +1429,8 @@ return;
     } else {
         streak = 0;
         // If question has a concept tag, trigger a reinforcement detour
-// --- Adaptive Concept Detour ---
-if(!detourActive && currentQuestion.tag){
+    // --- Adaptive Concept Detour ---
+    if(!detourActive && currentQuestion.tag){
     conceptMemory[currentQuestion.tag]++;
 }
 
@@ -1457,20 +1447,20 @@ if(!detourActive && currentQuestion.tag){
         conceptPool = mediumConceptPools[currentQuestion.tag];
     }
 
-   if(conceptPool){
+       if(conceptPool){
 
-    detourActive = true;
-    detourReturnRoom = room;
+        detourActive = true;
+        detourReturnRoom = room;
 
-    currentQuestion = shuffleOptions(pickRandom(conceptPool));
+        currentQuestion = shuffleOptions(pickRandom(conceptPool));
 
-    document.getElementById("question").innerText = "Concept Check: " + currentQuestion.q;
-    document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
+        document.getElementById("question").innerText = "Concept Check: " + currentQuestion.q;
+        document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
 
-    msgElement.innerHTML = `<span class='fade-out-text'>You falter… The labyrinth demands a concept check.</span>`;
+        msgElement.innerHTML = `<span class='fade-out-text'>You falter… The labyrinth demands a concept check.</span>`;
 
-    displayQuestion();
-    return;
+        displayQuestion();
+        return;
 }
 
 // Normal failure handling
