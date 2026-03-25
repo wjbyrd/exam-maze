@@ -451,6 +451,12 @@ let questionHistory = {
     finalBoss: []
 };
 
+const TIMING = {
+    normal: 1200,
+    boss: 1000,
+    detour: 1400
+};
+    
 const artifacts = {
 seal:{
     img:"seal_of_preferences.png",
@@ -1440,7 +1446,7 @@ function answer(choice) {
         msgElement.innerHTML = `<span class='fade-out-text'>Correct! Concept restored. Moving deeper...</span>`;
         room = detourReturnRoom + 1;
         localStorage.setItem("gauntletRoom", room);
-        setTimeout(loadQuestion, 1000);
+        setTimeout(loadQuestion, TIMING.normal);
         return;
     }
         correctAnswers++;
@@ -1459,7 +1465,7 @@ function answer(choice) {
         triggerBossShake();
 
         if (bossHealth > 0) {
-        setTimeout(loadQuestion, 900);
+        setTimeout(loadQuestion, TIMING.boss);
         return;
         }
 
