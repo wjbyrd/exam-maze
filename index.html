@@ -84,11 +84,13 @@ h2 { text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2);
    4. BUTTONS & INTERACTION
 ========================================= */
 button {
-    padding: 12px 22px; margin: 8px; font-size: 16px; cursor: pointer;
+    padding: 12px 22px; margin: 6px; font-size: 16px; cursor: pointer;
     background: #374151; color: white; border: none; border-radius: 8px; transition: all 0.2s ease;
 }
 
 button:hover { background: #4b5563; transform: translateY(-2px); }
+
+button:active {transform: scale(0.96);}
 
 .answers { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
 .answers button { flex: 1 1 200px; max-width: 320px; }
@@ -239,11 +241,12 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
    
 /* Wizard Box */
 #wizardBox{
-    width:180px;
-    min-width:180px;
+    width:160px;
+    min-width:160px;
+    min-height:200px;
     background:#0f172a;
     border-radius:12px;
-    padding:0;
+    padding:10px;
     display:flex;
     justify-content:center;
     flex:0 0 180px;
@@ -255,7 +258,7 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
 
 /* Wizard Image */
 #wizardImage{
-    width:110px;
+    width:115px;
     filter: drop-shadow(0 0 12px rgba(96,165,250,.6));
     animation: wizardFloat 4s ease-in-out infinite;
 }
@@ -1309,9 +1312,14 @@ function answer(choice) {
     totalAttempts++;
     const isBossRoom = (room === 10 || room === 20 || room === 30);
     const msgElement = document.getElementById("message");
+    const wizard = document.getElementById("wizardImage");
     if (choice === currentQuestion.a) {
         sfxCorrect.currentTime = 0;
         sfxCorrect.play().catch(()=>{});
+        wizard.style.transform = "scale(1.1)";
+        setTimeout(()=>{
+        wizard.style.transform = "";
+        },200);
         // If this was a concept detour question, return player to main path
         if(detourActive){
         detourActive = false;
@@ -1380,6 +1388,13 @@ return;
         }    
         sfxWrong.currentTime = 0;
         sfxWrong.play().catch(()=>{});
+        wizard.style.transform = "translateX(-6px)";
+        setTimeout(()=>{
+            wizard.style.transform = "translateX(6px)";
+            setTimeout(()=>{
+                wizard.style.transform = "";
+            },100);
+        },100);
         streak = 0;
     // If question has a concept tag, trigger a reinforcement detour
     // --- Adaptive Concept Detour ---
