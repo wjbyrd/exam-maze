@@ -106,7 +106,7 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
 #artifactImage { width: 96px; margin-bottom: 8px; }
 #artifactDrop img { filter: drop-shadow(0 0 12px rgba(56,189,248,.8)); }
 
-#artifactVault { margin-top: 60px; width: 260px; padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#020617,#020617 60%,#020617 100%); box-shadow: 0 0 25px rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.25); text-align: center; display:block !important; }
+#artifactVault { margin-top: -4px; width: 260px; padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#020617,#020617 60%,#020617 100%); box-shadow: 0 0 25px rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.25); text-align: center; display:block !important; }
 #artifactVault h3 { color: #60a5fa; margin: 0 0 14px 0; }
 
 .vaultRow { display: flex; justify-content: center; align-items:flex-end; gap: 8px; flex-wrap:wrap;}
@@ -171,12 +171,22 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
     display:flex;
     flex-direction:column;   /* STACK */
     align-items:center;      /* CENTER */
-    gap:16px;
+    gap:10px;
     width:100%;
     max-width:700px;         /* SMALLER footprint */
-    margin:0 auto 20px auto;
+    margin:0 auto 8px auto;
 }
-
+   
+/* TITLE ABOVE MAZE */
+.top-title{
+    font-size:22px;
+    font-weight:bold;
+    color:#e5e7eb;
+    text-align:center;
+    margin-bottom:6px;
+    text-shadow:0 0 10px rgba(255,255,255,0.15);
+}
+   
 /* Maze Tracker & Artifact Boxes */
 .top-panel{
     display:flex;
@@ -291,6 +301,7 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
     <button class="fullscreenBtn" onclick="goFullscreen()">Fullscreen</button>
     <!-- TOP PANEL -->
     <div class="top-panel">
+       <h2>The Labyrinth of Choice</h2>
         <div id="mazeTrackContainer">
             <div id="mazeTrack"></div>
         </div>
@@ -325,7 +336,6 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
             <img src="torch.gif" class="torch left-torch">
             <img src="torch.gif" class="torch right-torch">
 
-            <h2>The Labyrinth of Choice</h2>
             <p id="areaDisplay" class="area-title"></p>
 
             <div id="progressBar">
