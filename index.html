@@ -425,6 +425,7 @@ let currentQuestion = null;
 let detourActive = false;
 let detourReturnRoom = null;
 let lastTypes = [];
+let weakTags = {};
 let usedQuestions = {
     easy: [],
     medium: [],
@@ -751,7 +752,27 @@ hard:[
 { id:100, q:"If indifference curves become flatter as you move to the right along a curve, what does this indicate?",options:["Diminishing marginal rate of substitution","Increasing marginal utility","Perfect substitutes","Perfect complements"],a:0,feedback:"Consumers are willing to give up fewer units of Y for each additional unit of X, which reflects diminishing marginal rate of substitution."},
 { id:101, q:"If the price of good X falls while income remains constant, what happens to the budget constraint?",options:["It rotates outward along the X-axis","It shifts outward parallel","It rotates inward","It becomes vertical"],a:0,feedback:"A lower price for X allows consumers to buy more X while the Y intercept stays the same."},
 { id:102, q:"If the marginal rate of substitution is less than the price ratio at a bundle, what should the consumer do?",options:["Consume more of good Y and less of good X","Consume more of good X and less of good Y","Stop consuming both goods","Increase income"],a:0,feedback:"If MRS is less than the price ratio, the consumer values Y more relative to X than the market trade-off, so they should consume more Y."},
-{ id:103, q:"Which statement must be true for a bundle to maximize utility?",options:["An indifference curve is tangent to the budget line","The bundle lies on the highest indifference curve regardless of affordability","The consumer buys equal amounts of both goods","The budget line is horizontal"],a:0,feedback:"Utility maximization occurs where the highest attainable indifference curve is tangent to the budget constraint."}
+{ id:103, q:"Which statement must be true for a bundle to maximize utility?",options:["An indifference curve is tangent to the budget line","The bundle lies on the highest indifference curve regardless of affordability","The consumer buys equal amounts of both goods","The budget line is horizontal"],a:0,feedback:"Utility maximization occurs where the highest attainable indifference curve is tangent to the budget constraint."},
+{ id:201,q:"A consumer has MUx = 30 and MUy = 20. Prices are Px = 5 and Py = 4. What should the consumer do?",options:["Buy more X and less Y","Buy more Y and less X","Do nothing","Increase income"],a:1,tag:"consumer_equilibrium",type:"calculation",feedback:"MUx/Px = 6 and MUy/Py = 5. Consumer should shift toward Y."},
+{ id:202,q:"A good has price elasticity of demand of 1.5. If price increases by 10%, what happens to total revenue?",options:["Total revenue decreases","Total revenue increases","Total revenue stays constant","Cannot be determined"],a:0,tag:"elasticity",type:"interpretation",feedback:"Elastic demand means price and revenue move in opposite directions."},
+{ id:203,q:"A consumer’s income increases and the demand for good X falls. Meanwhile, when price falls, quantity demanded rises. What type of good is X?",options:["Inferior","Normal","Giffen","Perfect substitute"],a:0,tag:"income_substitution",type:"interpretation",feedback:"Inferior goods decrease in demand as income rises, but still follow the law of demand."},
+{ id:204,q:"If the price of a good decreases and total revenue decreases, what can you conclude about demand?",options:["Demand is inelastic","Demand is elastic","Demand is unit elastic","Demand is perfectly elastic"],a:0,tag:"elasticity",type:"interpretation",feedback:"If price and revenue move in the same direction, demand is inelastic."},
+{ id:205,q:"A consumer is at equilibrium. Income doubles, and prices remain constant. What happens to the optimal bundle?",options:["The consumer moves to a higher indifference curve","The consumer stays on the same bundle","The budget line rotates","The slope of the indifference curve changes"],a:0,tag:"consumer_equilibrium",type:"interpretation",feedback:"Higher income shifts the budget constraint outward, allowing higher utility."},
+{ id:206,q:"If the substitution effect and income effect exactly offset each other after a price change, what happens to quantity demanded?",options:["It remains unchanged","It increases","It decreases","It becomes zero"],a:0,tag:"income_substitution",type:"trap",feedback:"If both effects cancel out, there is no net change in consumption."},
+{ id:207,q:"The price of a good rises from $8 to $10 and quantity demanded falls from 50 to 40. Using midpoint elasticity, demand is:",options:["Elastic","Inelastic","Unit elastic","Perfectly elastic"],a:0,tag:"elasticity",type:"calculation",feedback:"Elasticity ≈ 1.33, which is elastic."},
+{ id:208,q:"A consumer’s marginal rate of substitution is decreasing. What does this imply about preferences?",options:["They are convex","They are linear","They are inconsistent","They are perfect complements"],a:0,tag:"consumer_equilibrium",type:"interpretation",feedback:"Diminishing MRS implies convex preferences."},
+{ id:209,q:"If the price of good X falls and consumption of good Y increases, what must be true?",options:["Goods are complements","Goods are substitutes","Y is inferior","X is inferior"],a:0,tag:"demand",type:"interpretation",feedback:"Complementary goods are consumed together."},
+{ id:210,q:"A demand curve is steep but not vertical. What can be said about elasticity?",options:["Demand is relatively inelastic","Demand is relatively elastic","Demand is perfectly elastic","Demand is unit elastic"],a:0,tag:"elasticity",type:"interpretation",feedback:"Steeper curves indicate lower responsiveness to price changes."},
+{ id:211,q:"A consumer has MUx/Px = 8 and MUy/Py = 4. If they reallocate spending optimally, what will happen?",options:["They will buy more X and less Y","They will buy more Y and less X","They will not change consumption","They will increase income"],a:0,tag:"consumer_equilibrium",type:"interpretation",feedback:"Consumers shift spending toward the good with higher marginal utility per dollar."},
+{ id:212,q:"If demand is elastic and price decreases by 5%, what must happen to quantity demanded for total revenue to increase?",options:["Quantity demanded increases by more than 5%","Quantity demanded increases by less than 5%","Quantity demanded decreases","Quantity demanded does not change"],a:0,tag:"elasticity",type:"interpretation",feedback:"Elastic demand requires quantity to change proportionally more than price."},
+{ id:213,q:"If a good is Giffen, what must be true about the income and substitution effects?",options:["Income effect outweighs substitution effect","Substitution effect outweighs income effect","Both effects reinforce each other","Neither effect exists"],a:0,tag:"income_substitution",type:"trap",feedback:"Giffen goods occur when the income effect dominates and reverses the usual demand relationship."}, 
+{ id:214,q:"A consumer faces Px = 2 and Py = 4. At their current bundle, MRS = 3. What should they do?",options:["Consume more X","Consume more Y","Stay at current bundle","Increase income"],a:0,tag:"consumer_equilibrium",type:"calculation",feedback:"Since MRS (3) > Px/Py (0.5), the consumer should consume more X."},    
+{ id:215,q:"If total revenue rises when price increases, what must be true about the percentage change in quantity demanded?",options:["It falls by less than the percentage increase in price","It falls by more than the percentage increase in price","It increases","It stays the same"],a:0,tag:"elasticity",type:"interpretation",feedback:"Inelastic demand means quantity changes proportionally less than price."},
+{ id:216,q:"If both goods are normal and income rises, what happens to the budget constraint and optimal bundle?",options:["Budget shifts outward, higher indifference curve reached","Budget rotates, same indifference curve","Budget shifts inward, lower utility","No change occurs"],a:0,tag:"consumer_equilibrium",type:"interpretation",feedback:"Higher income shifts the budget outward, allowing greater utility."},
+{ id:217,q:"If the price of X falls and demand for Y falls, what can you conclude?",options:["X and Y are complements","X and Y are substitutes","Y is inferior","X is inferior"],a:0,tag:"demand",type:"interpretation",feedback:"If consumption of Y falls when X becomes cheaper, the goods are complements."},
+{ id:218,q:"A demand curve is perfectly vertical. What happens to total revenue if price increases?",options:["Total revenue increases","Total revenue decreases","Total revenue stays constant","Cannot be determined"],a:0,tag:"elasticity",type:"interpretation",feedback:"With perfectly inelastic demand, quantity does not change, so higher price increases revenue."},
+{ id:219,q:"If MRS equals the price ratio but the consumer is not maximizing utility, what must be true?",options:["The bundle is not affordable","Preferences are inconsistent","Income is zero","Prices are changing"],a:0,tag:"consumer_equilibrium",type:"trap",feedback:"Utility maximization requires both MRS = price ratio and that the bundle lies on the budget constraint."},
+{ id:220,q:"If demand is elastic at a given price, what happens to total revenue when price falls?",options:["Total revenue increases","Total revenue decreases","Total revenue stays the same","Revenue becomes zero"],a:0,tag:"elasticity",type:"interpretation",feedback:"With elastic demand, price and total revenue move in opposite directions."}
 ]
 };
 
@@ -1318,18 +1339,30 @@ function loadQuestion() {
     ${currentQuestion.q}
     </div>`;
    } else {
-    if(diff === "calculation"){
+
+    // --- STREAK ADAPTIVE LOGIC ---
+    let adjustedDiff = diff;
+
+    if(streak >= 5 && room < 25){
+        adjustedDiff = "hard";
+    }
+    else if(streak >= 3 && room < 20){
+        adjustedDiff = "medium";
+    }
+
+    // --- QUESTION SELECTION ---
+    if(adjustedDiff === "calculation"){
         const generator = pickCalcGenerator();
         currentQuestion = shuffleOptions(generator());
     }
-    else if(diff === "easy"){
+    else if(adjustedDiff === "easy"){
         currentQuestion = shuffleOptions(randomEasy());
     }
-    else if(diff === "medium"){
+    else if(adjustedDiff === "medium"){
         currentQuestion = shuffleOptions(randomMedium());
     }
-    else if(diff === "hard"){
-    currentQuestion = shuffleOptions(randomHard());
+    else if(adjustedDiff === "hard"){
+        currentQuestion = shuffleOptions(randomHard());
     }
     else{
         currentQuestion = shuffleOptions(randomQuestion(diff));
@@ -1478,6 +1511,14 @@ return;
             },100);
         },100);
         streak = 0;
+
+// --- WEAK TAG TRACKING ---
+    if(currentQuestion.tag){
+        weakTags[currentQuestion.tag] = (weakTags[currentQuestion.tag] || 0) + 1;
+    }
+        for(let tag in weakTags){
+            weakTags[tag] *= 0.9;
+        }
     // If question has a concept tag, trigger a reinforcement detour
     // --- Adaptive Concept Detour ---
     if(!detourActive && currentQuestion.tag){
