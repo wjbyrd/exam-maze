@@ -541,6 +541,23 @@ function getAreaName(r) {
 // WIZARD DIALOGUE SYSTEM
 // Lines used during transitions
 // =============================
+const wizardFeedback = {
+    correct: [
+        "The path reveals itself to those who think clearly.",
+        "You see it now… the logic unfolds.",
+        "Good. You’re beginning to understand.",
+        "The labyrinth yields to disciplined thought.",
+        "Yes… that was no accident. Press on."
+    ],
+    wrong: [
+        "No. That is not the way.",
+        "You moved too quickly.",
+        "The logic slipped from your grasp.",
+        "Careless. Try again.",
+        "The labyrinth punishes haste."
+    ]
+};
+    
 const wizardLines = {
     definition: [
         "Define it. No guessing.",
@@ -578,6 +595,11 @@ const wizardLines = {
 
 function getWizardLine(type){
     const pool = wizardLines[type] || wizardLines.default;
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function getWizardFeedback(type){
+    const pool = wizardFeedback[type];
     return pool[Math.floor(Math.random() * pool.length)];
 }
     
@@ -1359,6 +1381,7 @@ function answer(choice) {
     if (choice === currentQuestion.a) {
         sfxCorrect.currentTime = 0;
         sfxCorrect.play().catch(()=>{});
+        wizardSpeak(getWizardFeedback("correct"));
         wizard.style.transform = "scale(1.1)";
         setTimeout(()=>{
         wizard.style.transform = "";
@@ -1431,6 +1454,7 @@ return;
         }    
         sfxWrong.currentTime = 0;
         sfxWrong.play().catch(()=>{});
+        wizardSpeak(getWizardFeedback("wrong"));
         wizard.style.transform = "translateX(-6px)";
         setTimeout(()=>{
             wizard.style.transform = "translateX(6px)";
@@ -1502,11 +1526,13 @@ function handleStreakVisuals() {
         document.getElementById("streakDisplay").style.color = "#60a5fa";
     }
 }
-
+    
+showHallwayTransition(currentQuestion.feedback, true);
+    
 function showHallwayTransition(feedback){
 const overlay = document.getElementById("hallwayTransition");
 const text = document.getElementById("hallwayText");
-const line = wizardLines[Math.floor(Math.random() * wizardLines.length)];
+const line = getWizardFeedback("correct");
     
 // pick a random hallway image
 const randomHall = hallwayImages[Math.floor(Math.random()*hallwayImages.length)];
@@ -1518,7 +1544,8 @@ overlay.style.backgroundSize = "cover";
 overlay.style.backgroundPosition = "center";
 
 text.innerHTML = `
-<div class="wizard-text" style="font-size:22px;margin-bottom:15px;">${line}</div>
+text.innerHTML = `
+<div class="wizard-text" style="font-size:20px;margin-bottom:10px;">${line}</div>
 <div style="font-size:18px;opacity:.9;">${feedback}</div>
 <div style="margin-top:25px;font-size:14px;opacity:.7;">You move deeper into the archives...</div>
 `;
