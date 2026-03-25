@@ -479,7 +479,9 @@ finalBossMusic.volume = 0.12; // slightly louder, it's the final fight
 const sfxMilestone = new Audio('streak.wav');
 const sfxVictory = new Audio('victory.wav');
 const sfxBossHit = new Audio('boss_hit.wav');
-
+const sfxCorrect = new Audio('ding.wav');
+const sfxWrong = new Audio('mistake.wav');
+    
 function playBossMusic(){
 
 if(!bossMusic.paused) return;
@@ -1255,6 +1257,29 @@ function pickRandom(pool){
     }
     return pool._remaining.pop();
 }
+
+let currentMusic = null;
+    
+function playExplorationMusic(){
+    if(currentMusic === "exploration") return;
+    stopAllMusic();
+    explorationMusic.play();
+    currentMusic = "exploration";
+}
+
+function playBossMusic(){
+    if(currentMusic === "boss") return;
+    stopAllMusic();
+    bossMusic.play();
+    currentMusic = "boss";
+}
+
+function playFinalBossMusic(){
+    if(currentMusic === "finalBoss") return;
+    stopAllMusic();
+    finalBossMusic.play();
+    currentMusic = "finalBoss";
+}
     
 function loadQuestion() {
     updateMazeTrack();
@@ -1267,11 +1292,17 @@ function loadQuestion() {
 
     // 1. Determine Difficulty and Boss Status
     let diff = (room <= 9) ? "easy" : (room === 10) ? "easyBoss" : (room <= 19) ? "medium" : (room === 20) ? "mediumBoss" : (room <= 25) ? "hard" : (room <= 29) ? "calculation" : "finalBoss";
-if(diff.includes("Boss")){
-playBossMusic();
-}else{
-playExplorationMusic();
-}
+    
+    // --- MUSIC CONTROL ---
+    if(diff === "finalBoss"){
+        playFinalBossMusic();
+        }
+    else if(diff.includes("Boss")){
+        playBossMusic();
+        }
+    else{
+        playExplorationMusic();
+        }
 
     const isBoss = diff.includes("Boss");
     
@@ -1296,28 +1327,28 @@ playExplorationMusic();
         bossMsg.style.color = bColor;
         gameBox.style.setProperty('--bossColor', bColor);
         let bossImage = "";
-let bossClass = "";
+        let bossClass = "";
 
-if(room === 10){
-bossImage = "warden.png";
-bossClass = "wardenGlow";
-}
-else if(room === 20){
-bossImage = "decomposer.png";
-bossClass = "decomposerGlow";
-}
-else{
-bossImage = "sovereign.png";
-bossClass = "finalBoss";
-}
+    if(room === 10){
+    bossImage = "warden.png";
+    bossClass = "wardenGlow";
+    }
+    else if(room === 20){
+    bossImage = "decomposer.png";
+    bossClass = "decomposerGlow";
+    }
+    else{
+    bossImage = "sovereign.png";
+    bossClass = "finalBoss";
+    }
 
-questionElement.innerHTML =
-`<img src="${bossImage}" class="bossIcon ${bossClass}">
-<span class="boss-title" style="color:${bColor}">${bTitle}</span>
-<div class="boss-q" style="--bossColor:${bColor}">
-${currentQuestion.q}
-</div>`;
-} else {
+    questionElement.innerHTML =
+    `<img src="${bossImage}" class="bossIcon ${bossClass}">
+    <span class="boss-title" style="color:${bColor}">${bTitle}</span>
+    <div class="boss-q" style="--bossColor:${bColor}">
+    ${currentQuestion.q}
+    </div>`;
+    } else {
     if(diff === "calculation"){
         const generator = pickCalcGenerator();
         currentQuestion = shuffleOptions(generator());
@@ -1342,13 +1373,14 @@ ${currentQuestion.q}
     // 4. Update Hints and Draw Buttons
     document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
     displayQuestion();
+    
   // --- Final Boss Entrance Shake ---
-if(diff === "finalBoss"){
-setTimeout(()=>{
-triggerBossShake();
-setTimeout(triggerBossShake,450);
-},200);
-}
+    if(diff === "finalBoss"){
+        setTimeout(()=>{
+        triggerBossShake();
+        setTimeout(triggerBossShake,450);
+        },200);
+    }
 }
     
 function displayQuestion() {
@@ -1366,9 +1398,11 @@ function displayQuestion() {
     
 function answer(choice) {
     totalAttempts++;
+    const isBossRoom = (room === 10 || room === 20 || room === 30);
     const msgElement = document.getElementById("message");
-    if (bgMusic.paused) bgMusic.play();
     if (choice === currentQuestion.a) {
+        sfxCorrect.currentTime = 0;
+        sfxCorrect.play().catch(()=>{});
         // If this was a concept detour question, return player to main path
         if(detourActive){
         detourActive = false;
@@ -1384,11 +1418,10 @@ function answer(choice) {
         handleStreakVisuals();
 
        // --- BOSS HIT LOGIC ---
-        if (room === 10 || room === 20 || room === 30) {
+        if(isBossRoom){
         bossHealth--;
-        sfxBossHit.pause();
         sfxBossHit.currentTime = 0;
-        sfxBossHit.play();
+        sfxBossHit.play().catch(()=>{});
 
         msgElement.innerHTML = `<span style='color:#f87171;font-weight:bold;'>⚔ HIT! Boss Health: ${bossHealth}/3</span>`;
 
@@ -1431,14 +1464,20 @@ showHallwayTransition(currentQuestion.feedback);
 return;
 
     } else {
+        if(isBossRoom){
+        sfxWrong.volume = 0.7;
+        } else {
+       sfxWrong.volume = 0.5;
+        }    
+        sfxWrong.currentTime = 0;
+        sfxWrong.play().catch(()=>{});
         streak = 0;
-        // If question has a concept tag, trigger a reinforcement detour
+    // If question has a concept tag, trigger a reinforcement detour
     // --- Adaptive Concept Detour ---
     if(!detourActive && currentQuestion.tag){
     conceptMemory[currentQuestion.tag]++;
-}
-
-}
+        }
+    }
 
     let conceptPool = null;
 
