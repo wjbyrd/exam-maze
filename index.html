@@ -918,11 +918,19 @@ let pool = typePools[type];
 }
 
 function randomMedium() {
-    const types = ["definition", "interpretation", "trap"];
-    const type = types[Math.floor(Math.random() * types.length)];
     const tag = mediumTags[Math.floor(Math.random() * mediumTags.length)];
+    const typePools = mediumPools[tag];
 
-    let pool = mediumPools[tag][type] || [];
+// Only pick types that actually have questions
+    const availableTypes = Object.keys(typePools).filter(t => typePools[t].length > 0);
+
+    if(availableTypes.length === 0){
+    console.warn("No types available for tag:", tag);
+    return null;
+}
+
+    const type = availableTypes[Math.floor(Math.random() * availableTypes.length)];
+    let pool = typePools[type];
     const recent = questionHistory.medium.slice(-3);
     let workingPool = pool.filter(q => !recent.includes(q.id));
 
