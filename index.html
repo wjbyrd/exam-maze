@@ -1069,11 +1069,6 @@ const calculationGenerators = [
 ];
     
 // Keep track of the last few questions to prevent repeats
-let questionHistory = {
-easy: [], medium: [], hard: [], calculation: [],
-easyBoss: [], mediumBoss: [], finalBoss: []
-};
-
 function randomQuestion(poolName) {
     // --- SPECIAL CALCULATED ROOMS (26-29) ---
     // These ensure the student practices specific math skills before the boss
