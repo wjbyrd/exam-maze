@@ -937,23 +937,26 @@ function randomMedium() {
 }
   
 function shuffleOptions(question){
-let q = {
-    q: question.q,
-    options: [...question.options],
-    a: question.a,
-    feedback: question.feedback,
-    hint: question.hint,
-    tag: question.tag,
-    type: question.type.
-};
-    
-let correct = q.options[q.a];
-    for(let i=q.options.length-1;i>0;i--){
-let j=Math.floor(Math.random()*(i+1));
-    [q.options[i],q.options[j]]=[q.options[j],q.options[i]];
+    let q = {
+        q: question.q,
+        options: [...question.options],
+        a: question.a,
+        feedback: question.feedback,
+        hint: question.hint,
+        tag: question.tag,
+        type: question.type
+    };
+
+    let correct = q.options[q.a];
+
+    for(let i = q.options.length - 1; i > 0; i--){
+        let j = Math.floor(Math.random() * (i + 1));
+        [q.options[i], q.options[j]] = [q.options[j], q.options[i]];
     }
-q.a = q.options.indexOf(correct);    
-return q;
+
+    q.a = q.options.indexOf(correct);
+
+    return q;
 }
     
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
