@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    
+<!-- Title can be changed to whatever the game needs -->
+<title>The Archives of Microeconomics</title>
+   
 <style>
 /* =========================================
    1. GLOBAL LAYOUT & BACKGROUND
@@ -26,7 +34,7 @@ body {
     gap: 40px;
     width: 100%;
     max-width: 1100px;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 /* =========================================
@@ -34,10 +42,13 @@ body {
 ========================================= */
 #gameBox {
     max-width: 720px;
-    width: 90%;
+    flex:1;
+    min-width:0;
+    max-width:720px;
+    width:100;
     min-height: auto;
     margin: 0;
-    padding: 20px 24px;
+    padding: 18px 20px;
     text-align: center;
     background: #111827;
     border-radius: 14px;
@@ -61,7 +72,7 @@ body {
    3. TEXT & HEADERS
 ========================================= */
 h2 { text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); margin-bottom: 5px; }
-#question { font-size: 20px; line-height: 1.4; font-weight: 500; margin: 20px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+#question { font-size: 20px; line-height: 1.4; font-weight: 500; margin: 14px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 .boss-title { font-size: 28px; font-weight: bold; margin-bottom: 15px; display: block; }
 .area-title { color: #9ca3af; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; }
 /* Boss question styling */
@@ -106,10 +117,10 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
 #artifactImage { width: 96px; margin-bottom: 8px; }
 #artifactDrop img { filter: drop-shadow(0 0 12px rgba(56,189,248,.8)); }
 
-#artifactVault { margin-top: -4px; width: 260px; padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#020617,#020617 60%,#020617 100%); box-shadow: 0 0 25px rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.25); text-align: center; display:block !important; }
+#artifactVault { margin-top: -6px; width: 220px; padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#020617,#020617 60%,#020617 100%); box-shadow: 0 0 25px rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.25); text-align: center; display:block !important; }
 #artifactVault h3 { color: #60a5fa; margin: 0 0 14px 0; }
 
-.vaultRow { display: flex; justify-content: center; align-items:flex-end; gap: 8px; flex-wrap:wrap;}
+.vaultRow { display: flex; justify-content: center; align-items:flex-end; gap: 15px; flex-wrap:wrap;}
 .artifactSlot { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 70px; text-align:center; opacity: .25; transition: all .4s ease;}
 .artifactSlot img { width: 45px; margin-bottom:4px;filter: grayscale(1); transition: all .4s ease; }
 .artifactSlot span { display: block; font-size: 13px; color: #94a3b8; margin-top: 8px; line-height: 1.2; }
@@ -166,15 +177,15 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
 /* =========================================
    11. PANEL LAYOUT SYSTEM
 ========================================= */
-
+/* Maze Tracker & Artifact Boxes */
 .top-panel{
     display:flex;
     flex-direction:column;   /* STACK */
     align-items:center;      /* CENTER */
-    gap:10px;
+    gap:8px;
     width:100%;
     max-width:700px;         /* SMALLER footprint */
-    margin:0 auto 8px auto;
+    margin:0 auto 10px auto;
 }
    
 /* TITLE ABOVE MAZE */
@@ -187,27 +198,16 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
     text-shadow:0 0 10px rgba(255,255,255,0.15);
 }
    
-/* Maze Tracker & Artifact Boxes */
-.top-panel{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:16px;
-    width:100%;
-    max-width:700px;
-    margin:0 auto 20px auto;
-}
-
 #mazeTrackContainer{
     width:100%;
     max-width:600px;
-    padding:12px;
+    padding:8px 12px;
 }
 
 #artifactVault{
     width:100%;
-    max-width:600px;
-    padding:12px;
+    max-width:420px;
+    padding:10px 14px;
 }
 
 /* Main Game Row */
@@ -257,10 +257,11 @@ button:hover { background: #4b5563; transform: translateY(-2px); }
 /* Game Box adjustment */
 #gameBox{
     flex:1;
-     min-width:0;
-     min-height: auto;
-     padding: 20px 24px;  /* slightly tighter */
-}   
+    min-width:0;
+    max-width:720px;
+    width:100%;
+    padding:18px 20px;   /* slightly tighter */
+} 
 
 /* =========================================
    12. BOSS MODE (UI STATE OVERRIDES)
