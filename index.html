@@ -1,408 +1,170 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Archives of Microeconomics</title>
 <style>
-body{
-font-family:Arial,sans-serif;
-margin:0;
-padding:0;
-min-height:100vh;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-color:white;
-
-background:
-linear-gradient(rgba(2,6,23,.8),rgba(2,6,23,.8)),
-url('question_background_image.jpeg');
-
-background-size:cover;
-background-position:center;
-background-attachment:scroll;
-}
-@keyframes torchFlicker {
-0%   { filter: brightness(1); }
-25%  { filter: brightness(1.05); }
-50%  { filter: brightness(0.97); }
-75%  { filter: brightness(1.04); }
-100% { filter: brightness(1); }
-}
-#gameBox{
-max-width:720px;
-width:90%;
-min-height:75vh;
-margin:0;
-padding:26px;
-text-align:center;
-background:#111827;
-border-radius:14px;
-box-sizing:border-box;
-box-shadow:0 0 40px rgba(0,0,0,0.8),0 0 20px rgba(251,191,36,0.1),inset 0 0 30px rgba(0,0,0,0.6);
-border:1px solid rgba(255,255,255,0.05);
-animation:torchFlicker 6s infinite;
-transition:box-shadow .3s ease;
-position:relative;
-}
-.hit { box-shadow: 0 0 60px #ef4444, inset 0 0 40px #7f1d1d !important; animation: shake 0.4s ease; }
-#autosave { position: absolute; top: 15px; right: 15px; font-size: 11px; opacity: 0.5; font-style: italic; }
-button{
-padding:12px 22px; margin:8px; font-size:16px; cursor:pointer;
-background:#374151; color:white; border:none; border-radius:8px; transition:all 0.2s ease;
-}
-button:hover{ background:#4b5563; transform:translateY(-2px); }
-h2{ text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); margin-bottom: 5px;}
-#mazeTrack{ font-size:22px; line-height:32px; letter-spacing:2px; margin-bottom:10px; display: inline-block; text-shadow:0 0 10px rgba(34,197,94,0.6); }
-#progressBar{ width:100%; height:22px; background:#2d3748; border-radius:12px; margin-bottom:20px; overflow:hidden; }
-#progressFill{ height:100%; width:0%; background:linear-gradient(90deg,#f59e0b,#ef4444); transition:width 0.4s ease; }
-.boss-title { font-size: 28px; font-weight: bold; margin-bottom: 15px; display: block; }
-.boss-q { font-style: italic; font-size: 19px; border-left: 4px solid var(--bossColor); padding-left: 15px; margin: 20px 0; text-align: left; }
-.area-title { color: #9ca3af; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; }
-.hint-box { font-size: 13px; color: #fbbf24; margin-top: 15px; opacity: 0.8; height: 18px; }
-
-@keyframes shake { 0% { transform:translateX(0); } 25% { transform:translateX(-8px); } 50% { transform:translateX(8px); } 75% { transform:translateX(-6px); } 100% { transform:translateX(0); } }
-@keyframes victoryGlow { 0% { transform:scale(1); text-shadow:0 0 10px gold; } 50% { transform:scale(1.1); text-shadow:0 0 25px gold, 0 0 40px orange; } 100% { transform:scale(1); text-shadow:0 0 10px gold; } }
-.victory{ animation:victoryGlow 1.5s ease-in-out infinite; color: gold !important; }  
-.dungeon-container{
-position:relative;
-display:flex;
-justify-content:center;
-align-items:flex-start;
-gap:40px;
-
-width:100%;
-max-width:1100px;
-
-margin-top:40px;
-}
-.fade-out-text {
-    animation: fadeOut 5s forwards;
-    font-weight: bold;
-    color: #4ade80; /* A nice success green */
-}
-
-@keyframes fadeOut {
-    0% { opacity: 1; }
-    70% { opacity: 1; } /* Stay fully visible for 3.5 seconds */
-    100% { opacity: 0; } /* Fade out over the last 1.5 seconds */
-}
-  
-#question {
-    font-size: 20px; /* Increased from your current size */
-    line-height: 1.4;
-    font-weight: 500;
-    margin: 20px 0;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Adds depth for readability */
-}
-
-.answers{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:14px;
-}
-
-.answers button{
-flex:1 1 200px;
-max-width:320px;
-}
-    
-/* Also updating the Boss question text specifically */
-.boss-q {
-    font-style: italic;
-    font-size: 24px; /* Matching the new standard size */
-    border-left: 4px solid var(--bossColor);
-    padding-left: 15px;
-    margin: 20px 0;
-    text-align: left;
-}
-  
-#mazeTrack {
-    display: grid;
-    grid-template-columns: repeat(10, 36px);
+/* =========================================
+   1. GLOBAL LAYOUT & BACKGROUND
+========================================= */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
     justify-content: center;
-    gap: 10px;
-    margin: 25px auto;
-}
-       
-.maze-box{
-    width:36px;
-    height:36px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
-    border-radius:6px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.1);
-    transition:all 0.3s ease;
+    align-items: center;
+    color: white;
+    background: linear-gradient(rgba(2,6,23,.8), rgba(2,6,23,.8)), url('question_background_image.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: scroll;
 }
 
-.maze-box.active {
-    background: rgba(251, 191, 36, 0.3);
-    border: 2px solid #fbbf24;
-    z-index: 10;
-    animation: activePulse 0.8s infinite alternate;
+.dungeon-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 40px;
 }
-  
-@keyframes activePulse {
-    0% { box-shadow: 0 0 5px #fbbf24; transform: scale(1.1); }
-    100% { box-shadow: 0 0 20px #fbbf24; transform: scale(1.2); }
+
+/* =========================================
+   2. CORE GAME UI (#gameBox)
+========================================= */
+#gameBox {
+    max-width: 720px;
+    width: 90%;
+    min-height: 75vh;
+    margin: 0;
+    padding: 26px;
+    text-align: center;
+    background: #111827;
+    border-radius: 14px;
+    box-sizing: border-box;
+    box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(251,191,36,0.1), inset 0 0 30px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.05);
+    animation: torchFlicker 6s infinite;
+    transition: box-shadow .3s ease;
+    position: relative;
 }
-  
-/* Gives a faint, constant aura to the boss rooms */
-.maze-box:nth-child(10) { text-shadow: 0 0 10px #60a5fa; }
-.maze-box:nth-child(20) { text-shadow: 0 0 12px #a855f7; }
-.maze-box:nth-child(30) { text-shadow: 0 0 15px #ef4444; }
-  
+
 #gameBox.boss-mode {
     border: 2px solid #ef4444;
     box-shadow: 0 0 50px rgba(239, 68, 68, 0.4), inset 0 0 20px rgba(239, 68, 68, 0.2);
 }
-   
-.torch{
-position:absolute;
-width:70px;
-top:30px;
-z-index:10;
-animation: torchFlicker 3s infinite alternate;
-pointer-events:none;
-opacity:.95;
-filter: drop-shadow(0 0 12px rgba(255,180,80,.7));
+
+.hit { box-shadow: 0 0 60px #ef4444, inset 0 0 40px #7f1d1d !important; animation: shake 0.4s ease; }
+#autosave { position: absolute; top: 15px; right: 15px; font-size: 11px; opacity: 0.5; font-style: italic; }
+
+/* =========================================
+   3. TEXT & HEADERS
+========================================= */
+h2 { text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); margin-bottom: 5px; }
+#question { font-size: 20px; line-height: 1.4; font-weight: 500; margin: 20px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.boss-title { font-size: 28px; font-weight: bold; margin-bottom: 15px; display: block; }
+.area-title { color: #9ca3af; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; }
+/* Boss question styling */
+.boss-q {font-style: italic; font-size: 24px; border-left: 4px solid var(--bossColor); padding-left: 15px; margin: 20px 0; text-align: left;}
+.hint-box { font-size: 13px; color: #fbbf24; margin-top: 15px; opacity: 0.8; height: 18px; }
+.fade-out-text { animation: fadeOut 5s forwards; font-weight: bold; color: #4ade80; }
+
+/* =========================================
+   4. BUTTONS & INTERACTION
+========================================= */
+button {
+    padding: 12px 22px; margin: 8px; font-size: 16px; cursor: pointer;
+    background: #374151; color: white; border: none; border-radius: 8px; transition: all 0.2s ease;
 }
 
-.left-torch{
-left:18px;
-}
+button:hover { background: #4b5563; transform: translateY(-2px); }
 
-.right-torch{
-right:18px;
-transform:scaleX(-1);
-}
+.answers { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.answers button { flex: 1 1 200px; max-width: 320px; }
 
-.boss-shake {
-    animation: bossShake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-}
+.fullscreenBtn { position: absolute; top: 12px; left: 12px; background: #374151; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; }
 
-@keyframes bossShake {
-    10%, 90% { transform: translate3d(-1px, 0, 0); }
-    20%, 80% { transform: translate3d(2px, 0, 0); }
-    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-    40%, 60% { transform: translate3d(4px, 0, 0); }
+/* =========================================
+   5. PROGRESS & MAZE TRACK
+========================================= */
+#progressBar { width: 100%; height: 22px; background: #2d3748; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+#progressFill { height: 100%; width: 0%; background: linear-gradient(90deg, #f59e0b, #ef4444); transition: width 0.4s ease; }
+
+#mazeTrack { display: grid; grid-template-columns: repeat(10, 36px); justify-content: center; gap: 10px; margin: 25px auto; }
+.maze-box { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+.maze-box.active { background: rgba(251, 191, 36, 0.3); border: 2px solid #fbbf24; z-index: 10; animation: activePulse 0.8s infinite alternate; }
+
+/* Room Specific Glows */
+.maze-box:nth-child(10) { text-shadow: 0 0 10px #60a5fa; }
+.maze-box:nth-child(20) { text-shadow: 0 0 12px #a855f7; }
+.maze-box:nth-child(30) { text-shadow: 0 0 15px #ef4444; }
+
+/* =========================================
+   6. ARTIFACT SYSTEM (REWARDS)
+========================================= */
+#artifactDrop { margin-top: 20px; padding: 14px; background: rgba(15,23,42,.6); border-radius: 10px; border: 1px solid rgba(99,102,241,.35); text-align: center; }
+#artifactImage { width: 96px; margin-bottom: 8px; }
+#artifactDrop img { filter: drop-shadow(0 0 12px rgba(56,189,248,.8)); }
+
+#artifactVault { margin-top: 60px; width: 260px; padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#020617,#020617 60%,#020617 100%); box-shadow: 0 0 25px rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.25); text-align: center; display: none; }
+#artifactVault h3 { color: #60a5fa; margin: 0 0 14px 0; }
+
+.vaultRow { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.artifactSlot { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; width: 110px; opacity: .25; transition: all .4s ease; text-align: center; }
+.artifactSlot img { width: 64px; filter: grayscale(1); transition: all .4s ease; }
+.artifactSlot span { display: block; font-size: 13px; color: #94a3b8; margin-top: 8px; line-height: 1.2; }
+
+/* Unlocked States */
+.artifactSlot.unlocked { opacity: 1; transform: scale(1.05); }
+.artifactSlot.unlocked img { filter: drop-shadow(0 0 14px rgba(56,189,248,.9)); animation: relicPulse 3s infinite; }
+.artifactSlot.unlocked span { color: #e2e8f0; font-weight: 600; }
+
+/* =========================================
+   7. BOSSES & TORCHES
+========================================= */
+/* Boss hit shake effect */
+.boss-shake {animation: bossShake 0.5s cubic-bezier(.36,.07,.19,.97) both;}
+.bossIcon { width: 96px; height: auto; display: block; margin: 0 auto 12px auto; animation: bossFloat 4s ease-in-out infinite; }
+.wardenGlow { filter: drop-shadow(0 0 14px rgba(96,165,250,.8)); }
+.decomposerGlow { filter: drop-shadow(0 0 14px rgba(168,85,247,.8)); }
+.finalBoss { filter: drop-shadow(0 0 18px rgba(239,68,68,.9)); }
+
+.torch { position: absolute; width: 70px; top: 30px; z-index: 10; animation: torchFlicker 3s infinite alternate; pointer-events: none; opacity: .95; filter: drop-shadow(0 0 12px rgba(255,180,80,.7)); }
+.left-torch { left: 18px; }
+.right-torch { right: 18px; transform: scaleX(-1); }
+
+/* =========================================
+   8. TRANSITIONS & SCREENS
+========================================= */
+#startScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('start_screen_image.png'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+#hallwayTransition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)), url('hallway1.png'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; font-size: 26px; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 1.2s ease; animation: hallwayZoom 3.2s linear forwards; }
+#hallwayTransition.active { opacity: 1; }
+#hallwayText { max-width: 600px; background: rgba(0,0,0,0.55); padding: 30px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 0 25px rgba(0,0,0,0.6); }
+
+/* =========================================
+   9. ANIMATION KEYFRAMES
+========================================= */
+@keyframes torchFlicker { 0%, 100% { filter: brightness(1); } 25% { filter: brightness(1.05); } 50% { filter: brightness(0.97); } 75% { filter: brightness(1.04); } }
+@keyframes hitshake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-6px); } 100% { transform: translateX(0); } }
+@keyframes bossShake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+@keyframes activePulse { 0% { box-shadow: 0 0 5px #fbbf24; transform: scale(1.1); } 100% { box-shadow: 0 0 20px #fbbf24; transform: scale(1.2); } }
+@keyframes victoryGlow { 0%, 100% { transform: scale(1); text-shadow: 0 0 10px gold; } 50% { transform: scale(1.1); text-shadow: 0 0 25px gold, 0 0 40px orange; } }
+@keyframes bossFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes relicPulse { 0%, 100% { filter: drop-shadow(0 0 8px #38bdf8); } 50% { filter: drop-shadow(0 0 18px #60a5fa); } }
+@keyframes fadeOut { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+/* =========================================
+   10. MEDIA QUERIES
+========================================= */
+@media (max-width: 600px) {
+    .maze-box {width:20px; height:20px;}
+    #gameBox { transform: scale(0.95); transform-origin: top center; }
+    .answers button { flex: 1 1 100%; }
 }
     
-.fullscreenBtn{
-position:absolute;
-top:12px;
-left:12px;
-background:#374151;
-color:white;
-border:none;
-padding:6px 10px;
-border-radius:6px;
-cursor:pointer;
-font-size:12px;
-}
-    
-#startScreen {
-position: fixed;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-background-image: url('start_screen_image.png'); 
-background-size: cover; 
-background-position: center; 
-background-repeat: no-repeat;
-z-index: 100;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-text-align: center;
-}
-
-@media (max-width:600px){
-
-#mazeTrack div{
-width:20px;
-height:20px;
-}
-
-#gameBox{
-transform:scale(0.95);
-transform-origin:top center;
-}
-
-.answers button{
-flex:1 1 100%;
-}
-}
-
-#hallwayTransition{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:
-linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
-url('hallway1.png');
-background-size:cover;
-background-position:center;
-display:flex;
-justify-content:center;
-align-items:center;
-text-align:center;
-color:white;
-font-size:26px;
-letter-spacing:2px;
-z-index:200;
-opacity:0;
-pointer-events:none;
-transition:opacity 1.2s ease;
-animation: hallwayZoom 3.2s linear forwards;
-}
-
-#hallwayTransition.active{
-opacity:1;
-}
-
-#hallwayText{
-max-width:600px;
-background:rgba(0,0,0,0.55);
-padding:30px;
-border-radius:10px;
-border:1px solid rgba(255,255,255,0.15);
-box-shadow:0 0 25px rgba(0,0,0,0.6);
-}
-
-
-#artifactDrop{
-margin-top:20px;
-padding:14px;
-background:rgba(15,23,42,.6);
-border-radius:10px;
-border:1px solid rgba(99,102,241,.35);
-text-align:center;
-}
-
-#artifactImage{
-width:96px;
-margin-bottom:8px;
-}
-  
-#artifactDrop img{
-filter: drop-shadow(0 0 12px rgba(56,189,248,.8));
-}
-
-#artifactVault{
-margin-top:60px;
-width:260px;
-padding:18px;
-border-radius:12px;
-background:linear-gradient(180deg,#020617,#020617 60%,#020617 100%);
-box-shadow:0 0 25px rgba(56,189,248,.15);
-border:1px solid rgba(56,189,248,.25);
-text-align:center;
-display:none;
-}
-
-#artifactVault h3{
-color:#60a5fa;
-margin:0 0 14px 0;
-}
-
-.vaultRow{
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:18px;
-}
-
-.artifactSlot{
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:flex-start;
-width:110px;
-opacity:.25;
-transition:all .4s ease;
-text-align:center;
-}
-
-.artifactSlot img{
-width:64px;
-filter:grayscale(1);
-transition:all .4s ease;
-}
-
-.artifactSlot span{
-display:block;
-font-size:13px;
-color:#94a3b8;
-margin-top:8px;
-line-height:1.2;
-text-align:center;
-}
-
-/* UNLOCKED STATE */
-.artifactSlot.unlocked{
-opacity:1;
-transform:scale(1.05);
-}
-
-@keyframes relicPulse{
-0%{ filter: drop-shadow(0 0 8px #38bdf8); }
-50%{ filter: drop-shadow(0 0 18px #60a5fa); }
-100%{ filter: drop-shadow(0 0 8px #38bdf8); }
-}
-
-.artifactSlot.unlocked img{
-filter:drop-shadow(0 0 14px rgba(56,189,248,.9));
-animation:relicPulse 3s infinite;
-}
-
-.artifactSlot.unlocked span{
-color:#e2e8f0;
-font-weight:600;
-}
-
-/* Boss Images */
-
-.bossIcon{
-width:96px;
-height:auto;
-display:block;
-margin:0 auto 12px auto;
-animation:bossFloat 4s ease-in-out infinite;
-}
-
-.wardenGlow{
-filter:drop-shadow(0 0 14px rgba(96,165,250,.8));
-}
-
-.decomposerGlow{
-filter:drop-shadow(0 0 14px rgba(168,85,247,.8));
-}
-
-.finalBoss{
-filter:drop-shadow(0 0 18px rgba(239,68,68,.9));
-}
-
-/* Floating animation */
-
-@keyframes bossFloat{
-0%{transform:translateY(0);}
-50%{transform:translateY(-6px);}
-100%{transform:translateY(0);}
-}
-
 </style>
 </head>
+
 <body>
   <div id="srAnnouncements"
      aria-live="assertive"
@@ -424,7 +186,7 @@ filter:drop-shadow(0 0 18px rgba(239,68,68,.9));
     <div id="autosave">💾 Progress Autosaved</div>
 <div id="gameBox">
     <img src="torch.gif" class="torch left-torch">
-     <img src="torch.gif" class="torch right-torch">
+    <img src="torch.gif" class="torch right-torch">
     <h2>The Labyrinth of Choice</h2>
     <p id="areaDisplay" class="area-title"></p>
     <div id="progressBar"><div id="progressFill"></div></div>
@@ -445,7 +207,6 @@ filter:drop-shadow(0 0 18px rgba(239,68,68,.9));
 </div>
 <div id="artifactVault">
     <h3>Relics Recovered</h3>
-
     <div class="vaultRow">
         <div id="vaultSeal" class="artifactSlot">
             <img src="seal_of_preferences.png">
@@ -482,41 +243,23 @@ const sfxBossHit = new Audio('boss_hit.wav');
 const sfxCorrect = new Audio('ding.wav');
 const sfxWrong = new Audio('mistake.wav');
     
-function playBossMusic(){
-
-if(!bossMusic.paused) return;
-
-bgMusic.pause();
-bossMusic.currentTime = 0;
-bossMusic.play().catch(e=>console.log("Boss music blocked"));
-
-}
-
-function playExplorationMusic(){
-bossMusic.pause();
-if(!bgMusic.paused) return;
-bgMusic.currentTime = 0;
-bgMusic.play().catch(e=>console.log("Music blocked"));
-}
-
 const hallwayImages = [
-"hallway1.png",
-"hallway2.png",
-"hallway3.png"
+    "hallway1.png",
+    "hallway2.png",
+    "hallway3.png"
 ];
   
 function goFullscreen(){
-let el = document.documentElement;
-
-if (el.requestFullscreen) {
+    let el = document.documentElement;
+    if (el.requestFullscreen) {
     el.requestFullscreen();
-} 
-else if (el.webkitRequestFullscreen) { // Safari
+    } 
+    else if (el.webkitRequestFullscreen) { // Safari
     el.webkitRequestFullscreen();
-} 
-else if (el.msRequestFullscreen) { // old Edge
+    } 
+    else if (el.msRequestFullscreen) { // old Edge
     el.msRequestFullscreen();
-}
+    }
 }
     
 // 1. Initial UI State: Hide game until startGame runs
@@ -540,47 +283,45 @@ let lastTypes = [];
 let easyCycle = 0 ;
 let mediumCycle = 0;
 let usedQuestions = {
-easy: [],
-medium: [],
-hard: [],
-easyBoss: [],
-mediumBoss: [],
-finalBoss: []
+    easy: [],
+    medium: [],
+    hard: [],
+    easyBoss: [],
+    mediumBoss: [],
+    finalBoss: []
 };
 let conceptMemory = {
-budget:0,
-demand:0,
-indifference:0,
-elasticity:0,
-equilibrium:0
+    budget:0,
+    demand:0,
+    indifference:0,
+    elasticity:0,
+    equilibrium:0
 };
 
 const artifacts = {
-
 seal:{
-img:"seal_of_preferences.png",
-title:"Seal of Preferences",
-text:"An ancient seal revealing the curves of desire. Where preferences meet the budget constraint, utility is maximized."
-},
+    img:"seal_of_preferences.png",
+    title:"Seal of Preferences",
+    text:"An ancient seal revealing the curves of desire. Where preferences meet the budget constraint, utility is maximized."
+    },
 
 prism:{
-img:"prism_of_tradeoffs.png",
-title:"Prism of Tradeoffs",
-text:"A crystal that fractures a price change into its hidden forces: substitution toward cheaper goods and the pull of income on purchasing power."
-},
+    img:"prism_of_tradeoffs.png",
+    title:"Prism of Tradeoffs",
+    text:"A crystal that fractures a price change into its hidden forces: substitution toward cheaper goods and the pull of income on purchasing power."
+    },
 
 scepter:{
-img:"scepter_of_elasticity.png",
-title:"Scepter of Elasticity",
-text:"The royal instrument of the Sovereign. It reveals how strongly quantity demanded responds when price changes."
-}
-
+    img:"scepter_of_elasticity.png",
+    title:"Scepter of Elasticity",
+    text:"The royal instrument of the Sovereign. It reveals how strongly quantity demanded responds when price changes."
+    }
 };
   
 // Restore saved username if it exists
 const savedUser = localStorage.getItem("gauntletUser");
 if(savedUser){
-document.getElementById("usernameInput").value = savedUser;
+    document.getElementById("usernameInput").value = savedUser;
 }
 
 // 3. Entry Logic
@@ -650,6 +391,18 @@ function getAreaName(r) {
     if (r <= 29) return "The Calculations Corridor";
     return "The Sovereign's Throne";
 };
+
+// =============================
+// WIZARD DIALOGUE SYSTEM
+// Lines used during transitions
+// =============================
+const wizardLines = [
+"The path reveals itself to those who think clearly.",
+"You see it now… the logic unfolds.",
+"Good. You’re beginning to understand.",
+"The labyrinth yields to disciplined thought.",
+"Yes… that was no accident. Press on."
+];
   
 // --- Question Pools follow below ---
   
@@ -957,36 +710,32 @@ return question;
 }
 
 function randomMedium(){
-
 let type;
-if(mediumCycle === 0) type = "definition";
-if(mediumCycle === 1) type = "interpretation";
-if(mediumCycle === 2) type = "trap";
-mediumCycle = (mediumCycle + 1) % 3;
+    if(mediumCycle === 0) type = "definition";
+    if(mediumCycle === 1) type = "interpretation";
+    if(mediumCycle === 2) type = "trap";
+    mediumCycle = (mediumCycle + 1) % 3;
 
 let tag = mediumTags[mediumTagCycle];
-mediumTagCycle = (mediumTagCycle + 1) % mediumTags.length;
+    mediumTagCycle = (mediumTagCycle + 1) % mediumTags.length;
 
 let pool = mediumPools[tag][type];
-
-if(!pool || pool.length === 0){
-console.error("Medium pool missing:", tag, type);
-return null;
-}
+    if(!pool || pool.length === 0){
+    console.error("Medium pool missing:", tag, type);
+    return null;
+    }
 
 let question = pool[mediumIndex[tag][type]];
-mediumIndex[tag][type]++;
-
-if(mediumIndex[tag][type] >= pool.length){
-shuffleArray(pool);
-mediumIndex[tag][type] = 0;
-}
+    mediumIndex[tag][type]++;
+    if(mediumIndex[tag][type] >= pool.length){
+    shuffleArray(pool);
+    mediumIndex[tag][type] = 0;
+    }
 
 return question;
 }
   
 function shuffleOptions(question){
-
 let q = {
     q: question.q,
     options: [...question.options],
@@ -995,16 +744,12 @@ let q = {
     hint: question.hint,
     tag: question.tag
 };
-
 let correct = q.options[q.a];
-
-for(let i=q.options.length-1;i>0;i--){
+    for(let i=q.options.length-1;i>0;i--){
 let j=Math.floor(Math.random()*(i+1));
-[q.options[i],q.options[j]]=[q.options[j],q.options[i]];
-}
-
-q.a = q.options.indexOf(correct);
-
+    [q.options[i],q.options[j]]=[q.options[j],q.options[i]];
+    }
+q.a = q.options.indexOf(correct);    
 return q;
 }
     
@@ -1395,6 +1140,15 @@ function displayQuestion() {
         optionsElement.appendChild(btn);
     });
 }
+
+// =============================
+// UI FEEDBACK SYSTEM (WIZARD)
+// Handles all on-screen messaging
+// =============================
+function wizardSpeak(text){
+    const msgElement = document.getElementById("message");
+    msgElement.innerHTML = `<span class="wizard-text">${text}</span>`;
+}
     
 function answer(choice) {
     totalAttempts++;
@@ -1537,10 +1291,10 @@ function handleStreakVisuals() {
 }
 
 function showHallwayTransition(feedback){
-
 const overlay = document.getElementById("hallwayTransition");
 const text = document.getElementById("hallwayText");
-
+const line = wizardLines[Math.floor(Math.random() * wizardLines.length)];
+    
 // pick a random hallway image
 const randomHall = hallwayImages[Math.floor(Math.random()*hallwayImages.length)];
 
@@ -1551,7 +1305,7 @@ overlay.style.backgroundSize = "cover";
 overlay.style.backgroundPosition = "center";
 
 text.innerHTML = `
-<div style="font-size:22px;margin-bottom:15px;color:#4ade80;">Correct.</div>
+<div class="wizard-text" style="font-size:22px;margin-bottom:15px;">${line}</div>
 <div style="font-size:18px;opacity:.9;">${feedback}</div>
 <div style="margin-top:25px;font-size:14px;opacity:.7;">You move deeper into the archives...</div>
 `;
