@@ -975,17 +975,17 @@ function randomQuestion(poolName) {
     if (room === 29) return getElasticityCalc();
 
 let pool = questionBanks[poolName]
-let used = [
+let used = new Set([
 ...usedQuestions.easy,
 ...usedQuestions.medium,
 ...usedQuestions.hard,
 ...usedQuestions.easyBoss,
 ...usedQuestions.mediumBoss,
 ...usedQuestions.finalBoss
-]
+]);
 
 
-let available = pool.filter(q => !used.includes(q.id))
+let available = pool.filter(q => !used.includes(q.id));
 
 if(available.length === 0){
 usedQuestions[poolName] = []
@@ -1101,7 +1101,7 @@ function pickRandom(pool){
 let currentMusic = null;
 
 function stopAllMusic(){
-    if(explorationMusic) explorationMusic.pause();
+    if(bgMusic) bgMusic.pause();
     if(bossMusic) bossMusic.pause();
     if(finalBossMusic) finalBossMusic.pause();
 }
@@ -1109,7 +1109,7 @@ function stopAllMusic(){
 function playExplorationMusic(){
     if(currentMusic === "exploration") return;
     stopAllMusic();
-    explorationMusic.play();
+    bgMusic.play();
     currentMusic = "exploration";
 }
 
