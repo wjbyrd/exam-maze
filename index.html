@@ -1784,19 +1784,30 @@ function copyResults() {
     const timeString = formatTime(totalTimeMs);
     const code = document.getElementById("vCode").innerText;
     const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
-    const shareText = `🎮 Labyrinth of Choice Conquered!\n👤 Adventurer: ${username}\n⏱️ Time: ${timeString}\n🎯 Accuracy: ${accuracy}%\n🔥 Best Streak: ${maxStreak}\n📝 Total Questions: ${totalAttempts}\n🔑 Verification Code: ${code}`;
-    
+
+    const shareText = `Adventurer: ${username}
+        Time: ${timeString}
+        Accuracy: ${accuracy}%
+        Best Streak: ${maxStreak}
+        Total Questions: ${totalAttempts}
+        Code: ${code}
+        Verified by The Archivist`;
+
     navigator.clipboard.writeText(shareText).then(() => {
         const btn = document.getElementById("shareBtn");
         const originalText = btn.innerText;
-        btn.innerText = "✅ Copied to Clipboard!";
+        const originalColor = btn.style.background;
+
+        btn.innerText = "✅ Copied!";
         btn.style.background = "#059669";
+
         setTimeout(() => {
             btn.innerText = originalText;
-            btn.style.background = "#374151";
+            btn.style.background = originalColor;
         }, 2000);
     });
 }
+    
 </script>
 </body>
 </html>
