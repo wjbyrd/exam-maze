@@ -241,7 +241,7 @@ button:active {transform: scale(0.96);}
    
 /* Wizard Box */
 #wizardBox{
-    width:180px;
+    width:160px;
     min-width:160px;
     min-height:200px;
     background:#0f172a;
@@ -252,8 +252,25 @@ button:active {transform: scale(0.96);}
     flex:0 0 180px;
     flex-shrink: 0;
     align-items:center;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     border:1px solid rgba(255,255,255,0.08);
+}
+
+/* Wizard Name */
+#wizardName {
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #93c5fd; /* soft arcane blue */
+    margin-bottom: 4px;
+    opacity: 0.85;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(147, 197, 253, 0.2);
+    padding-bottom: 2px;
+
+    /* subtle glow */
+    text-shadow: 0 0 6px rgba(147, 197, 253, 0.6);
 }
 
 /* Wizard Image */
@@ -338,6 +355,7 @@ button:active {transform: scale(0.96);}
         <!-- WIZARD -->
       <div id="gameShell">
        <div id="wizardBox">
+            <div id="wizardName">The Archivist</div>
             <img src="wizard.png" id="wizardImage">
         </div>
         <!-- GAME -->
