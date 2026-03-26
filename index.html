@@ -8,7 +8,7 @@
    
 <style>
 /* =========================================
-   1. GLOBAL LAYOUT & BACKGROUND
+   1. GLOBAL LAYOUT & BACKGROUND (CHANGE PNG WITH NEW GAME)
 ========================================= */
 body {
     font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@ body {
     justify-content: center;
     align-items: center;
     color: white;
-    background: linear-gradient(rgba(2,6,23,.8), rgba(2,6,23,.8)), url('question_background_image.jpeg');
+    background: linear-gradient(rgba(2,6,23,.8), rgba(2,6,23,.8)), url('question_background_image.png');
     background-size: cover;
     background-position: center;
     background-attachment: scroll;
@@ -50,7 +50,8 @@ body {
     margin: 0;
     padding: 18px 20px;
     text-align: center;
-    background: #111827;
+    background: rgba(15,23,42,0.98);
+    backdrop-filter: blur(6px);
     border-radius: 14px;
     box-sizing: border-box;
     box-shadow: 0 0 40px rgba(0,0,0,0.8), 0 0 20px rgba(251,191,36,0.1), inset 0 0 30px rgba(0,0,0,0.6);
@@ -61,8 +62,8 @@ body {
 }
 
 #gameBox.boss-mode {
-    border: 2px solid #ef4444;
-    box-shadow: 0 0 50px rgba(239, 68, 68, 0.4), inset 0 0 20px rgba(239, 68, 68, 0.2);
+border: 2px solid #60a5fa;
+box-shadow: 0 0 40px rgba(96,165,250,0.4);
 }
 
 .hit { box-shadow: 0 0 60px #ef4444, inset 0 0 40px #7f1d1d !important; animation: hitshake 0.4s ease; }
@@ -105,7 +106,7 @@ button:active {transform: scale(0.96);}
 
 #mazeTrack { display: grid; grid-template-columns: repeat(10, 36px); justify-content: center; gap: 10px; margin: 25px auto; }
 .maze-box { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
-.maze-box.active { background: rgba(251, 191, 36, 0.3); border: 2px solid #fbbf24; z-index: 10; animation: activePulse 0.8s infinite alternate; }
+.maze-box.active { background: rgba(96,165,250,0.25); border: 2px solid #60a5fa; z-index: 10; animation: activePulse 0.8s infinite alternate;}
 
 /* Room Specific Glows */
 .maze-box:nth-child(10) { text-shadow: 0 0 10px #60a5fa; }
@@ -138,8 +139,8 @@ button:active {transform: scale(0.96);}
 /* Boss hit shake effect */
 .boss-shake {animation: bossShake 0.5s cubic-bezier(.36,.07,.19,.97) both;}
 .bossIcon { width: 96px; height: auto; display: block; margin: 0 auto 12px auto; animation: bossFloat 4s ease-in-out infinite; }
-.wardenGlow { filter: drop-shadow(0 0 14px rgba(96,165,250,.8)); }
-.decomposerGlow { filter: drop-shadow(0 0 14px rgba(168,85,247,.8)); }
+.tyrantGlow { filter: drop-shadow(0 0 14px rgba(96,165,250,.8)); }
+.underwriterGlow { filter: drop-shadow(0 0 14px rgba(168,85,247,.8)); }
 .finalBoss { filter: drop-shadow(0 0 18px rgba(239,68,68,.9)); }
 
 .torch { position: absolute; width: 70px; top: 30px; z-index: 10; animation: torchFlicker 3s infinite alternate; pointer-events: none; opacity: .95; filter: drop-shadow(0 0 12px rgba(255,180,80,.7)); display:none; }
@@ -147,9 +148,9 @@ button:active {transform: scale(0.96);}
 .right-torch { right: 18px; transform: scaleX(-1); }
 
 /* =========================================
-   8. TRANSITIONS & SCREENS
+   8. TRANSITIONS & SCREENS (CHANGE PNG WITH NEW GAME)
 ========================================= */
-#startScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('start_screen_image.png'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+#startScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('start screen image.png'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
 #hallwayTransition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)), url('hallway1.png'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; font-size: 26px; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 1.2s ease; animation: hallwayZoom 3.2s ease-out forwards; }
 #hallwayTransition.active { opacity: 1; }
@@ -161,15 +162,13 @@ button:active {transform: scale(0.96);}
 @keyframes torchFlicker { 0%, 100% { filter: brightness(1); } 25% { filter: brightness(1.05); } 50% { filter: brightness(0.97); } 75% { filter: brightness(1.04); } }
 @keyframes hitshake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-6px); } 100% { transform: translateX(0); } }
 @keyframes bossShake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
-@keyframes activePulse { 0% { box-shadow: 0 0 5px #fbbf24; transform: scale(1.1); } 100% { box-shadow: 0 0 20px #fbbf24; transform: scale(1.2); } }
+@keyframes activePulse { 0% { box-shadow: 0 0 5px #60a5fa; transform: scale(1.1); } 100% { box-shadow: 0 0 20px #60a5fa; transform: scale(1.2); } }
 @keyframes victoryGlow { 0%, 100% { transform: scale(1); text-shadow: 0 0 10px gold; } 50% { transform: scale(1.1); text-shadow: 0 0 25px gold, 0 0 40px orange; } }
 @keyframes bossFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @keyframes relicPulse { 0%, 100% { filter: drop-shadow(0 0 8px #38bdf8); } 50% { filter: drop-shadow(0 0 18px #60a5fa); } }
 @keyframes fadeOut { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes wizardFloat{
-    0%,100%{ transform:translateY(0); }
-    50%{ transform:translateY(-5px); }
-}
+@keyframes wizardFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); }}
+@keyframes fadeIn {from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
    
 /* =========================================
    10. MEDIA QUERIES
@@ -312,6 +311,9 @@ button:active {transform: scale(0.96);}
 </style>
 </head>
 
+/* =========================================
+   1. BEGIN HTML ELEMENTS (CHANGE ELEMENTS WITH NEW GAME)
+========================================= */
 <body>
   <div id="srAnnouncements"
      aria-live="assertive"
@@ -388,6 +390,10 @@ button:active {transform: scale(0.96);}
         </div>
     </div>
 </div>
+
+/* =========================================
+   2. GAME ELEMENTS (CHANGE ELEMENTS WITH NEW GAME)
+========================================= */        
 <script>
 const bgMusic = new Audio('chamber.wav'); 
 bgMusic.loop = true; 
@@ -417,16 +423,17 @@ const hallwayImages = [
 ];
   
 function goFullscreen(){
-    let el = document.documentElement;
-    if (el.requestFullscreen) {
+let el = document.documentElement;
+
+if (el.requestFullscreen) {
     el.requestFullscreen();
-    } 
-    else if (el.webkitRequestFullscreen) { // Safari
+} 
+else if (el.webkitRequestFullscreen) { // Safari
     el.webkitRequestFullscreen();
-    } 
-    else if (el.msRequestFullscreen) { // old Edge
+} 
+else if (el.msRequestFullscreen) { // old Edge
     el.msRequestFullscreen();
-    }
+}
 }
     
 // 1. Initial UI State: Hide game until startGame runs
@@ -446,8 +453,11 @@ let room = localStorage.getItem("gauntletRoom") ? parseInt(localStorage.getItem(
 let currentQuestion = null;
 let detourActive = false;
 let detourReturnRoom = null;
+let conceptMemory = {};
+let tagHistory = [];
 let lastTypes = [];
-let weakTags = {};
+let easyCycle = 0 ;
+let mediumCycle = 0;
 let usedQuestions = {
     easy: [],
     medium: [],
@@ -455,13 +465,6 @@ let usedQuestions = {
     easyBoss: [],
     mediumBoss: [],
     finalBoss: []
-};
-let conceptMemory = {
-    budget:0,
-    demand:0,
-    indifference:0,
-    elasticity:0,
-    equilibrium:0
 };
 let questionHistory = {
     easy: [],
@@ -473,6 +476,66 @@ let questionHistory = {
     finalBoss: []
 };
 
+// =============================
+// ADAPTIVE ENGINE
+// =============================
+
+function weightedPick(pool){
+    let weightedPool = [];
+    pool.forEach(q => {
+        let weight = 1;
+        // Weakness boost
+        if(q.tag && conceptMemory[q.tag]){
+            weight += conceptMemory[q.tag];
+        }
+        // Coverage boost (if tag not seen recently)
+        let recentCount = tagHistory.filter(t => t === q.tag).length;
+        if(recentCount === 0){
+            weight += 2;
+        }
+        for(let i = 0; i < weight; i++){
+            weightedPool.push(q);
+        }
+    });
+    return weightedPool[Math.floor(Math.random() * weightedPool.length)];
+}
+
+function getAdaptiveQuestion(poolName, targetTag = null){
+    let pool = questionBanks[poolName];
+    // --- 🎯 TARGET SPECIFIC TAG IF PROVIDED ---
+    if(targetTag){
+        let filtered = pool.filter(q => q.tag === targetTag);
+
+        // Only use filtered if it actually has questions
+        if(filtered.length > 0){
+            pool = filtered;
+        }
+    }
+
+    let recent = questionHistory[poolName].slice(-5);
+    let available = pool.filter(q => !recent.includes(q.id));
+    if(available.length === 0){
+        available = pool;
+    }
+    let picked = weightedPick(available);
+
+    // Track history
+    questionHistory[poolName].push(picked.id);
+    if(questionHistory[poolName].length > 10){
+        questionHistory[poolName].shift();
+    }
+
+    // Track tag exposure
+    if(picked.tag){
+        tagHistory.push(picked.tag);
+        if(tagHistory.length > 10){
+            tagHistory.shift();
+        }
+    }
+    return picked;
+} 
+
+// 3. Game timing and artifacts (CHANGE VAULT ITEMS WITH NEW GAME)
 const TIMING = {
     normal: 1200,
     boss: 1000,
@@ -499,13 +562,13 @@ scepter:{
     }
 };
   
-// Restore saved username if it exists
+// 4. Restore saved username if it exists
 const savedUser = localStorage.getItem("gauntletUser");
 if(savedUser){
     document.getElementById("usernameInput").value = savedUser;
 }
 
-// 3. Entry Logic
+// 5. Entry Logic
 function startGame() {
     let inputName = document.getElementById("usernameInput").value.trim();
     if (!inputName) {
@@ -516,7 +579,7 @@ function startGame() {
     username = inputName;
     localStorage.setItem("gauntletUser", username);
 
-    // RESET GAME STATE
+    // RESET GAME STATE (CHANGE VAULT ITEMS WITH NEW GAME)
     room = 1;
     bossHealth = 3;
     streak = 0;
@@ -529,42 +592,37 @@ function startGame() {
     localStorage.removeItem("vaultSeal");
     localStorage.removeItem("vaultPrism");
     localStorage.removeItem("vaultScepter");
+
+    questionHistory = {
+    easy: [], medium: [], hard: [], calculation: [],
+    easyBoss: [], mediumBoss: [], finalBoss: []
+    };
     
-    // Reveal the game and torches
+    // Reveal the game and torches (CHANGE VAULT ITEMS WITH NEW GAME)
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("gameBox").style.display = "block";
     document.getElementById("artifactVault").style.display = "block";
     document.querySelectorAll(".torch").forEach(t => t.style.display = "block");
 
-questionHistory = {
-    easy: [],
-    medium: [],
-    hard: [],
-    calculation: [],
-    easyBoss: [],
-    mediumBoss: [],
-    finalBoss: []
-};
-    
-  if(localStorage.getItem("vaultSeal")){
+      if(localStorage.getItem("vaultSeal")){
         document.getElementById("vaultSeal").classList.add("unlocked");
-    }
+        }
 
-    if(localStorage.getItem("vaultPrism")){
+        if(localStorage.getItem("vaultPrism")){
         document.getElementById("vaultPrism").classList.add("unlocked");
-    }
+        }    
 
-    if(localStorage.getItem("vaultScepter")){
+        if(localStorage.getItem("vaultScepter")){
         document.getElementById("vaultScepter").classList.add("unlocked");
-    }
+        }
   
-    // Start atmosphere and timer
+// Start atmosphere and timer
     bgMusic.play().catch(e => console.log("Audio started"));
     startTime = Date.now(); 
     loadQuestion();
 }
 
-// 4. Enter Key Support
+// 6. Enter Key Support
 document.getElementById("usernameInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -572,7 +630,7 @@ document.getElementById("usernameInput").addEventListener("keypress", function(e
     }
 });
 
-// 5. Your Lore & Logic (Area Names)
+// 7. Your Lore & Logic (Area Names - CHANGE WITH NEW GAME)
 function getAreaName(r) {
     if (r <= 9) return "The Dimly Lit Archives";
     if (r === 10) return "The Warden's Gate";
@@ -584,7 +642,7 @@ function getAreaName(r) {
 };
 
 // =============================
-// WIZARD DIALOGUE SYSTEM
+// WIZARD DIALOGUE SYSTEM (CHANGE WITH NEW GAME)
 // Lines used during transitions
 // =============================
 const wizardFeedback = {
@@ -639,6 +697,7 @@ const wizardLines = {
     ]
 };
 
+// -- functions to place Wizard dialogue in game --        
 function getWizardLine(type){
     const pool = wizardLines[type] || wizardLines.default;
     return pool[Math.floor(Math.random() * pool.length)];
@@ -649,7 +708,7 @@ function getWizardFeedback(type){
     return pool[Math.floor(Math.random() * pool.length)];
 }
     
-// --- Question Pools follow below ---
+// --- Question Pools follow below (CHANGE WITH NEW GAME) ---
   
 const questionBanks = {
 easyBoss:[
@@ -667,7 +726,6 @@ finalBoss:[
 {q:"The Sovereign now tests your calculation. Price rises from $10 to $12 and quantity demanded falls from 100 to 80. Using the midpoint method, what is the elasticity?",options:["About 0.82 (inelastic)","About 1.22 (elastic)","Exactly 1 (unit elastic)","About 2.5"],a:1,feedback:"Elasticity ≈ 1.22, meaning demand is elastic."},
 {q:"Final blow. Given the elasticity you calculated, what happens to total revenue when price rises from $10 to $12?",options:["Total revenue decreases","Total revenue increases","Total revenue stays the same","Total revenue becomes zero"],a:0,feedback:"Because demand is elastic, increasing price reduces total revenue."}
 ],
-
 easy: [
 { id:1, q:"A theory of choice assumes individuals...",options:["Make random decisions","Choose the most preferred affordable bundle","Always maximize income","Always minimize work"],a:1,tag:"preferences",type:"definition",feedback:"Consumers choose the most preferred bundle they can afford given their budget constraint."},
 { id:2, q:"Consumer preferences are typically represented using...",options:["Demand curves","Indifference curves","Supply curves","Cost curves"],a:1,tag:"indifference",type:"definition",feedback:"Indifference curves show combinations of goods that give the consumer the same level of satisfaction."},
@@ -707,8 +765,7 @@ easy: [
 { id:36, q:"If the price of good X changes and the budget line rotates, what stays constant?",options:["Income","Utility","Demand","Preferences"],a:0,tag:"budget",type:"trap",feedback:"When a price changes, the budget line rotates but income remains the same."},
 { id:37, q:"A consumer chooses a bundle inside the budget constraint. What does this mean?",options:["They could afford more but chose not to","They spent all income","The bundle is impossible","Utility is maximized"],a:0,tag:"budget",type:"trap",feedback:"Bundles inside the budget constraint are affordable but do not use all available income."},
 { id:38, q:"If the price of both goods doubles and income also doubles, the budget constraint...",options:["Does not change","Shifts outward","Rotates inward","Becomes vertical"],a:0,tag:"budget",type:"trap",feedback:"If both prices and income double, purchasing power stays the same and the budget constraint remains unchanged."}
-      ],
-
+],
 medium: [
 { id:39, q:"The substitution effect of a price decrease occurs because...",options:["Relative prices change while utility is held constant","Income increases","Preferences change","Demand shifts"],a:0,tag:"income_substitution",type:"definition",feedback:"The substitution effect isolates the impact of a change in relative prices while holding utility constant."},
 { id:40, q:"A demand curve can be interpreted as...",options:["The consumer’s willingness to pay for additional units","A firm's marginal cost curve","Total utility over time","Market supply"],a:0,tag:"demand",type:"definition",feedback:"Each point on the demand curve reflects the consumer’s willingness to pay for one more unit."},
@@ -759,7 +816,6 @@ medium: [
 { id:193,q:"A flatter demand curve generally indicates...",options:["More elastic demand","More inelastic demand","Unit elastic demand","Perfectly inelastic demand"],a:0,tag:"elasticity",type:"interpretation",feedback:"Flatter curves indicate greater responsiveness to price changes."},
 { id:83, q:"If both substitution and income effects reduce consumption after a price decrease...",options:["The good is Giffen","The good is normal","Demand is perfectly elastic","Supply increased"],a:0,tag:"income_substitution",type:"trap",feedback:"Giffen goods occur when the income effect dominates the substitution effect."}
 ], 
-
 hard:[
 { id:84, q:"A firm lowers its price and observes that total revenue falls. What must be true about demand at the original price?",options:["Demand was inelastic","Demand was elastic","Demand was unit elastic","Demand was perfectly elastic"],a:0,feedback:"If lowering price reduces revenue, quantity did not increase enough to offset the price drop. Demand must have been inelastic."},
 { id:85, q:"A price increase causes total revenue to stay the same. What does this imply about demand at that price?",options:["Demand is unit elastic","Demand is elastic","Demand is inelastic","Demand is perfectly inelastic"],a:0,feedback:"When elasticity equals one, the percentage change in quantity exactly offsets the percentage change in price."},
@@ -872,129 +928,7 @@ elasticity:[
 {q:"If elasticity is greater than 1, demand is...",options:["Elastic","Inelastic","Unit elastic","Perfectly inelastic"],a:0,feedback:"Elastic demand means quantity demanded responds strongly to price changes."},
 {q:"If elasticity is less than 1, demand is...",options:["Inelastic","Elastic","Unit elastic","Perfectly elastic"],a:0,feedback:"Inelastic demand means quantity demanded responds weakly to price changes."}]
 };
-
-let easyTagCycle = 0;
-const easyTags = ["preferences","indifference","budget","equilibrium","demand"];
-
-let mediumTagCycle = 0;
-const mediumTags = ["demand","income_substitution","normal_inferior","consumer_equilibrium","elasticity"];
- 
-const easyPools = {
-preferences: {
-definition: questionBanks.easy.filter(q => q.tag === "preferences" && q.type === "definition"),
-interpretation: questionBanks.easy.filter(q => q.tag === "preferences" && q.type === "interpretation"),
-trap: questionBanks.easy.filter(q => q.tag === "preferences" && q.type === "trap")
-},
-indifference: {
-definition: questionBanks.easy.filter(q => q.tag === "indifference" && q.type === "definition"),
-interpretation: questionBanks.easy.filter(q => q.tag === "indifference" && q.type === "interpretation"),
-trap: questionBanks.easy.filter(q => q.tag === "indifference" && q.type === "trap")
-},
-budget: {
-definition: questionBanks.easy.filter(q => q.tag === "budget" && q.type === "definition"),
-interpretation: questionBanks.easy.filter(q => q.tag === "budget" && q.type === "interpretation"),
-trap: questionBanks.easy.filter(q => q.tag === "budget" && q.type === "trap")
-},
-equilibrium: {
-definition: questionBanks.easy.filter(q => q.tag === "equilibrium" && q.type === "definition"),
-interpretation: questionBanks.easy.filter(q => q.tag === "equilibrium" && q.type === "interpretation"),
-trap: questionBanks.easy.filter(q => q.tag === "equilibrium" && q.type === "trap")
-},
-demand: {
-definition: questionBanks.easy.filter(q => q.tag === "demand" && q.type === "definition"),
-interpretation: questionBanks.easy.filter(q => q.tag === "demand" && q.type === "interpretation"),
-trap: questionBanks.easy.filter(q => q.tag === "demand" && q.type === "trap")
-}
-};
-  
-const mediumPools = {
-demand: {
-definition: questionBanks.medium.filter(q => q.tag === "demand" && q.type === "definition"),
-interpretation: questionBanks.medium.filter(q => q.tag === "demand" && q.type === "interpretation"),
-trap: questionBanks.medium.filter(q => q.tag === "demand" && q.type === "trap")
-},
-income_substitution: {
-definition: questionBanks.medium.filter(q => q.tag === "income_substitution" && q.type === "definition"),
-interpretation: questionBanks.medium.filter(q => q.tag === "income_substitution" && q.type === "interpretation"),
-trap: questionBanks.medium.filter(q => q.tag === "income_substitution" && q.type === "trap")
-},
-normal_inferior: {
-definition: questionBanks.medium.filter(q => q.tag === "normal_inferior" && q.type === "definition"),
-interpretation: questionBanks.medium.filter(q => q.tag === "normal_inferior" && q.type === "interpretation"),
-trap: questionBanks.medium.filter(q => q.tag === "normal_inferior" && q.type === "trap")
-},
-consumer_equilibrium: {
-definition: questionBanks.medium.filter(q => q.tag === "consumer_equilibrium" && q.type === "definition"),
-interpretation: questionBanks.medium.filter(q => q.tag === "consumer_equilibrium" && q.type === "interpretation"),
-trap: questionBanks.medium.filter(q => q.tag === "consumer_equilibrium" && q.type === "trap")
-},
-elasticity: {
-definition: questionBanks.medium.filter(q => q.tag === "elasticity" && q.type === "definition"),
-interpretation: questionBanks.medium.filter(q => q.tag === "elasticity" && q.type === "interpretation"),
-trap: questionBanks.medium.filter(q => q.tag === "elasticity" && q.type === "trap")
-}
-};
- 
-function randomEasy() {
-    let recent = questionHistory.easy.slice(-5);
-
-    let availableQuestions = questionBanks.easy.filter(q => !recent.includes(q.id));
-
-    if (availableQuestions.length === 0) {
-        availableQuestions = [...questionBanks.easy];
-    }
-
-    let randomIndex = Math.floor(Math.random() * availableQuestions.length);
-    let question = availableQuestions[randomIndex];
-
-    questionHistory.easy.push(question.id);
-    if (questionHistory.easy.length > 10) {
-        questionHistory.easy.shift();
-    }
-
-    return question;
-}
-
-function randomMedium() {
-    let recent = questionHistory.medium.slice(-5);
-
-    let availableQuestions = questionBanks.medium.filter(q => !recent.includes(q.id));
-
-    if (availableQuestions.length === 0) {
-        availableQuestions = [...questionBanks.medium];
-    }
-
-    let randomIndex = Math.floor(Math.random() * availableQuestions.length);
-    let question = availableQuestions[randomIndex];
-
-    questionHistory.medium.push(question.id);
-    if (questionHistory.medium.length > 10) {
-        questionHistory.medium.shift();
-    }
-
-    return question;
-}
-
-function randomHard() {
-    let recent = questionHistory.hard.slice(-5);
-
-    let availableQuestions = questionBanks.hard.filter(q => !recent.includes(q.id));
-
-    if (availableQuestions.length === 0) {
-        availableQuestions = [...questionBanks.hard];
-    }
-
-    let randomIndex = Math.floor(Math.random() * availableQuestions.length);
-    let question = availableQuestions[randomIndex];
-
-    questionHistory.hard.push(question.id);
-    if (questionHistory.hard.length > 10) {
-        questionHistory.hard.shift();
-    }
-
-    return question;
-}
-    
+   
 function shuffleOptions(question){
     let q = {
         q: question.q,
@@ -1017,7 +951,11 @@ function shuffleOptions(question){
 
     return q;
 }
-    
+
+/* =========================================
+   RNG QUESTIONS (CHANGE WITH NEW GAME)
+========================================= */
+       
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
 function getMUPerDollar() {
@@ -1028,7 +966,6 @@ function getMUPerDollar() {
         options: [`${(mu/price).toFixed(1)}`, `${mu}`, `${price/mu}`, `${(mu*price)}`],
         a: 0,  type: "calculation", feedback:`MU per dollar = MU / Price = ${mu} / ${price} = ${(mu/price).toFixed(1)}`
     };
-    
 }
 
 function getEquilibriumCheck() {
@@ -1045,6 +982,7 @@ function getEquilibriumCheck() {
         a: 0,  type: "calculation", feedback:`Consumer equilibrium requires MUx/Px = MUy/Py. ${muX}/${pX} = ${ratio}. So MUy must equal ${correctMUy}.`
     };
 }
+    
 function getElasticityCalc() {
 
     const p1 = (Math.floor(Math.random() * 5) + 4) * 2;
@@ -1098,8 +1036,7 @@ function getElasticityCalc() {
         hint: "Arc Elasticity = [(Q2-Q1)/((Q1+Q2)/2)] / [(P2-P1)/((P1+P2)/2)]",
         feedback: `Elasticity ≈ ${elasticity}. Demand is ${classify(elasticityVal)}.`
     };
-
-    }
+}
   
 function getConsumerSurplusCalc() {
     const wtp = Math.floor(Math.random() * 20) + 40; // Higher WTP to ensure positive surplus
@@ -1119,8 +1056,7 @@ function getConsumerSurplusCalc() {
             `$${priceDrop + 10}`, 
             `$${wtp - initialPrice}`
         ],a: 0, type: "calculation", feedback:`Consumer surplus increases by the change in price: ${initialPrice} - ${finalPrice} = ${surplusIncrease}.`
-    };
-    
+    }; 
 }
 
 const calculationGenerators = [
@@ -1139,40 +1075,40 @@ function randomQuestion(poolName) {
     if (room === 28) return getConsumerSurplusCalc();
     if (room === 29) return getElasticityCalc();
 
-let pool = questionBanks[poolName]
-let used = new Set([
-...usedQuestions.easy,
-...usedQuestions.medium,
-...usedQuestions.hard,
-...usedQuestions.easyBoss,
-...usedQuestions.mediumBoss,
-...usedQuestions.finalBoss
-]);
+    let pool = questionBanks[poolName]
 
+    // Safety check in case poolName is invalid
+    if (!pool) return null;
+    
+    let used = [
+        ...usedQuestions.easy,
+        ...usedQuestions.medium,
+        ...usedQuestions.hard,
+        ...usedQuestions.easyBoss,
+        ...usedQuestions.mediumBoss,
+        ...usedQuestions.finalBoss
+    ];
 
-let available = pool.filter(q => !used.includes(q.id));
+    let available = pool.filter(q => !used.includes(q.id));
 
-if(available.length === 0){
-usedQuestions[poolName] = []
-available = pool
-}
+    if(available.length === 0){
+        usedQuestions[poolName] = []
+        available = pool
+    }
 
-// Avoid three identical question types in a row
-let filtered = available
+    // Avoid three identical question types in a row
+    let filtered = available;
+    if (lastTypes.length >= 2) {
+        let last1 = lastTypes[lastTypes.length - 1];
+        let last2 = lastTypes[lastTypes.length - 2];
 
-if(lastTypes.length >= 2){
-let last1 = lastTypes[lastTypes.length-1]
-let last2 = lastTypes[lastTypes.length-2]
+        if (last1 === last2) {
+            filtered = available.filter(q => q.type !== last1);
+            if (filtered.length === 0) filtered = available;
+        }
+    }
 
-if(last1 === last2){
-filtered = available.filter(q => q.type !== last1)
-if(filtered.length === 0){
-filtered = available
-}
-}
-}
-
-let question = filtered[Math.floor(Math.random()*filtered.length)]
+    let question = filtered[Math.floor(Math.random() * filtered.length)];
 
 usedQuestions[poolName].push(question.id)
 
@@ -1182,7 +1118,7 @@ if(lastTypes.length > 3){
 lastTypes.shift()
 }
 
-return question
+    return question;
 }
 
 function updateMazeTrack() {
@@ -1232,28 +1168,6 @@ function pickCalcGenerator(){
     }
 
     return calcBag.pop();
-}
-
-function weightedPick(pool){
-
-let weightedPool = [];
-
-pool.forEach(q => {
-
-let weight = 1;
-
-if(q.tag && conceptMemory[q.tag]){
-weight += conceptMemory[q.tag];
-}
-
-for(let i = 0; i < weight; i++){
-weightedPool.push(q);
-}
-
-});
-
-return weightedPool[Math.floor(Math.random()*weightedPool.length)];
-
 }
   
 function pickRandom(pool){
@@ -1315,14 +1229,12 @@ function loadQuestion() {
         playExplorationMusic();
         }
 
-   const isBoss = diff.includes("Boss");
-   document.body.classList.toggle("boss-mode", isBoss);
-   const shell = document.getElementById("gameShell");
-   const wizard = document.getElementById("wizardBox");
-   // --- UI MODE SWITCH ---
-      if(shell){
-       shell.style.justifyContent = isBoss ? "center" : "flex-start";
-         }
+    const isBoss = diff.includes("Boss");
+    const shell = document.getElementById("gameShell");
+
+    // SINGLE SOURCE OF TRUTH
+    shell.classList.toggle("boss-mode", isBoss);
+    gameBox.classList.toggle("boss-mode", isBoss);
    
     // 2. UI & Progress Updates
     gameBox.classList.toggle("boss-mode", isBoss);
@@ -1330,7 +1242,7 @@ function loadQuestion() {
     document.getElementById("areaDisplay").innerText = `${getAreaName(room)} (${room}/30)`;
     document.getElementById("srAnnouncements").innerText = `Entering ${getAreaName(room)}. Room ${room} of 30.`;
 
-    // 3. Select the Question
+    // 3. Select the Question (CHANGE BOSS NAMES AND PNG)
     if (isBoss) {
         if (bossHealth === 3) {
         bossPool = [...questionBanks[diff]]; // ← NO SHUFFLE
@@ -1371,32 +1283,50 @@ function loadQuestion() {
     // --- STREAK ADAPTIVE LOGIC ---
     let adjustedDiff = diff;
 
-    if(streak >= 5 && room < 25){
+
+    // --- FIND STRONGEST AREA (lowest weakness) ---
+    let strongestTag = null;
+    let lowestValue = Infinity;
+
+    for(let tag in conceptMemory){
+        if(conceptMemory[tag] < lowestValue){
+            lowestValue = conceptMemory[tag];
+            strongestTag = tag;
+            }
+        }
+
+    // --- ADAPTIVE ESCALATION ---
+    if(streak >= 8 && lowestValue < 1.5 && room < 25){
         adjustedDiff = "hard";
-    }
-    else if(streak >= 3 && room < 20){
+        }
+    else if(streak >= 5 && lowestValue < 2.5 && room < 20){
         adjustedDiff = "medium";
-    }
+        }
 
-    // --- QUESTION SELECTION ---
-    if(adjustedDiff === "calculation"){
-        const generator = pickCalcGenerator();
-        currentQuestion = shuffleOptions(generator());
-    }
-    else if(adjustedDiff === "easy"){
-        currentQuestion = shuffleOptions(randomEasy());
-    }
-    else if(adjustedDiff === "medium"){
-        currentQuestion = shuffleOptions(randomMedium());
-    }
-    else if(adjustedDiff === "hard"){
-        currentQuestion = shuffleOptions(randomHard());
-    }
-    else{
-        currentQuestion = shuffleOptions(randomQuestion(diff));
-    }
+// =============================
+// QUESTION SELECTION
+// =============================
 
-    // --- WIZARD LOGIC (RIGHT HERE) ---
+if(adjustedDiff === "calculation"){
+    const generator = pickCalcGenerator();
+    currentQuestion = shuffleOptions(generator());
+}
+else if(adjustedDiff === "hard" && strongestTag){
+    // 🔥 TARGET STRONGEST AREA FOR HARD QUESTIONS
+    currentQuestion = shuffleOptions(
+        getAdaptiveQuestion(adjustedDiff, strongestTag)
+    );
+}
+else{
+    // normal behavior
+    currentQuestion = shuffleOptions(
+        getAdaptiveQuestion(adjustedDiff)
+    );
+}
+
+// =============================
+// --- WIZARD LOGIC ---
+// =============================
     if(!currentQuestion.type){
         currentQuestion.type = "interpretation";
     }
@@ -1414,6 +1344,7 @@ function loadQuestion() {
         <div>${currentQuestion.q}</div>
     `;
 }
+    
     // 4. Update Hints and Draw Buttons
     document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
     displayQuestion();
@@ -1440,16 +1371,11 @@ function displayQuestion() {
     });
 }
 
-// =============================
-// UI FEEDBACK SYSTEM (WIZARD)
-// Handles all on-screen messaging
-// =============================
-function wizardSpeak(text){
-    const msgElement = document.getElementById("message");
-    msgElement.innerHTML = `<span class="wizard-text">${text}</span>`;
-}
-    
 function answer(choice) {
+    // --- GLOBAL MEMORY DECAY ---
+    for(let tag in conceptMemory){
+    conceptMemory[tag] *= 0.95;
+    }
     totalAttempts++;
     const isBossRoom = (room === 10 || room === 20 || room === 30);
     const msgElement = document.getElementById("message");
@@ -1476,6 +1402,12 @@ function answer(choice) {
         if (streak > maxStreak) maxStreak = streak;
         handleStreakVisuals();
 
+        // --- LEARNING: reduce weakness ---
+        if(currentQuestion.tag){
+            conceptMemory[currentQuestion.tag] =
+            (conceptMemory[currentQuestion.tag] || 0) * 0.7;
+        }
+
        // --- BOSS HIT LOGIC ---
         if(isBossRoom){
         bossHealth--;
@@ -1491,7 +1423,7 @@ function answer(choice) {
         return;
         }
 
-        // Boss defeated
+        // Boss defeated (CHANGE ARTIFACT NAMES)
         if(room === 10){
         document.getElementById("vaultSeal").classList.add("unlocked");
         localStorage.setItem("vaultSeal", "true");
@@ -1540,19 +1472,9 @@ return;
         },100);
         streak = 0;
 
-// --- WEAK TAG TRACKING ---
-    if(currentQuestion.tag){
-        weakTags[currentQuestion.tag] = (weakTags[currentQuestion.tag] || 0) + 1;
-    }
-        for(let tag in weakTags){
-            weakTags[tag] *= 0.9;
-        }
     // If question has a concept tag, trigger a reinforcement detour
     // --- Adaptive Concept Detour ---
-    if(!detourActive && currentQuestion.tag){
-    conceptMemory[currentQuestion.tag]++;
-        }
-    }
+   if(!detourActive &&currentQuestion.tag &&(conceptMemory[currentQuestion.tag] || 0) >= 2){
 
     let conceptPool = null;
 
@@ -1579,19 +1501,29 @@ return;
 
         displayQuestion();
         return;
+        }
+       }
+
+    // Normal failure handling
+    document.getElementById("streakDisplay").innerText = "";
+    bossHealth = 3;
+
+    room = Math.max(1, room - (room % 10 === 0 ? 3 : (room >= 21 ? 2 : 1)));
+    localStorage.setItem("gauntletRoom", room);
+    alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
+    loadQuestion();
+    }
 }
 
-// Normal failure handling
-document.getElementById("streakDisplay").innerText = "";
-bossHealth = 3;
-
-room = Math.max(1, room - (room % 10 === 0 ? 3 : (room >= 21 ? 2 : 1)));
-localStorage.setItem("gauntletRoom", room);
-alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
-loadQuestion();
-    }
+// Helper for cleaner artifact logic
+function unlockArtifact(key) {
+    const id = "vault" + key.charAt(0).toUpperCase() + key.slice(1);
+    document.getElementById(id).classList.add("unlocked");
+    localStorage.setItem(id, "true");
+    showArtifact(artifacts[key].img, artifacts[key].title, artifacts[key].text);
+}
     
-// Helper to keep the answer function clean
+// Helper to keep the answer function clean (CHANGE MESSAGE AND ICONS WITH NEW GAME)
 function handleStreakVisuals() {
     let streakMsg = "";
     let streakColor = "#60a5fa";
@@ -1612,49 +1544,46 @@ function handleStreakVisuals() {
 }
       
 function showHallwayTransition(feedback){
-const overlay = document.getElementById("hallwayTransition");
-const text = document.getElementById("hallwayText");
-const line = getWizardFeedback("correct");
-    
+    const overlay = document.getElementById("hallwayTransition");
+    const text = document.getElementById("hallwayText");
+
 // pick a random hallway image
-const randomHall = hallwayImages[Math.floor(Math.random()*hallwayImages.length)];
+    const randomHall = hallwayImages[Math.floor(Math.random()*hallwayImages.length)];
 
-overlay.style.background =
-`linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)), url('${randomHall}')`;
+    overlay.style.background =
+    `linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)), url('${randomHall}')`;
 
-overlay.style.backgroundSize = "cover";
-overlay.style.backgroundPosition = "center";
+    overlay.style.backgroundSize = "cover";
+    overlay.style.backgroundPosition = "center";
 
-text.innerHTML = `
-<div class="wizard-text" style="font-size:20px;margin-bottom:10px;">${line}</div>
-<div style="font-size:18px;opacity:.9;">${feedback}</div>
-<div style="margin-top:25px;font-size:14px;opacity:.7;">You move deeper into the archives...</div>
-`;
+    text.innerHTML = `
+    <div style="font-size:22px;margin-bottom:15px;color:#4ade80;">${getWizardFeedback("correct")}</div>
+    <div style="font-size:18px;opacity:.9;">${feedback}</div>
+    <div style="margin-top:25px;font-size:14px;opacity:.7;">You move deeper into the archives...</div>
+    `;
 
-overlay.classList.add("active");
+    overlay.classList.add("active");
 
-document.getElementById("srAnnouncements").innerText =`Correct. ${feedback}`;
-
-setTimeout(()=>{
-overlay.classList.remove("active");
-loadQuestion();
-},3200);
-
+    document.getElementById("srAnnouncements").innerText =`Correct. ${feedback}`;
+    
+    setTimeout(()=>{
+    overlay.classList.remove("active");
+    loadQuestion();
+    },3200);
 }
   
 function showArtifact(img,title,text){
 
-let drop = document.getElementById("artifactDrop");
-let image = document.getElementById("artifactImage");
-let t = document.getElementById("artifactTitle");
-let p = document.getElementById("artifactText");
+    let drop = document.getElementById("artifactDrop");
+    let image = document.getElementById("artifactImage");
+    let t = document.getElementById("artifactTitle");
+    let p = document.getElementById("artifactText");
 
-image.src = img;
-t.innerText = title;
-p.innerText = text;
+    image.src = img;
+    t.innerText = title;
+    p.innerText = text;
 
-drop.style.display = "block";
-
+    drop.style.display = "block";
 }
 
 function triggerBossShake() {
@@ -1684,7 +1613,7 @@ function generateCode(name, acc, streak, total){
     }
 
     return "ARCH-" + Math.abs(hash).toString(36).toUpperCase();
-}
+} 
     
 function handleVictory() {
     bgMusic.pause();
@@ -1697,22 +1626,47 @@ function handleVictory() {
     const totalTimeMs = Date.now() - startTime;
     const timeString = formatTime(totalTimeMs);
     const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
-    let accuracy = Math.round((correctAnswers / totalAttempts) * 100);
-
     const verificationCode = generateCode(username, accuracy, maxStreak, totalAttempts);
     
+     // --- ARCHIVIST JUDGMENT (CHANGE LINES WITH NEW GAME) ---
+    let archivistLine = "";
+    if(accuracy >= 90){
+        archivistLine = "You have mastered the Labyrinth. Few reach this level of clarity.";
+    }
+    else if(accuracy >= 75){
+        archivistLine = "You see much… but not all. The Labyrinth still holds power over you.";
+    }
+    else{
+        archivistLine = "You survived. Barely. The Labyrinth is not finished with you.";
+    }
+
+    let lineColor = "#93c5fd";
+
+    if(accuracy >= 90){
+        lineColor = "#4ade80"; // green
+    }
+    else if(accuracy < 75){
+    lineColor = "#f87171"; // red
+    }
+
     const gameBox = document.getElementById("gameBox");
-    // FIXED: changed totalAttemps to totalAttempts below
+
+        // --- HTML FIRST ---
     gameBox.innerHTML = `
         <div style="text-align:center; padding:30px;">
             <h1 class="victory" style="color:gold; text-shadow: 0 0 20px gold;">👑 CONQUEST COMPLETE 👑</h1>
-            
+
             <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid #374151;">
                 <p>👤 Adventurer: <strong>${username}</strong></p>
                 <p>🎯 Accuracy: <strong>${accuracy}%</strong> | 🔥 Best Streak: <strong>${maxStreak}</strong></p>
                 <p>⏱️ Time: <strong>${timeString}</strong> | 📝 Total Questions: <strong>${totalAttempts}</strong></p>
                 <p style="font-size: 0.8em; color: #9ca3af;">🔑 Verification Code: <span id="vCode">${verificationCode}</span></p>
             </div>
+
+            <p id="archivistLine" style="margin-top:20px; font-style:italic; color:#93c5fd; font-size:1.1em; color:${lineColor}; text-shadow: 0 0 6px rgba(147,197,253,0.4); opacity:0;">
+                ${archivistLine}
+            </p>
+
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
                 <button id="shareBtn" onclick="copyResults()" style="background:#4ade80; color:black; font-weight:bold; padding:12px 24px; border:none; border-radius:6px; cursor:pointer;">
                     📋 Copy Results
@@ -1723,8 +1677,18 @@ function handleVictory() {
             </div>
         </div>
     `;
+
+    // --- THEN RUN THE FADE-IN ---
+    setTimeout(() => {
+        const line = document.getElementById("archivistLine");
+        if(line){
+            line.style.transition = "opacity 1s ease";
+            line.style.opacity = 1;
+        }
+    }, 600);
 }
-  
+
+// --- Function to clear the boss rooms (CHANGE TITLES AND SUMMARIES WITH NEW GAME) ---
 function showKnowledgeRoom(bossRoom) {
     playExplorationMusic();  
   
@@ -1761,14 +1725,28 @@ function showKnowledgeRoom(bossRoom) {
     let nextAction = bossRoom === 30 ? "handleVictory()" : "room++; loadQuestion();";
     let buttonLabel = bossRoom === 30 ? "FINALIZE THE ARCHIVE CONQUEST →" : `CONTINUE TO ROOM ${bossRoom + 1} →`;
 
-    aContainer.innerHTML = `
-        <button onclick="${nextAction}" 
-                style="background:#60a5fa; color:black; font-weight:bold; width:100%; padding:20px; font-size:18px; box-shadow: 0 0 20px rgba(96, 165, 250, 0.5); border:none; border-radius:8px; cursor:pointer;">
-                ${buttonLabel}
-        </button>`;
+   aContainer.innerHTML = `
+    <button id="continueBtn"
+        style="background:#60a5fa; color:black; font-weight:bold; width:100%; padding:20px; font-size:18px;">
+        ${buttonLabel}
+    </button>`;
+    
+document.getElementById("continueBtn").onclick = () => {
+    // --- RESET BOSS STATE (THIS IS THE FIX) ---
+    document.getElementById("gameShell").classList.remove("boss-mode");
+    document.getElementById("gameBox").classList.remove("boss-mode");
+    bossHealth = 3;
+
+    if(bossRoom === 30){
+        handleVictory();
+    } else {
+        room++;
+        localStorage.setItem("gauntletRoom", room);
+        loadQuestion();
+    }
+};
 }
     
-  
 function shuffleArray(arr){
     for(let i=arr.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
     return arr;
