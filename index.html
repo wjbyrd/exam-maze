@@ -707,6 +707,11 @@ function getWizardFeedback(type){
     const pool = wizardFeedback[type];
     return pool[Math.floor(Math.random() * pool.length)];
 }
+
+function wizardSpeak(text){
+    const msg = document.getElementById("message");
+    msg.innerText = text;
+}     
     
 // --- Question Pools follow below (CHANGE WITH NEW GAME) ---
   
