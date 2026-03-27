@@ -1,3 +1,32 @@
+<!-- =====================================================
+GAUNTLET ENGINE — MASTER TEMPLATE
+
+READ BEFORE EDITING:
+
+This file is divided into TWO zones:
+
+1. SAFE TO EDIT (Customization)
+   - Question banks
+   - Boss names/images
+   - Text (wizard, areas, artifacts)
+   - Visual themes
+
+2. DO NOT TOUCH (Core Engine)
+   - Adaptive logic
+   - Question selection system
+   - Progression rules
+   - Boss mechanics
+
+If you modify the engine without understanding it,
+you WILL break the game.
+
+If something breaks, check:
+- Question IDs are unique
+- Each question has: q, options, a, tag, type, feedback
+- Tags/types are consistent
+
+===================================================== -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +37,16 @@
    
 <style>
 /* =========================================
-   1. GLOBAL LAYOUT & BACKGROUND (CHANGE PNG/JPEG WITH NEW GAME)
+   1. VISUAL DESIGN — SAFE TO EDIT
+
+You can change:
+- Colors
+- Background images
+- Fonts
+- Glow effects
+
+Do NOT rename IDs (#gameBox, #mazeTrack, etc.)
+or you will break JavaScript connections.
 ========================================= */
 body {
     font-family: Arial, sans-serif;
@@ -38,13 +76,47 @@ body {
 }
 
 /* =========================================
-   2. CORE GAME UI (#gameBox)
+   2. CORE GAME CONTAINER (#gameBox) — SAFE TO STYLE
+=========================================
+
+This is the main gameplay panel.
+
+Controls:
+- size and layout of the game area
+- background styling and effects
+- visual feedback (glow, boss mode, hit effects)
+- positioning of UI elements (autosave, etc.)
+
+-----------------------------------------
+SAFE TO EDIT:
+- colors, shadows, glow effects
+- padding, margins
+- background / blur effects
+- border styles
+- animation intensity
+
+-----------------------------------------
+USE CAUTION:
+- width / max-width / flex settings
+- position: relative (needed for overlays like autosave)
+- removing box-sizing may break layout
+
+-----------------------------------------
+DO NOT REMOVE:
+- #gameBox selector (used throughout JS)
+- .boss-mode class (boss visuals tied to logic)
+- .hit class (damage feedback)
+
+-----------------------------------------
+TIP:
+This controls how the game FEELS visually.
+You can restyle it completely—just keep structure intact.
+
 ========================================= */
 #gameBox {
     max-width: 720px;
     flex:1;
     min-width:0;
-    max-width:720px;
     width:100%;
     min-height: auto;
     margin: 0;
@@ -61,128 +133,487 @@ body {
     position: relative;
 }
 
+/* Boss state styling — triggered during boss fights (DO NOT REMOVE) */
 #gameBox.boss-mode {
-border: 2px solid #60a5fa;
-box-shadow: 0 0 40px rgba(96,165,250,0.4);
+    border: 2px solid #60a5fa;
+    box-shadow: 0 0 40px rgba(96,165,250,0.4);
 }
 
+/* Damage effect when boss/player is hit (visual feedback) */
 .hit { box-shadow: 0 0 60px #ef4444, inset 0 0 40px #7f1d1d !important; animation: hitshake 0.4s ease; }
+
+/* Autosave indicator — positioned relative to gameBox */
 #autosave { position: absolute; top: 15px; right: 15px; font-size: 11px; opacity: 0.5; font-style: italic; }
 
 /* =========================================
-   3. TEXT & HEADERS
+   3. TEXT & TYPOGRAPHY SYSTEM — SAFE TO CUSTOMIZE
+=========================================
+Controls all text styling in the game:
+- question readability
+- headers and titles
+- boss emphasis text
+- hints and feedback
+- visual hierarchy
+-----------------------------------------
+SAFE TO EDIT:
+- font sizes
+- colors
+- text shadows
+- spacing (margin, line-height)
+- stylistic effects (italic, uppercase, etc.)
+-----------------------------------------
+USE CAUTION:
+- extreme font sizes (may break layout)
+- removing margins (can cause overlap)
+- removing contrast (hurts readability)
+-----------------------------------------
+DO NOT REMOVE:
+- #question (core content display)
+- .boss-title (boss transitions)
+- .boss-q (boss summaries)
+- .fade-out-text (feedback animation)
+-----------------------------------------
+TIP:
+Prioritize readability over style.
+If students can’t read it quickly, the system fails.
 ========================================= */
 h2 { text-shadow: 0 0 10px rgba(255,255,255,0.3), 0 0 20px rgba(251,191,36,0.2); margin-bottom: 5px; }
+
+/* Main question text — keep readable and centered */
 #question { font-size: 20px; line-height: 1.4; font-weight: 500; margin: 14px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+/* Boss/summary title — high emphasis text */
 .boss-title { font-size: 28px; font-weight: bold; margin-bottom: 15px; display: block; }
+
+/* Area/zone label — subtle contextual info */
 .area-title { color: #9ca3af; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 15px; }
-/* Boss question styling */
+
+/* Boss summary text — left-aligned for readability */
 .boss-q {font-style: italic; font-size: 24px; border-left: 4px solid var(--bossColor); padding-left: 15px; margin: 20px 0; text-align: left;}
+
+/* Optional hint display (calculation or guidance) */
 .hint-box { font-size: 13px; color: #fbbf24; margin-top: 15px; opacity: 0.8; height: 18px; }
+    
+/* Temporary feedback text (auto fades out) */
 .fade-out-text { animation: fadeOut 5s forwards; font-weight: bold; color: #4ade80; }
 
 /* =========================================
-   4. BUTTONS & INTERACTION
+   4. BUTTONS & INTERACTION — SAFE TO CUSTOMIZE
+=========================================
+Controls all interactive elements:
+- answer buttons
+- hover/active feedback
+- layout of answer choices
+- utility buttons (fullscreen, etc.)
+-----------------------------------------
+SAFE TO EDIT:
+- colors, backgrounds, borders
+- hover/active effects (scale, glow, etc.)
+- padding, spacing, font sizes
+- button shapes (border-radius)
+-----------------------------------------
+USE CAUTION:
+- removing hover/active effects (reduces feedback)
+- extreme sizing (can break layout or overlap)
+- flex settings in .answers (affects layout)
+-----------------------------------------
+DO NOT REMOVE:
+- button selector (used globally)
+- .answers layout (controls answer positioning)
+-----------------------------------------
+TIP:
+Buttons should feel responsive and clickable.
+Visual feedback = better engagement.
 ========================================= */
+
+/* Base button styling — applies to all buttons */
 button {
     padding: 12px 22px; margin: 6px; font-size: 16px; cursor: pointer;
     background: #374151; color: white; border: none; border-radius: 8px; transition: all 0.2s ease;
 }
 
+/* Hover feedback — improves interactivity */
 button:hover { background: #4b5563; transform: translateY(-2px); }
 
+/* Click feedback — simulates button press */
 button:active {transform: scale(0.96);}
 
+/* Answer container — controls layout of choices */
 .answers { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+
+/* Individual answer buttons — flexible sizing */
 .answers button { flex: 1 1 200px; max-width: 320px; }
 
+/* Utility button (fullscreen toggle) — safe to restyle or move */
 .fullscreenBtn { position: absolute; top: 12px; left: 12px; background: #374151; color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px; }
 
 /* =========================================
-   5. PROGRESS & MAZE TRACK
+   5. PROGRESS & MAZE TRACK — SAFE TO CUSTOMIZE (WITH RULES)
+=========================================
+Controls visual progression feedback:
+- progress bar (top fill indicator)
+- maze track (30-room grid)
+- current position highlight
+- boss room visual cues
+-----------------------------------------
+SAFE TO EDIT:
+- colors, gradients, glow effects
+- sizes (maze-box, spacing, gap)
+- animation styles (pulse, transitions)
+- grid sizing (with care)
+-----------------------------------------
+USE CAUTION:
+- grid-template-columns (affects layout structure)
+- maze-box size vs spacing (can cause overflow)
+- removing animations (reduces feedback clarity)
+-----------------------------------------
+DO NOT MODIFY:
+- #mazeTrack structure (10 columns × 3 rows = 30 rooms)
+- nth-child(10, 20, 30) unless boss rooms are changed globally
+
+Changing boss room visuals here requires matching updates in:
+- game logic (boss triggers)
+- progression system
+-----------------------------------------
+TIP:
+This system gives players a sense of movement and progress.
+If it's unclear, motivation drops.
 ========================================= */
+    
+/* Progress bar container — background track */
 #progressBar { width: 100%; height: 22px; background: #2d3748; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+    
+/* Progress fill — width controlled by JS */
 #progressFill { height: 100%; width: 0%; background: linear-gradient(90deg, #f59e0b, #ef4444); transition: width 0.4s ease; }
 
+/* Maze grid layout — 10 columns = 30 total rooms */
 #mazeTrack { display: grid; grid-template-columns: repeat(10, 36px); justify-content: center; gap: 10px; margin: 25px auto; }
+    
+/* Individual room cell — default state */
 .maze-box { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; font-size: 20px; border-radius: 6px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+
+/* Current room highlight — animated pulse */
 .maze-box.active { background: rgba(212,175,55,0.2); border: 2px solid #d4af37; z-index: 10; animation: activePulse 1s infinite alternate;}
 
-/* Room Specific Glows */
+/* Boss room highlights (10, 20, 30) — visual only */
 .maze-box:nth-child(10) { text-shadow: 0 0 10px #60a5fa; }
 .maze-box:nth-child(20) { text-shadow: 0 0 12px #a855f7; }
 .maze-box:nth-child(30) { text-shadow: 0 0 15px #ef4444; }
-
 /* =========================================
-   6. ARTIFACT SYSTEM (REWARDS)
+   6. ARTIFACT SYSTEM (REWARDS) — SAFE TO CUSTOMIZE
+=========================================
+Controls visual display of rewards:
+- artifact drop popup (after boss wins)
+- artifact vault (persistent collection)
+- locked vs unlocked states
+- reward animations and glow effects
+-----------------------------------------
+SAFE TO EDIT:
+- colors, backgrounds, borders
+- artifact sizes and spacing
+- glow effects and animations
+- text labels and styling
+-----------------------------------------
+USE CAUTION:
+- opacity (controls locked vs unlocked visibility)
+- transform/scale (can affect layout spacing)
+- animation timing (too fast = distracting)
+-----------------------------------------
+DO NOT MODIFY:
+- .artifactSlot.unlocked (linked to JS unlock logic)
+- element IDs (#artifactDrop, #artifactVault, etc.)
+- display behavior (used for showing/hiding rewards)
+
+Changing these may break:
+- artifact unlocking visuals
+- vault persistence feedback
+-----------------------------------------
+TIP:
+This is your reward system.
+If it doesn’t feel rewarding, engagement drops.
 ========================================= */
+    
+/* Reward popup — appears after boss victory */
 #artifactDrop { margin-top: 20px; padding: 14px; background: rgba(15,23,42,.6); border-radius: 10px; border: 1px solid rgba(99,102,241,.35); text-align: center; }
+    
+/* Artifact image in popup */
 #artifactImage { width: 96px; margin-bottom: 8px; }
 #artifactDrop img { filter: drop-shadow(0 0 12px rgba(56,189,248,.8)); }
 
+/* Persistent artifact collection display (top panel) */
 #artifactVault { margin-top: -6px; width: 220px; padding: 18px; border-radius: 12px; background: linear-gradient(180deg,#020617,#020617 60%,#020617 100%); box-shadow: 0 0 25px rgba(56,189,248,.15); border: 1px solid rgba(56,189,248,.25); text-align: center; display:block !important; }
 #artifactVault h3 { color: #60a5fa; margin: 0 0 14px 0; }
 
+/* Layout container for artifact slots */
 .vaultRow { display: flex; justify-content: center; align-items:flex-end; gap: 15px; flex-wrap:wrap;}
+
+/* Individual artifact slot (default = locked state) */    
 .artifactSlot { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 70px; text-align:center; opacity: .25; transition: all .4s ease;}
+
+/* Locked artifact image (grayscale effect) */    
 .artifactSlot img { width: 45px; margin-bottom:4px;filter: grayscale(1); transition: all .4s ease; }
+
+/* Unlocked artifact — triggered by JS (DO NOT REMOVE) */    
 .artifactSlot span { display: block; font-size: 13px; color: #94a3b8; margin-top: 8px; line-height: 1.2; }
 
-/* Unlocked States */
+/* Glow + animation for unlocked artifacts */
 .artifactSlot.unlocked { opacity: 1; transform: scale(1.05); }
 .artifactSlot.unlocked img { filter: drop-shadow(0 0 14px rgba(56,189,248,.9)); animation: relicPulse 3s infinite; }
 .artifactSlot.unlocked span { color: #e2e8f0; font-weight: 600; }
 
 /* =========================================
-   7. BOSSES & TORCHES
+   7. BOSS EFFECTS & ATMOSPHERE — SAFE TO CUSTOMIZE
+=========================================
+Controls visual intensity and immersion:
+- boss animations (floating, shaking)
+- boss-specific glow effects
+- environmental effects (torches)
+-----------------------------------------
+SAFE TO EDIT:
+- glow colors (match your theme)
+- animation intensity and timing
+- boss icon size
+- torch placement and styling
+-----------------------------------------
+USE CAUTION:
+- removing animations (reduces feedback and immersion)
+- extreme sizing (can break layout)
+- opacity/filter changes (affects visibility)
+-----------------------------------------
+DO NOT REMOVE:
+- .boss-shake (triggered during boss hits)
+- .bossIcon (used for boss rendering)
+- .torch (environmental effect tied to game start)
+
+Removing these will:
+- eliminate combat feedback
+- reduce visual clarity during bosses
+-----------------------------------------
+TIP:
+This section controls how "intense" the game feels.
+Subtle changes here dramatically affect experience.
 ========================================= */
-/* Boss hit shake effect */
+    
+/* Hit animation — triggered when boss takes damage */
 .boss-shake {animation: bossShake 0.5s cubic-bezier(.36,.07,.19,.97) both;}
+
+/* Boss image display — includes floating animation */
 .bossIcon { width: 96px; height: auto; display: block; margin: 0 auto 12px auto; animation: bossFloat 4s ease-in-out infinite; }
+
+/* Boss-specific glow effects (safe to recolor per theme, change name before glow to match your boss name) */
 .tyrantGlow { filter: drop-shadow(0 0 14px rgba(96,165,250,.8)); }
 .underwriterGlow { filter: drop-shadow(0 0 14px rgba(168,85,247,.8)); }
 .finalBoss { filter: drop-shadow(0 0 18px rgba(239,68,68,.9)); }
 
+/* Ambient torch effect — decorative, shown during gameplay */
 .torch { position: absolute; width: 70px; top: 30px; z-index: 10; animation: torchFlicker 3s infinite alternate; pointer-events: none; opacity: .95; filter: drop-shadow(0 0 12px rgba(255,180,80,.7)); display:none; }
+
+/* Torch positioning (left/right sides of screen) */
 .left-torch { left: 18px; }
 .right-torch { right: 18px; transform: scaleX(-1); }
-
 /* =========================================
-   8. TRANSITIONS & SCREENS (CHANGE PNG WITH NEW GAME)
+   8. FULLSCREEN SCREENS & TRANSITIONS — SAFE TO CUSTOMIZE
+=========================================
+Controls full-screen UI layers:
+- start screen (game entry)
+- hallway transition overlay (between rooms)
+- transition text display
+-----------------------------------------
+SAFE TO EDIT:
+- background images (start screen, hallway scenes)
+- text styling and layout
+- overlay colors and opacity
+- animation timing and effects
+-----------------------------------------
+USE CAUTION:
+- position: fixed (required for full-screen coverage)
+- z-index layering (controls what appears on top)
+- opacity / pointer-events (controls visibility + interaction)
+-----------------------------------------
+DO NOT REMOVE:
+- #startScreen (entry point to game)
+- #hallwayTransition + .active (transition system)
+- #hallwayText (text container)
+
+Removing these will break:
+- game start flow
+- transition animations
+- progression continuity
+-----------------------------------------
+TIP:
+This section controls immersion and pacing between actions.
+Good transitions = smoother experience.
 ========================================= */
+
+/* Fullscreen start screen — shown before game begins */    
 #startScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('start_screen_image.png'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 
+/* Transition overlay — appears between rooms (controlled by JS) */
 #hallwayTransition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)), url('hallway1.png'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; font-size: 26px; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 1.2s ease; animation: hallwayZoom 3.2s ease-out forwards; }
+
+/* Activates transition visibility (DO NOT REMOVE) */    
 #hallwayTransition.active { opacity: 1; }
+
+/* Text container for transition messages */
 #hallwayText { max-width: 600px; background: rgba(0,0,0,0.55); padding: 30px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 0 25px rgba(0,0,0,0.6); }
 
 /* =========================================
-   9. ANIMATION KEYFRAMES
+   9. ANIMATION SYSTEM — SAFE TO CUSTOMIZE (WITH CARE)
+=========================================
+Defines all animation keyframes used throughout the game:
+- environmental effects (torch flicker)
+- combat feedback (hit shake, boss shake)
+- progression feedback (active pulse, victory glow)
+- character motion (boss float, wizard float)
+- reward effects (relic pulse)
+- UI transitions (fade in/out)
+-----------------------------------------
+SAFE TO EDIT:
+- animation intensity (scale, movement distance)
+- timing (duration in CSS usage, not here)
+- visual effects (glow, brightness, shadows)
+-----------------------------------------
+USE CAUTION:
+- transform values (affects layout positioning)
+- extreme motion (can feel distracting or chaotic)
+- removing animations (reduces feedback clarity)
+-----------------------------------------
+DO NOT REMOVE:
+- keyframe names (used across CSS and JS)
+  e.g. torchFlicker, bossShake, activePulse, etc.
+
+Renaming or deleting these will break:
+- visual feedback
+- boss effects
+- UI transitions
+-----------------------------------------
+TIP:
+Animations should reinforce feedback, not distract.
+Subtle > excessive.
 ========================================= */
+
+/* Ambient lighting effect (environmental immersion) */    
 @keyframes torchFlicker { 0%, 100% { filter: brightness(1); } 25% { filter: brightness(1.05); } 50% { filter: brightness(0.97); } 75% { filter: brightness(1.04); } }
+
+/* Damage feedback (quick impact effect) */    
 @keyframes hitshake { 0% { transform: translateX(0); } 25% { transform: translateX(-8px); } 50% { transform: translateX(8px); } 75% { transform: translateX(-6px); } 100% { transform: translateX(0); } }
+
+/* Boss-specific hit feedback (stronger shake) */    
 @keyframes bossShake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+
+/* Current room highlight animation (maze tracker) */   
 @keyframes activePulse { 0% { box-shadow: 0 0 6px rgba(212,175,55,0.7); transform: scale(1.1); } 100% { box-shadow:0 0 10px rgba(212,175,55,0.6), 0 0 20px rgba(212,175,55,0.5),0 0 40px rgba(212,175,55,0.3); ; transform: scale(1.2); } }
+
+/* Victory text animation (end screen emphasis) */    
 @keyframes victoryGlow { 0%, 100% { transform: scale(1); text-shadow: 0 0 10px gold; } 50% { transform: scale(1.1); text-shadow: 0 0 25px gold, 0 0 40px orange; } }
+
+/* Idle boss movement (subtle hovering effect) */    
 @keyframes bossFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+/* Artifact glow animation (reward emphasis) */    
 @keyframes relicPulse { 0%, 100% { filter: drop-shadow(0 0 8px #38bdf8); } 50% { filter: drop-shadow(0 0 18px #60a5fa); } }
+
+/* Temporary feedback text fade-out */   
 @keyframes fadeOut { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Wizard idle animation (subtle movement) */    
 @keyframes wizardFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-5px); }}
+
+/* General UI entrance animation */    
 @keyframes fadeIn {from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
    
 /* =========================================
-   10. MEDIA QUERIES
+   10. RESPONSIVE DESIGN — MOBILE ADJUSTMENTS
+=========================================
+
+Applies layout changes for smaller screens (≤ 600px).
+
+Ensures:
+- maze tracker stays visible
+- game content fits without overflow
+- answer buttons stack vertically
+
+-----------------------------------------
+SAFE TO EDIT:
+- sizes (maze-box, scaling)
+- button layout (flex behavior)
+- scale amount for gameBox
+
+-----------------------------------------
+USE CAUTION:
+- removing transform scaling may cause overflow
+- changing button flex may break readability
+
+-----------------------------------------
+DO NOT REMOVE:
+This section is required for mobile usability.
+
+Without it:
+- layout will overflow screen
+- buttons may be cut off
+- UI becomes hard to use on phones
+
+-----------------------------------------
+TIP:
+Test changes on both:
+- desktop (full width)
+- mobile (narrow screen)
+
+This controls responsiveness, not game logic.
 ========================================= */
-@media (max-width: 600px) {
+/* Smaller maze icons for mobile */
+    @media (max-width: 600px) {
     .maze-box {width:20px; height:20px;}
+/* Slight scale-down to fit game within screen */
     #gameBox { transform: scale(0.95); transform-origin: top center; }
+/* Stack answer buttons vertically */
     .answers button { flex: 1 1 100%; }
 }
 
 /* =========================================
-   11. PANEL LAYOUT SYSTEM
+   11. PANEL LAYOUT SYSTEM — SAFE TO CUSTOMIZE (WITH LIMITS)
+=========================================
+
+Controls the structural layout of the game UI:
+
+- top panel (title, maze tracker, artifact vault)
+- main panel (wizard + game box)
+- spacing, alignment, and sizing
+
+-----------------------------------------
+SAFE TO EDIT:
+- spacing (gap, margin, padding)
+- colors, borders, shadows
+- font sizes and styling
+- max-width values (to adjust scale)
+
+-----------------------------------------
+USE CAUTION:
+- flexbox settings (display, flex, align-items)
+- width / max-width relationships
+
+-----------------------------------------
+DO NOT MODIFY:
+- element IDs (#gameShell, #gameBox, #wizardBox, etc.)
+- core layout structure (flex directions and hierarchy)
+
+Breaking structure may cause:
+- overlapping elements
+- misaligned panels
+- mobile layout issues
+
+-----------------------------------------
+TIP:
+If layout breaks, check:
+- flex direction
+- width vs max-width conflicts
+- container nesting
+
+This controls layout — not game logic.
 ========================================= */
+    
 /* Maze Tracker & Artifact Boxes */
+/* Top panel: stacks title, maze tracker, and artifact vault */
 .top-panel{
     display:flex;
     flex-direction:column;   /* STACK */
@@ -216,6 +647,7 @@ button:active {transform: scale(0.96);}
 }
 
 /* Main Game Row */
+/* Main horizontal layout: wizard + game area */
 .main-panel{
     display:flex;
     gap:20px;
@@ -225,6 +657,7 @@ button:active {transform: scale(0.96);}
 }
    
 /* Game Shell Wrapper*/
+/* Core game container — controls overall layout and spacing */
    #gameShell{
     display:flex;
     gap:20px;
@@ -239,6 +672,7 @@ button:active {transform: scale(0.96);}
 }
    
 /* Wizard Box */
+/* Wizard display panel — fixed width, do not remove flex settings */
 #wizardBox{
     width:160px;
     min-width:160px;
@@ -277,6 +711,7 @@ button:active {transform: scale(0.96);}
 }
 
 /* Wizard Image */
+/* Wizard visual + floating animation (safe to replace image or effects) */
 #wizardImage{
     width:115px;
     filter: drop-shadow(0 0 12px rgba(96,165,250,.6));
@@ -284,6 +719,7 @@ button:active {transform: scale(0.96);}
 }
 
 /* Game Box adjustment */
+/* Main gameplay area — expands to fill available space */
 #gameBox{
     flex:1;
     min-width:0;
@@ -291,19 +727,47 @@ button:active {transform: scale(0.96);}
     width:100%;
     padding:18px 20px;   /* slightly tighter */
 } 
-
+    
 /* =========================================
-   12. BOSS MODE (UI STATE OVERRIDES)
+   12. BOSS MODE (UI STATE OVERRIDES) — DO NOT MODIFY STRUCTURE
+=========================================
+Applies layout changes during boss encounters.
+Triggered by adding the "boss-mode" class via JavaScript.
+Effects:
+- hides wizard panel
+- centers game content
+- adjusts layout for focused boss interaction
+-----------------------------------------
+SAFE TO EDIT:
+- spacing (margin, alignment)
+- sizing (max-width adjustments)
+- visual styling
+-----------------------------------------
+DO NOT MODIFY:
+- .boss-mode selector
+- element targets (#wizardBox, #gameBox, #gameShell)
+
+Removing or changing these will break:
+- boss screen layout
+- UI transitions into boss mode
+-----------------------------------------
+TIP:
+Boss mode removes distractions and increases focus.
+Keep layout clean and centered.
 ========================================= */
+
+/* Center layout when wizard is removed */
 .boss-mode #wizardBox{
     display:none;
 }
 
+/* Center and slightly constrain game area for boss mode */
 .boss-mode #gameBox{
     max-width:700px;
     margin:0 auto;
 }
 
+/* Center layout when wizard is removed */
 .boss-mode #gameShell{
     justify-content:center;
 }
@@ -312,17 +776,69 @@ button:active {transform: scale(0.96);}
 </head>
 
 <!-- =========================================
-   1. BEGIN HTML ELEMENTS (CHANGE ELEMENTS WITH NEW GAME)
+HTML STRUCTURE — GAME UI FRAMEWORK
+=========================================
+
+This section defines the full layout of the game.
+
+It includes:
+- start screen (player entry)
+- accessibility elements (screen reader announcements)
+- transition overlays (hallway scenes)
+- top panel (progress + artifacts)
+- main panel (wizard + gameplay)
+- dynamic content containers (questions, answers, feedback)
+
+-----------------------------------------
+SAFE TO EDIT (CUSTOMIZATION):
+- text (titles, labels, instructions)
+- images (wizard, artifacts, backgrounds)
+- styling (colors, fonts, layout tweaks)
+- artifact names and visuals
+
+-----------------------------------------
+DO NOT MODIFY (STRUCTURE/IDS):
+The following IDs are REQUIRED by JavaScript:
+
+- usernameInput
+- gameBox
+- question
+- answers
+- message
+- mazeTrack
+- artifactVault / vault items
+- artifactDrop / artifactImage / artifactTitle / artifactText
+- hallwayTransition / hallwayText
+- srAnnouncements
+
+Renaming or removing these will break:
+- question loading
+- answer selection
+- progression tracking
+- artifact system
+- accessibility features
+
+-----------------------------------------
+NOTES:
+- This layout is tightly connected to the game engine
+- Most issues come from changing IDs, not styling
+
+Edit appearance freely.
+Respect structure strictly.
+
 ========================================= -->
 <body>
+<!-- Screen reader announcements (accessibility — do not remove) -->    
   <div id="srAnnouncements"
      aria-live="assertive"
      aria-atomic="true"
      style="position:absolute; left:-9999px; height:1px; width:1px; overflow:hidden;">
 </div>
+<!-- Transition overlay between rooms (safe to style, keep IDs) -->    
 <div id="hallwayTransition">
 <div id="hallwayText"></div>
 </div>
+<!-- Start screen / player entry (safe to redesign completely) -->
 <div id="startScreen">
     <h1 style="color:rgb(48, 187, 221); text-shadow:0 0 30px rgb(48, 187, 221); font-size:60px; margin-bottom:10px;">THE ARCHIVES OF MICROECONOMICS</h1>
     <h2 style="color:rgb(51, 140, 178); text-shadow:0 0 20px rgb(51, 140, 178); font-size:40px; margin-bottom:50px;">THE LABYRINTH OF CHOICE</h2>
@@ -332,12 +848,14 @@ button:active {transform: scale(0.96);}
 </div>
 <div class="dungeon-container">
     <button class="fullscreenBtn" onclick="goFullscreen()">Fullscreen</button>
-    <!-- TOP PANEL -->
+    <!-- TOP PANEL -CHANGE NAME IN TITLE -->
+    <!-- Top panel: progress track + artifact vault -->
     <div class="top-panel">
        <div class="top-title">The Labyrinth of Choice</div>
         <div id="mazeTrackContainer">
             <div id="mazeTrack"></div>
         </div>
+        <!-- Artifact slots (IDs must match unlock system in JS - CHANGE NAMES) -->
         <div id="artifactVault">
             <h3>Relics Recovered</h3>
             <div class="vaultRow">
@@ -357,14 +875,16 @@ button:active {transform: scale(0.96);}
         </div>
     </div>
     <!-- MAIN PANEL -->
+    <!-- Main game area: wizard + question interface -->
     <div class="main-panel">
-        <!-- WIZARD -->
+        <!-- WIZARD - CAN CHANGE WIZARD NAME-->
       <div id="gameShell">
        <div id="wizardBox">
             <div id="wizardName">The Archivist</div>
             <img src="wizard.png" id="wizardImage">
         </div>
         <!-- GAME -->
+        <!-- Dynamic question + answer rendering (DO NOT rename IDs) -->
         <div id="gameBox">
             <div id="autosave">💾 Progress Autosaved</div>
 
@@ -381,7 +901,7 @@ button:active {transform: scale(0.96);}
             </div>
             <div id="answers"></div>
             <p id="message"></p>
-
+            <!-- Artifact reward popup (triggered after boss victories) -->
             <div id="artifactDrop" style="display:none;">
                 <img id="artifactImage" width="96">
                 <h3 id="artifactTitle"></h3>
@@ -395,6 +915,14 @@ button:active {transform: scale(0.96);}
    2. GAME ELEMENTS (CHANGE ELEMENTS WITH NEW GAME)
 ========================================= -->
  <script>
+
+// =============================================
+// AUDIO SYSTEM — OPTIONAL
+// =============================================
+// Replace audio files with your own if desired.
+// Safe to remove entirely if you don't want sound.
+// Does NOT affect game logic.
+     
 const bgMusic = new Audio('chamber.wav'); 
 bgMusic.loop = true; 
 bgMusic.volume = 0.1; 
@@ -436,11 +964,24 @@ else if (el.msRequestFullscreen) { // old Edge
 }
 }
     
+// =============================================
 // 1. Initial UI State: Hide game until startGame runs
+// =============================================
 document.getElementById("gameBox").style.display = "none";
 document.querySelectorAll(".torch").forEach(t => t.style.display = "none");
 
+// =============================================
 // 2. Global Variables (Declared only ONCE)
+// CORE GAME STATE — DO NOT MODIFY STRUCTURE
+// =============================================
+// These variables control:
+// - progression
+// - scoring
+// - adaptive difficulty
+//
+// You may RESET values (e.g., starting room),
+// but DO NOT rename or delete variables.
+     
 let totalAttempts = 0;
 let bossHealth = 3; 
 let bossPool = [];
@@ -476,9 +1017,23 @@ let questionHistory = {
     finalBoss: []
 };
 
-// =============================
-// ADAPTIVE ENGINE
-// =============================
+// =============================================
+// ADAPTIVE ENGINE — DO NOT TOUCH
+// =============================================
+// This system controls:
+//
+// 1. Weakness tracking (conceptMemory)
+// 2. Question weighting (weightedPick)
+// 3. Topic rotation (tagHistory)
+// 4. Anti-repetition logic
+//
+// If you modify this without understanding it,
+// you will break:
+// - difficulty scaling
+// - learning reinforcement
+// - question balance
+//
+// Only advanced users should modify this.
 
 function weightedPick(pool){
     let weightedPool = [];
@@ -535,13 +1090,45 @@ function getAdaptiveQuestion(poolName, targetTag = null){
     return picked;
 } 
 
-// 3. Game timing and artifacts (CHANGE VAULT ITEMS WITH NEW GAME)
+// =============================================
+// TIMING CONFIGURATION — SAFE TO TUNE
+// =============================================
+// Controls delay timing (in milliseconds) for game events.
+//
+// - normal  → standard transitions between questions
+// - boss    → faster pacing during boss encounters
+// - detour  → slightly longer for concept recovery moments
+//
+// SAFE TO EDIT:
+// - values (increase for slower pacing, decrease for faster)
+//
+// DO NOT REMOVE:
+// - keys (normal, boss, detour) — used elsewhere in game
+//
+// Changing timing affects:
+// - game speed
+// - perceived difficulty
+// - player experience (pressure vs. reflection)
+//
+// This is pacing control, not logic.
+// =============================================
 const TIMING = {
     normal: 1200,
     boss: 1000,
     detour: 1400
 };
-    
+
+// =============================================
+// BOSSES & REWARDS — SAFE TO CUSTOMIZE
+// =============================================
+// You can change:
+// - boss names
+// - images
+// - artifact rewards
+// - lore text
+//
+// Do NOT remove bossHealth logic.
+     
 const artifacts = {
 seal:{
     img:"seal_of_preferences.png",
@@ -562,13 +1149,55 @@ scepter:{
     }
 };
   
-// 4. Restore saved username if it exists
+// =============================================
+// USERNAME RESTORE — SAFE TO MODIFY
+// =============================================
+// Loads previously saved username from localStorage
+// and pre-fills the input field.
+//
+// SAFE TO EDIT:
+// - key name ("gauntletUser")
+// - behavior (e.g., remove if you want fresh input every time)
+//
+// WARNING:
+// Requires input element with id="usernameInput"
+//
+// Removing this will NOT break the game,
+// but will remove convenience for returning users.
+// =============================================
 const savedUser = localStorage.getItem("gauntletUser");
 if(savedUser){
     document.getElementById("usernameInput").value = savedUser;
 }
 
-// 5. Entry Logic
+// =============================================
+// GAME INITIALIZATION — PARTIAL CUSTOMIZATION
+// =============================================
+// Runs when player starts a new game.
+//
+// Handles:
+// - username setup
+// - full game state reset
+// - UI reveal (game, vault, torches)
+// - restoring unlocked artifacts
+// - starting music and timer
+//
+// ---------------------------------------------
+// SAFE TO EDIT:
+// - alert message text
+// - vault item IDs (Seal, Prism, Scepter)
+// - visual elements shown/hidden
+//
+// DO NOT MODIFY:
+// - state reset variables (room, streak, etc.)
+// - questionHistory structure
+// - loadQuestion() call
+//
+// Breaking this WILL cause:
+// - corrupted runs
+// - incorrect scoring
+// - progression bugs
+// =============================================
 function startGame() {
     let inputName = document.getElementById("usernameInput").value.trim();
     if (!inputName) {
@@ -579,7 +1208,10 @@ function startGame() {
     username = inputName;
     localStorage.setItem("gauntletUser", username);
 
-    // RESET GAME STATE (CHANGE VAULT ITEMS WITH NEW GAME)
+// =============================================
+// RESET CORE GAME STATE — DO NOT MODIFY STRUCTURE
+// =============================================
+// Resets all progression, scoring, and adaptive tracking
     room = 1;
     bossHealth = 3;
     streak = 0;
@@ -598,13 +1230,28 @@ function startGame() {
     easyBoss: [], mediumBoss: [], finalBoss: []
     };
     
-    // Reveal the game and torches (CHANGE VAULT ITEMS WITH NEW GAME)
+// =============================================
+// UI INITIALIZATION — SAFE TO CUSTOMIZE
+// =============================================
+// Shows main game elements and restores vault visuals
     document.getElementById("startScreen").style.display = "none";
     document.getElementById("gameBox").style.display = "block";
     document.getElementById("artifactVault").style.display = "block";
     document.querySelectorAll(".torch").forEach(t => t.style.display = "block");
 
-      if(localStorage.getItem("vaultSeal")){
+   // =============================================
+   // VAULT RESTORE SYSTEM — SAFE WITH MATCHING IDS
+   // =============================================
+   // Restores previously unlocked artifacts from storage.
+   //
+   // IMPORTANT:
+   // IDs must match exactly:
+   // - localStorage key ("vaultSeal")
+   // - HTML element id ("vaultSeal")
+   //
+   // Mismatches = artifacts won't display
+   // =============================================    
+        if(localStorage.getItem("vaultSeal")){
         document.getElementById("vaultSeal").classList.add("unlocked");
         }
 
@@ -616,13 +1263,18 @@ function startGame() {
         document.getElementById("vaultScepter").classList.add("unlocked");
         }
   
-// Start atmosphere and timer
+// Start game loop: music + timer + first question
     bgMusic.play().catch(e => console.log("Audio started"));
     startTime = Date.now(); 
     loadQuestion();
 }
 
-// 6. Enter Key Support
+// =============================================
+// INPUT SHORTCUT — SAFE TO KEEP OR REMOVE
+// =============================================
+// Allows pressing Enter to start the game
+// Improves usability, does not affect logic
+// =============================================
 document.getElementById("usernameInput").addEventListener("keypress", function(event) {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -630,7 +1282,23 @@ document.getElementById("usernameInput").addEventListener("keypress", function(e
     }
 });
 
-// 7. Your Lore & Logic (Area Names - CHANGE WITH NEW GAME)
+// =============================================
+// AREA NAMING SYSTEM — SAFE TO CUSTOMIZE (WITH RULES)
+// =============================================
+// Maps room numbers → area names (display only)
+//
+// SAFE TO EDIT:
+// - area names (theme, tone, subject)
+// - text flavor
+//
+// DO NOT MODIFY:
+// - room number structure (<=9, ===10, etc.)
+// unless you also update:
+//   - boss rooms (10, 20, 30)
+//   - progression logic elsewhere
+//
+// This affects UI only, not game logic.
+// =============================================
 function getAreaName(r) {
     if (r <= 9) return "The Dimly Lit Archives";
     if (r === 10) return "The Warden's Gate";
@@ -641,10 +1309,26 @@ function getAreaName(r) {
     return "The Sovereign's Throne";
 };
 
-// =============================
-// WIZARD DIALOGUE SYSTEM (CHANGE WITH NEW GAME)
-// Lines used during transitions
-// =============================
+// =============================================
+// WIZARD DIALOGUE SYSTEM — SAFE TO CUSTOMIZE
+// =============================================
+// Controls all in-game messaging tone:
+//
+// - wizardFeedback → correct/incorrect responses
+// - wizardLines → prompts based on question type
+//
+// SAFE TO EDIT:
+// - all text (tone, theme, personality)
+// - add/remove lines for variety
+//
+// DO NOT MODIFY:
+// - object structure (correct, wrong, definition, etc.)
+// - function calls that reference these keys
+//
+// Missing keys will cause undefined messages.
+//
+// This system controls immersion and feedback tone.
+// =============================================
 const wizardFeedback = {
     correct: [
         "The path reveals itself to those who think clearly.",
@@ -696,24 +1380,51 @@ const wizardLines = {
         "Your answer matters."
     ]
 };
-
-// -- functions to place Wizard dialogue in game --        
+     
+// Returns a random prompt based on question type
+// Falls back to "default" if type not found
 function getWizardLine(type){
     const pool = wizardLines[type] || wizardLines.default;
     return pool[Math.floor(Math.random() * pool.length)];
 }
 
+// Returns random feedback (correct or wrong)
+// Used during answer responses and transitions     
 function getWizardFeedback(type){
     const pool = wizardFeedback[type];
     return pool[Math.floor(Math.random() * pool.length)];
 }
 
+// Updates on-screen message text
+// Requires element with id="message"     
 function wizardSpeak(text){
     const msg = document.getElementById("message");
     msg.innerText = text;
 }     
     
-// --- Question Pools follow below (CHANGE WITH NEW GAME) ---
+// =============================================
+// QUESTION BANKS — PRIMARY EDIT AREA
+// =============================================
+//
+// REQUIRED FORMAT:
+//
+// {
+//   id: UNIQUE NUMBER (DO NOT REUSE)
+//   q: "Question text",
+//   options: ["A","B","C","D"],
+//   a: INDEX OF CORRECT ANSWER (0–3),
+//   tag: "concept category",
+//   type: "definition | interpretation | calculation | trap",
+//   feedback: "Explanation shown after answer"
+// }
+//
+// RULES:
+// - IDs must be unique
+// - Always include 4 options
+// - Keep tags consistent (drives adaptive engine)
+// - Do NOT remove 'tag' or 'type'
+//
+// This is where instructors customize content.
   
 const questionBanks = {
 easyBoss:[
@@ -722,9 +1433,9 @@ easyBoss:[
 {q:"The Warden disrupts the balance. Now MUx/Px = 6 and MUy/Py = 3. What should the consumer do to restore equilibrium?",options:["Reduce consumption of both goods","Buy more Y and less X","Buy equal amounts of both goods","Buy more X and less Y"],a:3,feedback:"Consumers increase consumption of the good with the higher marginal utility per dollar until the ratios equalize."}
 ],
 mediumBoss:[
-{q:"The Decomposer smiles. A price falls and quantity demanded rises. A student claims this must be because both substitution and income effects are positive. What’s the problem?",options:["There is no problem; the student must be correct","The good could be inferior, meaning the income effect is negative","Substitution effects can be negative","Income effects always dominate substitution effects"],a:1,feedback:"Even if quantity rises, the good could be inferior—the substitution effect may simply outweigh a negative income effect."},
-{q:"The Decomposer twists the logic. The price of a good falls, and quantity demanded increases only slightly. What does this suggest?",options:["The good is normal","The good is inferior with a strong income effect","The income effect is small or offsets part of the substitution effect","The substitution effect is negative"],a:2,feedback:"A small increase suggests the income effect is offsetting part of the substitution effect."},
-{q:"Final strike. A price falls, and quantity demanded falls. Which must be true?",options:["The good is inferior and the income effect outweighs substitution","The substitution effect is negative","The good is normal but demand shifted","The law of demand is violated"],a:0,feedback:"Only a Giffen-type case: inferior good where income effect dominates substitution."}
+{q:"The Decomposer smiles. A price falls and quantity demanded rises. A student claims this must be because both substitution and income effects are positive. What’s the problem?",options:["There is no problem; the student must be correct","The good could be inferior, meaning the income effect is negative even if quantity rises","Substitution effects can be negative","Income effects always dominate substitution effects"],a:1,feedback:"Even if quantity rises, the good could be inferior—the substitution effect may simply outweigh a negative income effect."},
+{q:"The Decomposer twists the logic. The price of a good falls, and quantity demanded increases only slightly. What does this suggest?",options:["The good is normal","The good is inferior with a strong income effect","The income effect is small or partially offsets the substitution effect","The substitution effect is negative"],a:2,feedback:"A small increase suggests the income effect is offsetting part of the substitution effect."},
+{q:"Final strike. A price falls, and quantity demanded falls. Which must be true?",options:["The good is inferior and the income effect outweighs the substitution effect","The substitution effect is negative","The good is normal but demand shifted","The law of demand is violated"],a:0,feedback:"This is a Giffen-type case: an inferior good where the income effect dominates the substitution effect.."}
 ],
 finalBoss:[{q:"The Sovereign whispers: 'A firm raises price and total revenue falls.' A student immediately concludes demand is elastic. What is the flaw in this reasoning?",options:["There is no flaw; the conclusion must be correct","The student ignored the possibility of unit elasticity","The student assumed causation without confirming no other factors changed","Revenue always falls when price increases"],a:2,feedback:"The elasticity rule only holds ceteris paribus. If other factors changed, the conclusion may be wrong."},
 {q:"The Sovereign sets a snare. A firm lowers price and sees total revenue increase. Another student claims this proves demand is inelastic. What’s the correct interpretation?",options:["The student is correct","The student reversed the relationship between elasticity and revenue","Demand must be unit elastic","There is not enough information"],a:1,feedback:"If price falls and revenue rises, demand is elastic—not inelastic."},
@@ -932,7 +1643,36 @@ elasticity:[
 {q:"If elasticity is greater than 1, demand is...",options:["Elastic","Inelastic","Unit elastic","Perfectly inelastic"],a:0,feedback:"Elastic demand means quantity demanded responds strongly to price changes."},
 {q:"If elasticity is less than 1, demand is...",options:["Inelastic","Elastic","Unit elastic","Perfectly elastic"],a:0,feedback:"Inelastic demand means quantity demanded responds weakly to price changes."}]
 };
-   
+
+// =============================================
+// ANSWER SHUFFLING — DO NOT MODIFY CORE LOGIC
+// =============================================
+// Randomizes answer choices while preserving
+// the correct answer index.
+//
+// Steps:
+// 1. Copy original question (prevents mutation)
+// 2. Store correct answer value
+// 3. Shuffle options
+// 4. Recalculate correct index (q.a)
+//
+// ---------------------------------------------
+// DO NOT MODIFY:
+// - correct answer tracking logic
+// - q.a reassignment
+// - structure of returned object
+//
+// Breaking this WILL cause:
+// - incorrect answers being marked correct
+// - correct answers being marked wrong
+//
+// ---------------------------------------------
+// SAFE TO EDIT:
+// - adding extra fields (if needed)
+// - minor formatting changes
+//
+// This function ensures fairness in answer order.
+// =============================================   
 function shuffleOptions(question){
     let q = {
         q: question.q,
@@ -956,9 +1696,16 @@ function shuffleOptions(question){
     return q;
 }
 
-/* =========================================
-   RNG QUESTIONS (CHANGE WITH NEW GAME)
-========================================= */
+// =============================================
+// DYNAMIC CALCULATION QUESTIONS — SAFE TO EDIT
+// =============================================
+// These generate random numeric problems.
+//
+// You can:
+// - modify formulas
+// - add new generators
+//
+// Keep structure consistent (q, options, a, feedback)
        
 function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
@@ -1070,7 +1817,16 @@ const calculationGenerators = [
     getConsumerSurplusCalc
 ];
     
-// Keep track of the last few questions to prevent repeats
+// =============================================
+// QUESTION SELECTION ENGINE — DO NOT MODIFY
+// =============================================
+// Handles:
+// - non-repetition
+// - difficulty filtering
+// - type balancing
+//
+// Breaking this = repeated questions or bad difficulty scaling
+     
 function randomQuestion(poolName) {
     // --- SPECIAL CALCULATED ROOMS (26-29) ---
     // These ensure the student practices specific math skills before the boss
@@ -1125,6 +1881,31 @@ lastTypes.shift()
     return question;
 }
 
+// =============================================
+// MAZE TRACK VISUAL SYSTEM — SAFE TO EDIT (WITH RULES)
+// =============================================
+// This function renders the 30-room progression map.
+//
+// What you CAN change:
+// - Icons (🟩 🟦 ⬛ 🎲 🛡️ 👑)
+// - Colors / styles (opacity, glow, etc.)
+// - Visual themes (make it sci-fi, medieval, etc.)
+//
+// What you MUST NOT change:
+// - Loop range (1 → 30) → controls total rooms
+// - "room" variable usage → tracks player position
+// - Boss room numbers (10, 20, 30) unless you update ALL logic elsewhere
+//
+// If you change boss room numbers here but NOT in:
+// - loadQuestion()
+// - answer()
+// - boss logic
+// → the game WILL break.
+//
+// This is VISUAL ONLY.
+// It does NOT control game progression.
+// =============================================
+     
 function updateMazeTrack() {
     const track = document.getElementById("mazeTrack");
     track.innerHTML = ""; // Clear the old grid
@@ -1155,6 +1936,37 @@ function updateMazeTrack() {
     }
 }
 
+// =============================================
+// RANDOMIZATION SYSTEM — DO NOT MODIFY CORE LOGIC
+// =============================================
+// Controls fair, non-repeating selection of:
+// - calculation generators
+// - question pools
+//
+// Uses "shuffle + bag" system to ensure:
+// - no immediate repeats
+// - full coverage before reuse
+//
+// ---------------------------------------------
+// SAFE TO EDIT:
+// - adding new generators (calculationGenerators)
+// - modifying pool content
+//
+// DO NOT MODIFY:
+// - shuffle logic
+// - bag system (calcBag, _remaining)
+// - pop() usage
+//
+// Breaking this WILL cause:
+// - repeated questions
+// - uneven distribution
+// - predictable patterns
+//
+// This ensures randomness WITHOUT repetition.
+// =============================================     
+
+// Fisher-Yates shuffle (uniform random order)
+// Do not modify — ensures unbiased randomness     
 function shuffle(arr){
     for(let i = arr.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
@@ -1163,17 +1975,21 @@ function shuffle(arr){
     return arr;
 }
 
+// Bag system for calculation generators
+// Ensures all generators are used before repeating
 let calcBag = [];
 
+// Pulls one calculation generator from the bag
+// Refills bag when empty (reshuffled)
 function pickCalcGenerator(){
-
     if(calcBag.length === 0){
         calcBag = shuffle([...calculationGenerators]);
     }
-
     return calcBag.pop();
 }
-  
+
+// Generic bag-based random picker for any pool
+// Prevents repeats until pool is exhausted
 function pickRandom(pool){
     if(!pool._remaining || pool._remaining.length === 0){
         pool._remaining = shuffle([...pool]);
@@ -1181,14 +1997,47 @@ function pickRandom(pool){
     return pool._remaining.pop();
 }
 
+// =============================================
+// MUSIC CONTROL SYSTEM — SAFE TO CUSTOMIZE (WITH RULES)
+// =============================================
+// Controls background music states:
+//
+// - exploration (normal gameplay)
+// - boss (mid bosses)
+// - finalBoss (final encounter)
+//
+// Ensures ONLY ONE track plays at a time.
+//
+// ---------------------------------------------
+// SAFE TO EDIT:
+// - audio files (bgMusic, bossMusic, finalBossMusic)
+// - volumes
+// - adding new music states (advanced)
+//
+// ---------------------------------------------
+// DO NOT MODIFY:
+// - currentMusic tracking
+// - stopAllMusic() behavior
+// - conditional checks (prevents overlap)
+//
+// Breaking this WILL cause:
+// - multiple tracks playing at once
+// - music not switching correctly
+//
+// This system manages audio state transitions.
+// =============================================     
 let currentMusic = null;
 
+// Stops all music tracks (called before switching states)
+// Do not remove — prevents audio overlap     
 function stopAllMusic(){
     if(bgMusic) bgMusic.pause();
     if(bossMusic) bossMusic.pause();
     if(finalBossMusic) finalBossMusic.pause();
 }
-   
+
+// Plays exploration (default) music
+// Skips if already playing to prevent restart spam     
 function playExplorationMusic(){
     if(currentMusic === "exploration") return;
     stopAllMusic();
@@ -1196,6 +2045,8 @@ function playExplorationMusic(){
     currentMusic = "exploration";
 }
 
+// Plays boss encounter music
+// Automatically stops other tracks first     
 function playBossMusic(){
     if(currentMusic === "boss") return;
     stopAllMusic();
@@ -1203,13 +2054,27 @@ function playBossMusic(){
     currentMusic = "boss";
 }
 
+// Plays final boss music (highest priority state)
+// Overrides all other music     
 function playFinalBossMusic(){
     if(currentMusic === "finalBoss") return;
     stopAllMusic();
     finalBossMusic.play();
     currentMusic = "finalBoss";
 }
-    
+
+// =============================================
+// MAIN GAME LOOP — DO NOT MODIFY
+// =============================================
+// Controls:
+// - what question appears
+// - boss encounters
+// - difficulty scaling
+// - UI updates
+//
+// This is the heart of the game.
+// Changing logic here will break progression.
+     
 function loadQuestion() {
     updateMazeTrack();
     const questionElement = document.getElementById("question");
@@ -1263,6 +2128,16 @@ function loadQuestion() {
         let bossImage = "";
         let bossClass = "";
 
+// =============================================
+// BOSS VISUAL CONFIGURATION — SAFE TO EDIT
+// =============================================
+// Change:
+// - boss images
+// - boss class
+//
+// Keep room numbers (10, 20, 30) intact.
+// =============================================
+        
     if(room === 10){
     bossImage = "warden.png";
     bossClass = "wardenGlow";
@@ -1286,7 +2161,6 @@ function loadQuestion() {
 
     // --- STREAK ADAPTIVE LOGIC ---
     let adjustedDiff = diff;
-
 
     // --- FIND STRONGEST AREA (lowest weakness) ---
     let strongestTag = null;
@@ -1361,7 +2235,31 @@ else{
         },200);
     }
 }
-    
+
+// =============================================
+// ANSWER RENDERING — DO NOT MODIFY CORE LOGIC
+// =============================================
+// This function displays answer choices as buttons.
+//
+// It connects each button to the answer() function,
+// which handles ALL game logic (correct/incorrect,
+// streaks, progression, etc.)
+//
+// ---------------------------------------------
+// SAFE TO EDIT:
+// - button styling (CSS)
+// - text formatting
+// - layout of answers
+//
+// DO NOT MODIFY:
+// - btn.onclick = () => answer(index)
+// - use of currentQuestion.options
+//
+// Changing these will break answer selection
+// and disconnect the game logic.
+//
+// This is the bridge between UI and engine.
+// =============================================     
 function displayQuestion() {
     const optionsElement = document.getElementById("answers");
     optionsElement.innerHTML = "";
@@ -1375,6 +2273,23 @@ function displayQuestion() {
     });
 }
 
+// =============================================
+// ANSWER HANDLER — CRITICAL SYSTEM
+// =============================================
+// Controls:
+// - correct/incorrect logic
+// - streaks
+// - setbacks
+// - boss damage
+// - adaptive memory updates
+//
+// DO NOT MODIFY unless you understand:
+// - conceptMemory
+// - detour system
+// - progression penalties
+//
+// Check for artifact names and CHANGE
+     
 function answer(choice) {
     // --- GLOBAL MEMORY DECAY ---
     for(let tag in conceptMemory){
@@ -1487,8 +2402,17 @@ return;
         },100);
         streak = 0;
 
-    // If question has a concept tag, trigger a reinforcement detour
-    // --- Adaptive Concept Detour ---
+// =============================================
+// CONCEPT DETOUR SYSTEM — ADVANCED
+// =============================================
+// When a student repeatedly misses a concept,
+// they are forced into a focused "mini quiz"
+//
+// This is key to reinforcement learning.
+//
+// You can ADD questions to pools,
+// but do NOT change trigger logic unless advanced.
+        
    if(!detourActive &&currentQuestion.tag &&(conceptMemory[currentQuestion.tag] || 0) >= 2){
 
     let conceptPool = null;
@@ -1523,14 +2447,54 @@ return;
     document.getElementById("streakDisplay").innerText = "";
     bossHealth = 3;
 
-    room = Math.max(1, room - (room % 10 === 0 ? 3 : (room >= 21 ? 2 : 1)));
+    // =============================================
+    // SAFE FALLBACK LOGIC (NO BOSS REGRESSION)
+    // =============================================
+    const bossRooms = [10, 20, 30];
+
+    // Original fallback amount
+    let fallback = (room % 10 === 0 ? 3 : (room >= 21 ? 2 : 1));
+    let newRoom = room - fallback;
+
+    // Prevent falling into boss rooms
+    while (bossRooms.includes(newRoom)) {
+    newRoom++;
+    }
+
+    // Clamp to minimum
+    room = Math.max(1, newRoom);
     localStorage.setItem("gauntletRoom", room);
     alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
     loadQuestion();
     }
 }
 
-// Helper for cleaner artifact logic
+// =============================================
+// UI FEEDBACK & REWARD SYSTEM — SAFE TO CUSTOMIZE
+// =============================================
+// These functions control:
+// - visual feedback (streaks, boss shake, transitions)
+// - reward display (artifacts)
+// - immersion elements (hallway transitions)
+//
+// SAFE TO EDIT:
+// - text, colors, messages
+// - images and styling
+// - timing (setTimeout delays)
+//
+// DO NOT MODIFY:
+// - function names (called elsewhere in engine)
+// - core triggers (when these are called)
+//
+// Breaking these won't destroy logic,
+// but WILL break user experience.
+//
+// This is presentation + feedback layer.
+// =============================================
+
+// Unlocks artifact in vault + saves progress
+// Requires matching ID format: "vault" + ArtifactName
+// Safe to customize artifact visuals/text only
 function unlockArtifact(key) {
     const id = "vault" + key.charAt(0).toUpperCase() + key.slice(1);
     document.getElementById(id).classList.add("unlocked");
@@ -1538,7 +2502,18 @@ function unlockArtifact(key) {
     showArtifact(artifacts[key].img, artifacts[key].title, artifacts[key].text);
 }
     
-// Helper to keep the answer function clean (CHANGE MESSAGE AND ICONS WITH NEW GAME)
+// =============================================
+// STREAK FEEDBACK SYSTEM — SAFE TO CUSTOMIZE
+// =============================================
+// Controls milestone streak messages and colors.
+//
+// You can:
+// - change streak thresholds (5, 10, 20)
+// - change messages/themes
+// - change colors
+//
+// Keep variable "streak" intact.
+// =============================================
 function handleStreakVisuals() {
     let streakMsg = "";
     let streakColor = "#60a5fa";
@@ -1557,7 +2532,20 @@ function handleStreakVisuals() {
         document.getElementById("streakDisplay").style.color = "#60a5fa";
     }
 }
-      
+
+// =============================================
+// TRANSITION SCREEN — SAFE TO CUSTOMIZE
+// =============================================
+// Displays feedback + transition between rooms.
+//
+// You can:
+// - change text, tone, styling
+// - change images (hallwayImages array)
+// - adjust timing (setTimeout)
+//
+// DO NOT remove loadQuestion() call,
+// or the game will stall.
+// =============================================
 function showHallwayTransition(feedback){
     const overlay = document.getElementById("hallwayTransition");
     const text = document.getElementById("hallwayText");
@@ -1586,7 +2574,10 @@ function showHallwayTransition(feedback){
     loadQuestion();
     },3200);
 }
-  
+
+// Displays artifact reward popup
+// Safe to customize layout, text, and images
+// Requires matching HTML element IDs     
 function showArtifact(img,title,text){
 
     let drop = document.getElementById("artifactDrop");
@@ -1601,6 +2592,17 @@ function showArtifact(img,title,text){
     drop.style.display = "block";
 }
 
+// =============================================
+// BOSS HIT ANIMATION — SAFE TO CUSTOMIZE
+// =============================================
+// Creates shake effect on boss + game box.
+//
+// You can:
+// - adjust animation timing
+// - change CSS effects
+//
+// Safe to remove if no animation desired.
+// =============================================     
 function triggerBossShake() {
     const icon = document.querySelector(".bossIcon");
     const box = document.getElementById("gameBox");
@@ -1618,6 +2620,158 @@ function triggerBossShake() {
     }
 }
   
+// =============================================
+// BOSS SUMMARY / TRANSITION ROOM — PARTIAL CUSTOMIZATION
+// =============================================
+// This function runs AFTER a boss is defeated.
+//
+// It serves THREE roles:
+// 1. Displays narrative payoff (title + summary)
+// 2. Pauses gameplay for reflection
+// 3. Routes player forward OR to final victory
+//
+// ---------------------------------------------
+// SAFE TO EDIT (CUSTOMIZATION):
+// - Boss titles ("DICE TYRANT DEFEATED", etc.)
+// - Summary text (lore, explanations, tone)
+// - Button text ("CONTINUE...", "FINALIZE...")
+// - Styling (colors, formatting)
+//
+// ---------------------------------------------
+// DO NOT MODIFY (CORE LOGIC):
+// - bossRoom checks (10, 20, 30)
+// - progression logic (room++, loadQuestion())
+// - handleVictory() trigger
+// - bossHealth reset
+//
+// If you change boss room numbers here,
+// you MUST also change them in:
+// - loadQuestion()
+// - answer()
+// - mazeTrack()
+//
+// ---------------------------------------------
+// WARNING:
+// This function controls the transition between levels.
+// Breaking this will cause:
+// - bosses to repeat
+// - game to freeze after boss
+// - victory screen not triggering
+//
+// This is BOTH UI + progression logic.
+// Edit carefully.
+// =============================================
+function showKnowledgeRoom(bossRoom) {
+    playExplorationMusic();  
+  
+    const qContainer = document.getElementById("question");
+    const aContainer = document.getElementById("answers");
+    const msgElement = document.getElementById("message");
+  
+  
+    // Clear the "Correct!" fade-out text so it doesn't stay on the summary screen
+    msgElement.innerText = "";
+    msgElement.className = "";
+    
+    let title = "";
+    let summary = "";
+
+// =============================================
+// BOSS NARRATIVE CONTENT — SAFE TO EDIT
+// =============================================
+// Each block corresponds to a boss room.
+// You can rewrite these freely to match your theme.
+//
+// Keep room numbers aligned with:
+// - actual boss encounters
+// =============================================    
+    if (bossRoom === 10) {
+        title = "WARDEN OF INDIFFERENCE DEFEATED (Archive 10.1)";
+        summary = "As the Warden fades you find the Seal of Preferences. Consumers have consistent preferences represented by indifference curves. They face trade-offs determined by their budget constraint. Optimal consumption occurs where the marginal rate of substitution equals the price ratio. The Labyrinth grows deeper...";
+    } else if (bossRoom === 20) {
+        title = "DECOMPOSER OF CHOICE DEFEATED (Archive 20.1)";
+        summary = "With the Decomposer's defeat you claim the Artifact of Price Effects. You have conquered the dual nature of price changes. You now distinguish between how price changes affect purchasing power (Income Effect) and relative attractiveness (Substitution Effect).";
+    } else if (bossRoom === 30) {
+        title = "SOVEREIGN OF ELASTICITY DEFEATED (Final Archive)";
+        summary = "With the Sovereign finally beaten, you claim the Scepter of Elasticity. You have proven your mastery over Market Responsiveness and the mathematical laws that govern Demand, Elasticity, and Total Revenue.";
+    }
+
+    // Update the UI
+    qContainer.innerHTML = `
+        <span class="boss-title" style="color:#60a5fa; text-shadow: 0 0 15px #60a5fa;">${title}</span>
+        <div class="boss-q" style="--bossColor:#60a5fa; font-style: normal; border-left-color: #60a5fa;">${summary}</div>
+    `;
+    
+    // logic to ensure Room 30 triggers the end game, while 10 and 20 trigger the next level
+    let nextAction = bossRoom === 30 ? "handleVictory()" : "room++; loadQuestion();";
+    let buttonLabel = bossRoom === 30 ? "FINALIZE THE ARCHIVE CONQUEST →" : `CONTINUE TO ROOM ${bossRoom + 1} →`;
+
+   aContainer.innerHTML = `
+    <button id="continueBtn"
+        style="background:#60a5fa; color:black; font-weight:bold; width:100%; padding:20px; font-size:18px;">
+        ${buttonLabel}
+    </button>`;
+
+// =============================================
+// PROGRESSION HANDLER — DO NOT MODIFY
+// =============================================
+// Controls what happens AFTER the summary screen:
+// - resets boss state
+// - advances room
+// - triggers next question or victory
+//
+// Breaking this = progression failure
+// =============================================    
+document.getElementById("continueBtn").onclick = () => {
+    // --- RESET BOSS STATE (THIS IS THE FIX) ---
+    document.getElementById("gameShell").classList.remove("boss-mode");
+    document.getElementById("gameBox").classList.remove("boss-mode");
+    bossHealth = 3;
+
+    if(bossRoom === 30){
+        handleVictory();
+    } else {
+        room++;
+        localStorage.setItem("gauntletRoom", room);
+        loadQuestion();
+    }
+};
+}
+
+// =============================================
+// COMPLETION CODE GENERATOR — DO NOT MODIFY
+// =============================================
+// This function creates a unique verification code
+// based on player performance:
+//
+// Inputs:
+// - name (player)
+// - accuracy (% correct)
+// - streak (max streak)
+// - total (questions answered)
+//
+// It generates a deterministic hash so that:
+// - codes are reproducible
+// - codes cannot be easily faked manually
+//
+// ---------------------------------------------
+// DO NOT CHANGE:
+// - string structure (name|acc|streak|total|ARCHIVE42)
+// - hashing logic
+// - return format ("ARCH-...")
+//
+// Changing this WILL:
+// - invalidate all existing completion codes
+// - break verification consistency
+//
+// ---------------------------------------------
+// SAFE TO EDIT (if absolutely necessary):
+// - "ARCHIVE42" → change only if rebranding ALL codes
+// - "ARCH-" prefix → cosmetic only
+//
+// This is NOT encryption.
+// It is a lightweight integrity check.
+// =============================================
 function generateCode(name, acc, streak, total){
     let str = `${name}|${acc}|${streak}|${total}|ARCHIVE42`;
     let hash = 0;
@@ -1629,7 +2783,37 @@ function generateCode(name, acc, streak, total){
 
     return "ARCH-" + Math.abs(hash).toString(36).toUpperCase();
 } 
-    
+
+// =============================================
+// VICTORY SCREEN — PARTIAL CUSTOMIZATION ZONE
+// =============================================
+// This function runs when the player completes the gauntlet.
+//
+// DO NOT MODIFY (CORE LOGIC):
+// - accuracy calculation
+// - time tracking
+// - verification code generation
+// - function structure
+//
+// SAFE TO EDIT (CUSTOMIZATION):
+// - victory title text ("CONQUEST COMPLETE")
+// - narrative/judgment text (archivistLine)
+// - colors and styling
+// - labels (Adventurer → Student, etc.)
+// - button text
+//
+// WARNING:
+// The HTML below is dynamically injected.
+// If you remove IDs like:
+// - vCode
+// - archivistLine
+// - shareBtn
+// you WILL break:
+// - copyResults()
+// - fade-in animation
+//
+// This is a PRESENTATION layer, not a logic layer.
+// =============================================     
 function handleVictory() {
     bgMusic.pause();
     bossMusic.pause();
@@ -1643,7 +2827,18 @@ function handleVictory() {
     const accuracy = Math.round((correctAnswers / totalAttempts) * 100);
     const verificationCode = generateCode(username, accuracy, maxStreak, totalAttempts);
     
-     // --- ARCHIVIST JUDGMENT (CHANGE LINES WITH NEW GAME) ---
+// =============================================
+// PERFORMANCE FEEDBACK TEXT — SAFE TO EDIT
+// =============================================
+// Customize these lines to match your theme.
+// You can:
+// - rename "Archivist"
+// - change tone (serious, funny, brutal, etc.)
+// - adjust thresholds (90, 75)
+//
+// DO NOT remove the structure (if / else blocks)
+// unless you understand accuracy calculation.
+// =============================================
     let archivistLine = "";
     if(accuracy >= 90){
         archivistLine = "You have mastered the Labyrinth. Few reach this level of clarity.";
@@ -1666,7 +2861,18 @@ function handleVictory() {
 
     const gameBox = document.getElementById("gameBox");
 
-        // --- HTML FIRST ---
+// =============================================
+// VICTORY SCREEN HTML TEMPLATE
+// =============================================
+// You can fully redesign this layout.
+//
+// Just KEEP:
+// - id="vCode"
+// - id="archivistLine"
+// - onclick="copyResults()"
+//
+// Everything else is fair game.
+// =============================================
     gameBox.innerHTML = `
         <div style="text-align:center; padding:30px;">
             <h1 class="victory" style="color:gold; text-shadow: 0 0 20px gold;">👑 CONQUEST COMPLETE 👑</h1>
@@ -1701,72 +2907,49 @@ function handleVictory() {
             line.style.opacity = 1;
         }
     }, 600);
-}
+}     
 
-// --- Function to clear the boss rooms (CHANGE TITLES AND SUMMARIES WITH NEW GAME) ---
-function showKnowledgeRoom(bossRoom) {
-    playExplorationMusic();  
-  
-    const qContainer = document.getElementById("question");
-    const aContainer = document.getElementById("answers");
-    const msgElement = document.getElementById("message");
-  
-  
-    // Clear the "Correct!" fade-out text so it doesn't stay on the summary screen
-    msgElement.innerText = "";
-    msgElement.className = "";
-    
-    let title = "";
-    let summary = "";
-
-    if (bossRoom === 10) {
-        title = "WARDEN OF INDIFFERENCE DEFEATED (Archive 10.1)";
-        summary = "As the Warden fades you find the Seal of Preferences. Consumers have consistent preferences represented by indifference curves. They face trade-offs determined by their budget constraint. Optimal consumption occurs where the marginal rate of substitution equals the price ratio. The Labyrinth grows deeper...";
-    } else if (bossRoom === 20) {
-        title = "DECOMPOSER OF CHOICE DEFEATED (Archive 20.1)";
-        summary = "With the Decomposer's defeat you claim the Artifact of Price Effects. You have conquered the dual nature of price changes. You now distinguish between how price changes affect purchasing power (Income Effect) and relative attractiveness (Substitution Effect).";
-    } else if (bossRoom === 30) {
-        title = "SOVEREIGN OF ELASTICITY DEFEATED (Final Archive)";
-        summary = "With the Sovereign finally beaten, you claim the Scepter of Elasticity. You have proven your mastery over Market Responsiveness and the mathematical laws that govern Demand, Elasticity, and Total Revenue.";
-    }
-
-    // Update the UI
-    qContainer.innerHTML = `
-        <span class="boss-title" style="color:#60a5fa; text-shadow: 0 0 15px #60a5fa;">${title}</span>
-        <div class="boss-q" style="--bossColor:#60a5fa; font-style: normal; border-left-color: #60a5fa;">${summary}</div>
-    `;
-    
-    // logic to ensure Room 30 triggers the end game, while 10 and 20 trigger the next level
-    let nextAction = bossRoom === 30 ? "handleVictory()" : "room++; loadQuestion();";
-    let buttonLabel = bossRoom === 30 ? "FINALIZE THE ARCHIVE CONQUEST →" : `CONTINUE TO ROOM ${bossRoom + 1} →`;
-
-   aContainer.innerHTML = `
-    <button id="continueBtn"
-        style="background:#60a5fa; color:black; font-weight:bold; width:100%; padding:20px; font-size:18px;">
-        ${buttonLabel}
-    </button>`;
-    
-document.getElementById("continueBtn").onclick = () => {
-    // --- RESET BOSS STATE (THIS IS THE FIX) ---
-    document.getElementById("gameShell").classList.remove("boss-mode");
-    document.getElementById("gameBox").classList.remove("boss-mode");
-    bossHealth = 3;
-
-    if(bossRoom === 30){
-        handleVictory();
-    } else {
-        room++;
-        localStorage.setItem("gauntletRoom", room);
-        loadQuestion();
-    }
-};
-}
-    
+// =============================
+// UTILITIES
+// =============================
+     
+// =============================================
+// ARRAY SHUFFLE UTILITY — SAFE TO USE, DO NOT MODIFY
+// =============================================
+// Fisher-Yates shuffle algorithm.
+//
+// Used to randomize:
+// - question order
+// - calculation generators
+// - any randomized sequences
+//
+// DO NOT MODIFY unless you understand:
+// - uniform randomness
+// - bias in random selection
+//
+// Breaking this = predictable patterns in questions
+// =============================================     
 function shuffleArray(arr){
     for(let i=arr.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
     return arr;
-}
+}     
 
+// =============================================
+// HIGH SCORE TRACKING — OPTIONAL FEATURE
+// =============================================
+// Stores top completion times in browser (localStorage)
+//
+// - Saves name, time, and date
+// - Sorts fastest → slowest
+// - Keeps top 5 results only
+//
+// SAFE TO EDIT:
+// - number of scores kept (slice)
+// - displayed fields (name/date)
+//
+// WARNING:
+// Clearing browser data will erase scores.
+// =============================================
 function updateHighScores(newTimeMs) {
     let scores = JSON.parse(localStorage.getItem("gauntletHighScores")) || [];
     scores.push({ name: username, time: newTimeMs, date: new Date().toLocaleDateString() });
@@ -1779,12 +2962,47 @@ function updateHighScores(newTimeMs) {
     return scores;
 }
 
+// =============================================
+// TIME FORMATTER — SAFE UTILITY
+// =============================================
+// Converts milliseconds → readable format (Xm Ys)
+//
+// Used for:
+// - victory screen
+// - performance tracking
+//
+// Safe to modify format if desired.
+// =============================================     
 function formatTime(ms) {
     let mins = Math.floor(ms / 60000);
     let secs = Math.floor((ms / 1000) % 60);
     return `${mins}m ${secs}s`;
 }
 
+// =============================================
+// RESULT SHARING — SAFE TO CUSTOMIZE
+// =============================================
+// Copies player performance summary to clipboard.
+//
+// Includes:
+// - name
+// - time
+// - accuracy
+// - streak
+// - verification code
+//
+// SAFE TO EDIT:
+// - text format
+// - labels ("Adventurer", etc.)
+// - button feedback message
+//
+// WARNING:
+// Requires element IDs:
+// - "vCode"
+// - "shareBtn"
+//
+// Removing those will break this function.
+// =============================================     
 function copyResults() {
     const totalTimeMs = Date.now() - startTime;
     const timeString = formatTime(totalTimeMs);
@@ -1817,3 +3035,16 @@ function copyResults() {
 </script>
 </body>
 </html>
+
+// =====================================================
+// IF SOMETHING BREAKS:
+//
+// 1. Check question IDs are unique
+// 2. Check each question has:
+//    - q, options, a
+// 3. Do NOT edit core engine sections
+// 4. Use browser console (F12) for errors
+//
+// Most issues come from bad question formatting.
+//
+// =====================================================
