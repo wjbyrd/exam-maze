@@ -772,40 +772,27 @@ Test changes on both:
 
 This controls responsiveness, not game logic.
 ========================================= */
-@media (max-width: 600px) {
-    #gameShell {
-        padding: 8px;
-        gap: 10px;
-    }
-
-    .main-panel {
-        flex-direction: column; /* Wizard moves above the GameBox */
-        align-items: center;
-    }
-
-    #wizardBox {
-        flex-direction: row; /* Horizontal layout for wizard on mobile to save vertical space */
-        width: 100%;
-        max-width: 260px;
-        min-height: 80px;
-        margin-bottom: 10px;
-        height: auto;
-        padding: 8px;
-    }
-
-    #wizardImage {
-        width: 60px; /* Smaller wizard image to save space */
-    }
-
-    #question {
-        font-size: 1.2rem;
-        line-height: 1.3;
-    }
-
-    .artifactSlot img {
-        width: 35px; /* Smaller icons in the vault */
-    }
+/* Base mobile rules */
+@media (max-width: 900px){
+#gameShell {padding: 8px;gap: 10px;}
+#question {font-size: 1.2rem; line-height: 1.3;}
+.artifactSlot img {width: 35px;}
 }
+   
+/* Portrait (stacked, bigger wizard) */
+@media (max-width: 600px) and (orientation: portrait){
+.main-panel {flex-direction: column; align-items: center;}
+#wizardBox{width: 100%; max-width: 280px;margin-bottom: 12px;}
+#wizardImage {width: 100px; max-width: 100%;}
+}
+   
+/* Landscape (side-by-side, compact wizard) */   
+@media (max-width: 900px) and (orientation: landscape){
+.main-panel{flex-direction: row;}
+#wizardBox{max-width: 180px;}
+#wizardImage{width: 80px;}
+}
+   
 </style>
 </head>
 
