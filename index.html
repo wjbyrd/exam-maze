@@ -2340,6 +2340,10 @@ function answer(choice) {
             (conceptMemory[currentQuestion.tag] || 0) * 0.7;
         }
 
+      // 🔍 DEBUG: Check tag + memory
+      console.log("TAG:", currentQuestion.tag);
+      console.log("MEMORY:", conceptMemory[currentQuestion.tag]);
+       
        // --- BOSS HIT LOGIC ---
         if(isBossRoom){
         bossHealth--;
@@ -2384,6 +2388,10 @@ localStorage.setItem("gauntletRoom", room);
 showHallwayTransition(currentQuestion.feedback);
 return;
 
+// =============================================
+// ❌ WRONG ANSWER BLOCK — ALL FAILURE LOGIC
+// =============================================
+       
     } else {
         if(isBossRoom){
         sfxWrong.volume = 0.7;
@@ -2402,6 +2410,16 @@ return;
         },100);
         streak = 0;
 
+// --- LEARNING: increase weakness (THIS DRIVES DETOURS) ---
+if(currentQuestion.tag){
+    conceptMemory[currentQuestion.tag] =
+    (conceptMemory[currentQuestion.tag] || 0) + 1;
+}
+
+// 🔍 DEBUG: verify detour trigger conditions
+console.log("WRONG TAG:", currentQuestion.tag);
+console.log("UPDATED MEMORY:", conceptMemory[currentQuestion.tag]);
+
 // =============================================
 // CONCEPT DETOUR SYSTEM — ADVANCED
 // =============================================
@@ -2412,7 +2430,9 @@ return;
 //
 // You can ADD questions to pools,
 // but do NOT change trigger logic unless advanced.
-        
+
+console.log("DETOUR CHECK VALUE:", conceptMemory[currentQuestion.tag]);
+       
    if(!detourActive &&currentQuestion.tag &&(conceptMemory[currentQuestion.tag] || 0) >= 1){
 
     let conceptPool = null;
