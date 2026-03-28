@@ -2315,8 +2315,9 @@ else{
     questionElement.innerHTML = `
         <div>${currentQuestion.q}</div>
     `;
-}
    document.querySelector(".question-directive").textContent = getWizardLine(currentQuestion.type);
+}
+   
    
     // 4. Update Hints and Draw Buttons
     document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
