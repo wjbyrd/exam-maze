@@ -2315,7 +2315,8 @@ else{
     questionElement.innerHTML = `
         <div>${currentQuestion.q}</div>
     `;
-   document.querySelector(".question-directive").textContent = getWizardLine(currentQuestion.type);
+   document.querySelector(".question-directive").textContent = wizardText;
+   msgElement.innerHTML = "";
 }
    
    
