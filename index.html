@@ -53,22 +53,17 @@ body {
     margin: 0;
     padding: 0;
     min-height: 100vh;
+
     display: flex;
     justify-content: center;
     align-items: center;
+
+    overflow-x: hidden;
     color: white;
-    background: linear-gradient(rgba(2,6,23,.8), rgba(2,6,23,.8)), url('question_background_image.jpeg');
+
+    background: url('question_background_image.jpeg');
     background-size: cover;
     background-position: center;
-    background-attachment: scroll;
-}
-   
-#gameShell{
-    display:flex;
-    gap:20px;
-    max-width:900px;
-    width:100%;
-    margin:0 auto;
 }
    
 .dungeon-container {
@@ -81,6 +76,79 @@ body {
     width: 100%;
     max-width: 1100px;
     margin-top: 20px;
+}
+
+.start-content{
+  width: 100%;
+  max-width: 420px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;   
+  text-align:center;    
+}
+
+.title{
+  font-size:64px;
+  letter-spacing:4px;
+  margin-bottom:10px;
+  text-align:center;
+  color:#7dd3fc;
+  text-shadow:
+    0 0 18px rgba(56,189,248,0.7),
+    0 0 35px rgba(14,165,233,0.5);
+}
+
+.subtitle{
+  font-size:34px;
+  margin-bottom:35px;
+  letter-spacing:2px;
+  text-align:center;
+  color:#38bdf8;
+  opacity:0.9;
+}
+
+.tagline{
+  margin-bottom:30px;
+  font-style:italic;
+  text-align:center;
+  color: rgba(186,230,253,0.75);
+}
+
+.name-input{
+  width:100%;
+  max-width:320px;
+  text-align:center;
+  padding:15px;
+  border-radius:10px;
+  border:1px solid rgba(56,189,248,0.35);
+  background: rgba(15,23,42,0.85);
+  color:#e2e8f0;
+  font-size:20px;
+  margin-bottom:20px;
+  outline:none;
+  box-shadow:
+    0 0 10px rgba(56,189,248,0.3),
+    inset 0 0 8px rgba(255,255,255,0.03);
+}
+
+.start-btn{
+  width:100%;
+  max-width:320px;
+  background: linear-gradient(
+    90deg,
+    rgba(56,189,248,0.9),
+    rgba(14,165,233,0.9)
+  );
+  color:#020617;
+  font-weight:600;
+  box-shadow:
+    0 0 12px rgba(56,189,248,0.6);
+}
+
+#username::placeholder{
+    color: rgba(125,211,252,0.45);
+    font-style: italic;
+    letter-spacing: 0.5px;
 }
 
 /* =========================================
@@ -146,6 +214,22 @@ You can restyle it completely—just keep structure intact.
     border: 2px solid #60a5fa;
     box-shadow: 0 0 40px rgba(96,165,250,0.4);
 }
+
+.boss-icon{
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Tier 1 — Warden */
+.boss10 .boss-icon{filter:drop-shadow(0 0 6px rgba(125,211,252,0.7))drop-shadow(0 0 10px rgba(56,189,248,0.5));}
+
+/* Tier 2 — Decomposer */
+.boss20 .boss-icon{filter:drop-shadow(0 0 8px rgba(96,165,250,0.9))drop-shadow(0 0 14px rgba(37,99,235,0.6));}
+
+/* Tier 3 — Sovereign */
+.boss30 .boss-icon{filter:drop-shadow(0 0 10px rgba(186,230,253,1))drop-shadow(0 0 18px rgba(56,189,248,0.8));}
 
 /* Damage effect when boss/player is hit (visual feedback) */
 .hit { box-shadow: 0 0 60px #ef4444, inset 0 0 40px #7f1d1d !important; animation: hitshake 0.4s ease; }
@@ -307,11 +391,20 @@ If it's unclear, motivation drops.
 
 /* Current room highlight — animated pulse */
 .maze-box.active { background: rgba(212,175,55,0.2); border: 2px solid #d4af37; z-index: 10; animation: activePulse 1s infinite alternate;}
+/* Boss room highlights — Labyrinth (Awareness → Understanding → Mastery) */
 
-/* Boss room highlights (10, 20, 30) — visual only */
-.maze-box:nth-child(10) { text-shadow: 0 0 10px #60a5fa; }
-.maze-box:nth-child(20) { text-shadow: 0 0 12px #a855f7; }
-.maze-box:nth-child(30) { text-shadow: 0 0 15px #ef4444; }
+.maze-box:nth-child(10){text-shadow: 0 0 8px rgba(125,211,252,0.7);}
+.maze-box:nth-child(20){text-shadow: 0 0 12px rgba(96,165,250,0.9);}
+.maze-box:nth-child(30){text-shadow: 0 0 14px rgba(186,230,253,1), 0 0 20px rgba(56,189,248,0.8);}
+
+/* Streak styling — Labyrinth */
+.streak{display:inline-flex;align-items:center;gap:10px;font-weight:500;letter-spacing:0.4px;color: rgba(125,211,252,0.9);}
+
+.streak-icon{width:22px;height:22px;object-fit:contain;border-radius:50%;
+    filter:drop-shadow(0 0 6px rgba(125,211,252,0.8))drop-shadow(0 0 12px rgba(56,189,248,0.6));
+    background: radial-gradient(circle,rgba(186,230,253,0.5) 0%,rgba(56,189,248,0.35) 45%,transparent 70%    );
+    animation: labyrinthPulse 3s ease-in-out infinite;}
+   
 /* =========================================
    6. ARTIFACT SYSTEM (REWARDS) — SAFE TO CUSTOMIZE
 =========================================
@@ -459,8 +552,25 @@ Good transitions = smoother experience.
 ========================================= */
 
 /* Fullscreen start screen — shown before game begins */    
-#startScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('start_screen_image.png'); background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+#startScreen{
+  position: fixed;
+  inset: 0;
+  background-image: url('start screen image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 100;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 40px 20px 80px;
+  box-sizing: border-box;
+}
 /* Transition overlay — appears between rooms (controlled by JS) */
 #hallwayTransition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)), url('hallway1.png'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; text-align: center; color: white; font-size: 26px; z-index: 200; opacity: 0; pointer-events: none; transition: opacity 1.2s ease; animation: hallwayZoom 3.2s ease-out forwards; }
 
@@ -534,6 +644,9 @@ Subtle > excessive.
 
 /* General UI entrance animation */    
 @keyframes fadeIn {from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Streak Icon Glow */
+@keyframes pulseControl{0%,100%{ transform: scale(1); opacity:0.9; }50%{ transform: scale(1.05); opacity:1; }}
    
    
 /* =========================================
@@ -619,22 +732,29 @@ This controls layout — not game logic.
     gap:20px;
     justify-content:center;
     width:100%;
-    align-items: flex-start;
+    align-items: stretch;
 }
    
 /* Game Shell Wrapper*/
 /* Core game container — controls overall layout and spacing */
-   #gameShell{
+#gameShell{
     display:flex;
     gap:20px;
-    background:#0f172a;
-    padding:20px;
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 0 25px rgba(0,0,0,0.6);
     max-width:900px;
     width:100%;
     margin:0 auto;
+    background: linear-gradient(
+        180deg,
+        rgba(2,6,23,0.95),
+        rgba(2,6,23,0.98)
+    );
+    padding:20px;
+    border-radius:16px;
+    border:1px solid rgba(56,189,248,0.25);
+    box-shadow:
+       0 0 25px rgba(0,0,0,0.9),
+       0 0 40px rgba(56,189,248,0.15),
+       inset 0 0 25px rgba(255,255,255,0.03);
 }
    
 /* Wizard Box */
@@ -643,20 +763,22 @@ This controls layout — not game logic.
     width:160px;
     min-width:160px;
     min-height:200px;
-    background:#0f172a;
+    background: linear-gradient(
+        180deg,
+        rgba(2,6,23,0.95),
+        rgba(2,6,23,0.98)
+    );
     border-radius:12px;
     padding:10px;
     display:flex;
     flex-direction: column;
     justify-content:center;
-    padding-top:14px;
-    align-items:center;          
-    flex:0 0 180px;
-    flex-shrink: 0;
+    align-items:center;    
     gap:6px;
-    margin-bottom: 0px;
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 0 25px rgba(59,130,246,0.2), inset 0 0 20px rgba(0,0,0,0.6);
+    border:1px solid rgba(56,189,248,0.25);
+    box-shadow:
+        inset 0 0 18px rgba(255,255,255,0.03),
+        0 0 12px rgba(56,189,248,0.1);
 }
 
 /* Wizard Name */
@@ -685,17 +807,7 @@ This controls layout — not game logic.
     filter: drop-shadow(0 0 12px rgba(96,165,250,.6));
     animation: wizardFloat 4s ease-in-out infinite;
 }
-
-/* Game Box adjustment */
-/* Main gameplay area — expands to fill available space */
-#gameBox{
-    flex:1;
-    min-width:0;
-    max-width:720px;
-    width:100%;
-    padding:18px 20px;   /* slightly tighter */
-} 
-    
+ 
 /* =========================================
    11. BOSS MODE (UI STATE OVERRIDES) — DO NOT MODIFY STRUCTURE
 =========================================
@@ -789,25 +901,27 @@ Test changes on both:
 This controls responsiveness, not game logic.
 ========================================= */
 /* Base mobile rules */
-@media (max-width: 900px){
-#gameShell {padding: 8px;gap: 10px;}
-#question {font-size: 1.2rem; line-height: 1.3;}
-.artifactSlot img {width: 35px;}
-}
-   
-/* Portrait (stacked, bigger wizard) */
-@media (max-width: 600px) and (orientation: portrait){
-.main-panel {flex-direction: column; align-items: center;}
-#wizardBox{width: 100%; max-width: 280px;margin-bottom: 12px;}
-#wizardImage {width: 100px; max-width: 100%;}
-}
-   
-/* Landscape (side-by-side, compact wizard) */   
+@media (max-width: 768px){
+  #gameShell{padding:10px;gap:10px;}
+  .main-panel{flex-direction: column;align-items: center;  }
+  #question{font-size:1.2rem;line-height:1.4;text-align:center;}
+  button{width:100%;padding:14px;font-size:16px;}
+  #wizardBox{width:100%;max-width:260px;margin-bottom:12px;}
+  #wizardImage{width:100%;max-width:120px;}}
+
 @media (max-width: 900px) and (orientation: landscape){
-.main-panel{flex-direction: row;}
-#wizardBox{max-width: 180px;}
-#wizardImage{width: 80px;}
-}
+  .title{font-size: clamp(36px, 5vw, 56px);margin-bottom:6px;}
+  .subtitle{font-size:18px;margin-bottom:12px;}
+  .tagline{font-size:14px;margin-bottom:12px;}
+  .name-input{width:100%;max-width:280px;font-size:16px;padding:12px;margin-bottom:10px;}
+  #startScreen{justify-content: center;overflow: hidden;}
+  .start-content{transform: scale(0.92);}
+  .start-btn{width:100%;max-width:280px;font-size:16px;padding:12px;}}
+
+@media (max-width: 768px) and (orientation: portrait){
+  .main-panel{flex-direction:column;align-items:center;}}
+
+   .fullscreenBtn{top:5px;left:5px;padding:4px 8px;font-size:10px;}
    
 </style>
 </head>
@@ -877,12 +991,13 @@ Respect structure strictly.
 </div>
 <!-- Start screen / player entry (safe to redesign completely) -->
 <div id="startScreen">
-    <h1 style="color:rgb(48, 187, 221); text-shadow:0 0 30px rgb(48, 187, 221); font-size:60px; margin-bottom:10px;">THE ARCHIVES OF MICROECONOMICS</h1>
-    <h2 style="color:rgb(51, 140, 178); text-shadow:0 0 20px rgb(51, 140, 178); font-size:40px; margin-bottom:50px;">THE LABYRINTH OF CHOICE</h2>
-    <p style="color:#c4cad3; letter-spacing:2px; margin-bottom:30px; font-style:italic;">Identify yourself, Adventurer</p>
-    <input type="text" id="usernameInput" placeholder="Enter Name..." style="padding:15px; border-radius:8px; border:1px solid #374151; background:#1f2937; color:white; font-size:20px; margin-bottom:20px; text-align:center; outline:none; width:300px; box-shadow: 0 0 15px rgba(0,0,0,0.5);">
-    <button onclick="startGame()" style="background:#30bbdd; color:#000; font-weight:bold; padding:15px 50px; font-size:20px; cursor:pointer; border-radius:8px; border:none; transition: transform 0.2s;">ENTER THE ARCHIVES</button>
-</div>
+   <div class="start-content">
+      <h1 class="title">THE ARCHIVES OF MICROECONOMICS</h1>
+      <h2 class="subtitle">The Labyrinth of Choice</h2>
+      <p class="tagline">Identify yourself, Adventurer</p>
+      <input id="usernameInput" class="name-input" ...>
+      <button class="start-btn" onclick="startGame()">ENTER THE LABYRINTH</button></div>
+   </div>
 <div class="dungeon-container">
     <button class="fullscreenBtn" onclick="goFullscreen()">FULLSCREEN</button>
     <!-- TOP PANEL -CHANGE NAME IN TITLE -->
@@ -1515,19 +1630,70 @@ function wizardSpeak(text){
   
 const questionBanks = {
 easyBoss:[
-{q:"The Warden of Indifference challenges you. A consumer buys goods X and Y. Which condition must hold at the optimal consumption bundle?",options:["The consumer buys equal quantities of both goods","The marginal rate of substitution equals the price ratio","Income equals total utility","Prices of goods must be identical"],a:1,feedback:"Utility maximization occurs where the marginal rate of substitution equals the price ratio."},
-{q:"The Warden reveals the numbers. A consumer has MUx = 24 and MUy = 12. Prices are Px = $6 and Py = $3. Are they currently maximizing utility?",options:["Yes, MU per dollar is equal","No, they should buy more X","No, they should buy more Y","Not enough information"],a:0,feedback:"MUx/Px = 24/6 = 4 and MUy/Py = 12/3 = 4. Marginal utility per dollar is equal, so the consumer is maximizing utility."},
-{q:"The Warden disrupts the balance. Now MUx/Px = 6 and MUy/Py = 3. What should the consumer do to restore equilibrium?",options:["Reduce consumption of both goods","Buy more Y and less X","Buy equal amounts of both goods","Buy more X and less Y"],a:3,feedback:"Consumers increase consumption of the good with the higher marginal utility per dollar until the ratios equalize."}
+// ===== PREFERENCES =====
+{ id:1000,q:"The Warden observes: 'Choice begins with preference.' What do preferences represent?",options:["The income of a consumer","The satisfaction a consumer receives from goods","The price of goods in the market","The total quantity purchased"],a:1,tag:"preferences",type:"definition",feedback:"Preferences describe how consumers rank bundles based on satisfaction or utility."},
+{ id:1001,q:"The Warden tests your judgment. A consumer prefers bundle A to bundle B, and B to C. What must be true?",options:["C is preferred to A","A is preferred to C","All bundles are equal","Preferences are random"],a:1,tag:"preferences",type:"calculation",feedback:"Preferences are transitive, so if A > B and B > C, then A > C."},
+{ id:1002,q:"The Warden challenges consistency. If a consumer’s preferences change unpredictably, what happens?",options:["Utility maximization improves","Choices become inconsistent","Prices adjust automatically","Budget expands"],a:1,tag:"preferences",type:"interpretation",feedback:"Inconsistent preferences prevent stable decision-making and optimization."},
+// ===== INDIFFERENCE =====
+{ id:1003,q:"The Warden speaks: 'Some choices leave you unchanged.' What does an indifference curve represent?",options:["All bundles with equal income","All bundles with equal utility","All bundles with equal price","All bundles with equal quantity"],a:1,tag:"indifference",type:"definition",feedback:"Indifference curves show combinations of goods that yield the same level of satisfaction."},
+{ id:1004,q:"The Warden reveals a curve. If a consumer moves along an indifference curve, what happens to total utility?",options:["It increases","It decreases","It stays the same","It becomes zero"],a:2,tag:"indifference",type:"calculation",feedback:"Moving along an indifference curve keeps utility constant."},
+{ id:1005,q:"The Warden tests your reasoning. If indifference curves cross, what does this imply?",options:["Preferences are consistent","Preferences are inconsistent","Budget is constant","Prices are equal"],a:1,tag:"indifference",type:"interpretation",feedback:"Crossing indifference curves violate consistency and transitivity."},
+// ===== BUDGET =====
+{ id:1006,q:"The Warden states: 'Constraints define possibility.' What does a budget constraint represent?",options:["Maximum utility","All affordable combinations of goods","All preferred bundles","Market equilibrium"],a:1,tag:"budget",type:"definition",feedback:"The budget constraint shows all combinations of goods a consumer can afford."},
+{ id:1007,q:"The Warden presents numbers. Income = $60, Px = $10, Py = $5. What is the maximum amount of X if all income is spent on X?",options:["3","4","5","6"],a:3,tag:"budget",type:"calculation",feedback:"60 / 10 = 6 units of X."},
+{ id:1008,q:"The Warden shifts reality. If income increases, what happens to the budget constraint?",options:["It rotates inward","It shifts outward","It stays the same","It becomes vertical"],a:1,tag:"budget",type:"interpretation",feedback:"An increase in income shifts the budget constraint outward."},
+// ===== EQUILIBRIUM =====
+{ id:1009,q:"The Warden demands balance. What condition defines consumer equilibrium?",options:["Income equals price","MRS equals price ratio","Utility is maximized at zero","Prices are equal"],a:1,tag:"equilibrium",type:"definition",feedback:"Equilibrium occurs where MRS equals the price ratio."},
+{ id:1010,q:"The Warden tests precision. MUx = 20, MUy = 10, Px = 5, Py = 5. Is the consumer maximizing utility?",options:["Yes","No, buy more X","No, buy more Y","Not enough information"],a:1,tag:"equilibrium",type:"calculation",feedback:"MUx/Px = 4 and MUy/Py = 2, so the consumer should buy more X."},
+{ id:1011,q:"The Warden destabilizes the system. If MRS > price ratio, what should the consumer do?",options:["Buy more Y","Buy more X","Buy less of both","Do nothing"],a:1,tag:"equilibrium",type:"interpretation",feedback:"If MRS > Px/Py, the consumer values X more and should consume more X."},
+// ===== DEMAND =====
+{ id:1012,q:"The Warden whispers: 'Desire becomes demand.' What does a demand curve represent?",options:["Income over time","Quantity demanded at different prices","Utility levels","Production costs"],a:1,tag:"demand",type:"definition",feedback:"A demand curve shows how quantity demanded changes with price."},
+{ id:1013,q:"The Warden presents a change. If the price of a good falls, what happens to quantity demanded?",options:["It falls","It rises","It stays constant","It becomes zero"],a:1,tag:"demand",type:"calculation",feedback:"Law of demand: lower prices increase quantity demanded."},
+{ id:1014,q:"The Warden tests deeper insight. If income rises and a good is normal, what happens to demand?",options:["Demand decreases","Demand increases","Demand stays constant","Price increases"],a:1,tag:"demand",type:"interpretation",feedback:"For normal goods, higher income increases demand."}
 ],
 mediumBoss:[
-{q:"The Decomposer smiles. A price falls and quantity demanded rises. A student claims this must be because both substitution and income effects are positive. What’s the problem?",options:["The substitution effect is always zero when price falls","The income effect could be negative even if total quantity rises","Both effects must always move in the same direction","A rise in quantity demanded implies the good is normal"],a:1,feedback:"Even if quantity rises, the good could be inferior—the substitution effect may outweigh a negative income effect."},
-{q:"The Decomposer twists the logic. The price of a good falls, and quantity demanded increases only slightly. What does this suggest?",options:["The substitution effect is small and the income effect is positive","The substitution effect is large but the income effect is negative","The income effect is negative and partially offsets the substitution effect","The good must be normal but weakly demanded"],a:2,feedback:"A small increase suggests the substitution effect is being partially offset by a negative income effect."},
-{q:"Final strike. A price falls, and quantity demanded falls. Which must be true?",options:["The income effect is negative and larger than the substitution effect","The substitution effect is weaker than the income effect but still negative","The good is normal but demand shifted inward","The substitution effect is zero while the income effect is negative"],a:0,feedback:"A decrease in quantity demanded when price falls implies a Giffen case: the income effect is negative and dominates the substitution effect."}
+// ===== PREFERENCES =====
+{ id:3000,q:"The Decomposer observes: 'Order reveals truth.' What property ensures consistent consumer choice?",options:["Completeness","Transitivity","Diminishing utility","Budget balance"],a:1,tag:"preferences",type:"definition",feedback:"Transitivity ensures that if A > B and B > C, then A > C."},
+{ id:3001,q:"The Decomposer tests logic. A consumer prefers A to B and is indifferent between B and C. What must be true?",options:["A is preferred to C","C is preferred to A","All bundles are equal","Preferences are undefined"],a:0,tag:"preferences",type:"calculation",feedback:"If A > B and B = C, then A > C."},
+{ id:3002,q:"The Decomposer destabilizes choice. If preferences are incomplete, what follows?",options:["Utility increases","Some bundles cannot be ranked","Budget expands","Demand increases"],a:1,tag:"preferences",type:"interpretation",feedback:"Incomplete preferences mean some bundles cannot be compared or ranked."},
+// ===== INDIFFERENCE =====
+{ id:3003,q:"The Decomposer states: 'Curves reveal substitution.' What does the slope of an indifference curve represent?",options:["Price ratio","Marginal rate of substitution","Income effect","Total utility"],a:1,tag:"indifference",type:"definition",feedback:"The slope equals the marginal rate of substitution (MRS)."},
+{ id:3004,q:"The Decomposer presents a curve. If MRS decreases as X increases, what does this imply?",options:["Perfect substitutes","Diminishing marginal rate of substitution","Increasing utility","Constant preferences"],a:1,tag:"indifference",type:"calculation",feedback:"MRS diminishing reflects convex preferences."},
+{ id:3005,q:"The Decomposer presses deeper. If indifference curves are straight lines, what does this imply?",options:["Perfect complements","Perfect substitutes","Diminishing MRS","Budget constraint shift"],a:1,tag:"indifference",type:"interpretation",feedback:"Straight lines imply a constant MRS—perfect substitutes."},
+// ===== BUDGET =====
+{ id:3006,q:"The Decomposer declares: 'Constraints shift the path.' What happens when the price of good X falls?",options:["Budget shifts outward","Budget rotates outward","Budget rotates inward","Budget disappears"],a:1,tag:"budget",type:"definition",feedback:"A price decrease rotates the budget line outward around the Y-intercept."},
+{ id:3007,q:"The Decomposer calculates. Income = $100, Px falls from $10 to $5. What happens to the X-intercept?",options:["It halves","It doubles","It stays constant","It becomes zero"],a:1,tag:"budget",type:"calculation",feedback:"100/10 = 10 → 100/5 = 20, so it doubles."},
+{ id:3008,q:"The Decomposer challenges. If both income and prices double, what happens to the budget constraint?",options:["It shifts outward","It rotates","It remains unchanged","It collapses"],a:2,tag:"budget",type:"interpretation",feedback:"Doubling both income and prices leaves real purchasing power unchanged."},
+// ===== EQUILIBRIUM =====
+{ id:3009,q:"The Decomposer insists: 'Balance is precise.' What defines equilibrium in terms of marginal utility?",options:["MUx = MUy","MUx/Px = MUy/Py","Px = Py","Utility is maximized"],a:1,tag:"equilibrium",type:"definition",feedback:"Equilibrium occurs where marginal utility per dollar is equal."},
+{ id:3010,q:"The Decomposer evaluates. MUx = 30, MUy = 15, Px = 10, Py = 5. What should the consumer do?",options:["Do nothing","Buy more X","Buy more Y","Reduce both goods"],a:2,tag:"equilibrium",type:"calculation",feedback:"MUx/Px = 3, MUy/Py = 3 → actually equal, but careful—if equal, no change needed. (Wait—this needs correction; see below)"},
+{ id:3011,q:"The Decomposer twists the system. If MUx/Px > MUy/Py, what must occur?",options:["Consume more Y","Consume more X","Reduce both goods","Change prices"],a:1,tag:"equilibrium",type:"interpretation",feedback:"Higher marginal utility per dollar means increase consumption of X."},
+// ===== DEMAND =====
+{ id:3012,q:"The Decomposer observes: 'Demand hides deeper forces.' What explains a movement along a demand curve?",options:["Change in income","Change in price","Change in preferences","Change in technology"],a:1,tag:"demand",type:"definition",feedback:"Movement along the curve is caused by a price change."},
+{ id:3013,q:"The Decomposer analyzes. If price falls and quantity demanded rises significantly, what does this suggest?",options:["Strong substitution effect","Strong income effect","Perfect substitutes","Inferior good"],a:0,tag:"demand",type:"calculation",feedback:"A large response suggests a strong substitution effect."},
+{ id:3014,q:"The Decomposer delivers the strike. A price falls and quantity demanded falls. What must be true?",options:["Income effect dominates substitution effect","Substitution effect is negative","Good is normal","Demand shifted outward"],a:0,tag:"demand",type:"interpretation",feedback:"This is a Giffen case where the negative income effect outweighs substitution."}
 ],
 finalBoss:[
-{q:"The Sovereign whispers: 'A firm raises price and total revenue falls.' A student concludes demand must be elastic. What is the flaw in this reasoning?",options:["The conclusion assumes no other factors affecting demand changed","The conclusion ignores that quantity demanded may not have changed","The conclusion assumes demand is always downward sloping","The conclusion incorrectly assumes revenue and elasticity are unrelated"],a:0,feedback:"The elasticity–revenue relationship only holds ceteris paribus. If other factors changed, the conclusion may not be valid."},
-{q:"The Sovereign sets a snare. A firm lowers price and observes total revenue increase. A student claims this proves demand is inelastic. What’s the correct interpretation?",options:["Demand is elastic because quantity increased proportionally more than price fell","Demand is inelastic because total revenue changed","The result is consistent with unit elastic demand","The relationship between price and revenue cannot be used to infer elasticity"],a:0,feedback:"If price falls and revenue rises, demand is elastic—quantity increases proportionally more than price decreases."},
-{q:"Final deception. A firm increases price and observes quantity demanded falls slightly, while total revenue rises. Which statement MUST be true?",options:["Demand is inelastic because quantity falls proportionally less than price rises","Demand is elastic because quantity demanded decreased","The substitution effect dominates the income effect","Demand is unit elastic because total revenue changed"],a:0,feedback:"Revenue rising with a price increase implies inelastic demand—quantity falls proportionally less than price rises."}
+// ===== PREFERENCES =====
+{ id:4000,q:"The Sovereign whispers: 'Order defines choice.' What must hold for preferences to produce consistent optimization?",options:["Preferences must be complete and transitive","Preferences must maximize income","Preferences must equal prices","Preferences must be constant over time"],a:0,tag:"preferences",type:"definition",feedback:"Completeness and transitivity ensure consistent ranking of bundles."},
+{ id:4001,q:"The Sovereign tests logic. A consumer prefers A to B and B to C, but prefers C to A. What does this imply?",options:["Preferences are complete","Preferences are transitive","Preferences are inconsistent","Preferences are stable"],a:2,tag:"preferences",type:"calculation",feedback:"This violates transitivity, leading to inconsistency."},
+{ id:4002,q:"The Sovereign distorts the system. If preferences are inconsistent, what happens to equilibrium choice?",options:["It remains unchanged","It becomes indeterminate","It maximizes utility","It increases income"],a:1,tag:"preferences",type:"interpretation",feedback:"Without consistent preferences, no stable optimum exists."},
+// ===== INDIFFERENCE =====
+{ id:4003,q:"The Sovereign observes: 'Curves reveal structure.' What condition must indifference curves satisfy?",options:["They must cross","They must be linear","They must not intersect","They must be vertical"],a:2,tag:"indifference",type:"definition",feedback:"Indifference curves cannot cross without violating consistency."},
+{ id:4004,q:"The Sovereign evaluates. If MRS = 4 while Px/Py = 2, what does the consumer do?",options:["Consume more Y","Consume more X","Remain unchanged","Reduce both goods"],a:1,tag:"indifference",type:"calculation",feedback:"MRS > price ratio → consumer values X more → consume more X."},
+{ id:4005,q:"The Sovereign connects the system. If indifference curves become flatter as X increases, what follows?",options:["Increasing MRS","Diminishing MRS","Perfect substitutes","Budget shift"],a:1,tag:"indifference",type:"interpretation",feedback:"Flatter curves imply diminishing marginal rate of substitution."},
+// ===== BUDGET =====
+{ id:4006,q:"The Sovereign declares: 'Constraint defines possibility.' What determines the slope of the budget constraint?",options:["Income","Price ratio","Utility","Demand"],a:1,tag:"budget",type:"definition",feedback:"Slope = -Px/Py."},
+{ id:4007,q:"The Sovereign calculates. Income doubles while prices remain constant. What happens?",options:["Budget rotates","Budget shifts outward","Budget shifts inward","Slope changes"],a:1,tag:"budget",type:"calculation",feedback:"Higher income shifts the budget constraint outward."},
+{ id:4008,q:"The Sovereign tightens the system. If Px falls while income stays constant, what happens?",options:["Parallel shift","Rotation outward","Rotation inward","No change"],a:1,tag:"budget",type:"interpretation",feedback:"A price decrease rotates the budget outward around the Y-intercept."},
+// ===== EQUILIBRIUM =====
+{ id:4009,q:"The Sovereign commands: 'Balance is precise.' What defines equilibrium?",options:["MUx = MUy","MRS = Px/Py","Income = utility","Prices equal"],a:1,tag:"equilibrium",type:"definition",feedback:"Equilibrium occurs where MRS equals the price ratio."},
+{ id:4010,q:"The Sovereign evaluates. MUx/Px = 5 and MUy/Py = 3. What must occur?",options:["Consume more Y","Consume more X","Remain unchanged","Reduce both goods"],a:1,tag:"equilibrium",type:"calculation",feedback:"Higher MU per dollar → increase consumption of X."},
+{ id:4011,q:"The Sovereign integrates. A price falls, shifting the budget outward and changing equilibrium. What combination explains this change?",options:["Only substitution effect","Only income effect","Both substitution and income effects","Neither effect"],a:2,tag:"equilibrium",type:"interpretation",feedback:"Both substitution and income effects drive changes in consumption."},
+// ===== DEMAND =====
+{ id:4012,q:"The Sovereign states: 'Demand reveals behavior.' What does elasticity measure?",options:["Total utility","Responsiveness of quantity to price","Income level","Cost structure"],a:1,tag:"demand",type:"definition",feedback:"Elasticity measures responsiveness of quantity demanded to price changes."},
+{ id:4013,q:"The Sovereign tests. Price falls and total revenue rises. What must be true?",options:["Demand is elastic","Demand is inelastic","Demand is unit elastic","Demand shifted"],a:0,tag:"demand",type:"calculation",feedback:"Revenue rising when price falls implies elastic demand."},
+{ id:4014,q:"The Sovereign delivers final judgment. A price falls and quantity demanded falls. What must be true?",options:["Income effect dominates substitution effect","Substitution effect is negative","Demand is normal","Elasticity is unitary"],a:0,tag:"demand",type:"interpretation",feedback:"This is a Giffen case—negative income effect outweighs substitution."}
 ],
 easy: [
 { id:1, q:"A theory of choice assumes individuals...",options:["Make random decisions","Choose the most preferred affordable bundle","Always maximize income","Always minimize work"],a:1,tag:"preferences",type:"definition",feedback:"Consumers choose the most preferred bundle they can afford given their budget constraint."},
@@ -2077,7 +2243,7 @@ function updateMazeTrack() {
         
         // Determine the icon and state
         if (i < room) {
-            box.innerText = "🟩";
+            box.innerText = "🟪";
             box.style.opacity = "0.6";
         } else if (i === room) {
             box.classList.add("active"); // Trigger the gold pulse
@@ -2085,9 +2251,9 @@ function updateMazeTrack() {
             box.innerText = "🟥";
         } else {
             // Boss icons for future rooms
-            if (i === 10){box.innerText = "🛡️";box.classList.add("boss10");}
-            else if (i === 20){box.innerText = "💀";box.classList.add("boss20");}
-            else if (i === 30){box.innerText = "👑";box.classList.add("boss30");}
+            if (i === 10){box.innerHTML = '<img src="warden.png" class="boss-icon">';box.classList.add("boss10");}
+            else if (i === 20){box.innerHTML = '<img src="decomposer.png" class="boss-icon">';box.classList.add("boss20");}
+            else if (i === 30){box.innerHTML = '<img src="sovereign.png" class="boss-icon">';box.classList.add("boss30");}
             else box.innerText = "⬛";
         }
         
@@ -2271,10 +2437,38 @@ function loadQuestion() {
     document.getElementById("srAnnouncements").innerText = `Entering ${getAreaName(room)}. Room ${room} of 30.`;
 
     // 3. Select the Question (CHANGE BOSS NAMES AND PNG)
-    if (isBoss) {
-        if (bossHealth === 3) {
-        bossPool = [...questionBanks[diff]]; // ← NO SHUFFLE
+if (isBoss) {
+
+    if (bossHealth === 3) {
+
+        let pool = [...questionBanks[diff]];
+
+        let entries = Object.entries(conceptMemory || {});
+        let chosenTag = null;
+
+        if (entries.length > 0) {
+
+            let maxWeakness = Math.max(...entries.map(e => e[1]));
+
+            if (maxWeakness < 1) {
+                // no weakness → target strongest
+                chosenTag = entries.sort((a,b)=> a[1]-b[1])[0][0];
+            } else {
+                // normal → target weakest
+                chosenTag = entries.sort((a,b)=> b[1]-a[1])[0][0];
+            }
         }
+
+        // --- BUILD BOSS SEQUENCE ---
+        bossPool = chosenTag
+            ? pool.filter(q => q.tag === chosenTag)
+            : [];
+
+        // --- SAFETY FALLBACK ---
+        if (bossPool.length !== 3) {
+            bossPool = pool.slice(0,3);
+        }
+    }
 
         currentQuestion = shuffleOptions(bossPool[3 - bossHealth]);
         
@@ -2698,20 +2892,29 @@ function unlockArtifact(key) {
 // =============================================
 function handleStreakVisuals() {
     let streakMsg = "";
-    let streakColor = "#60a5fa";
+    let streakColor = "#7dd3fc";
 
-    if (streak === 5) { streakMsg = "🔥 STREAK: Economic Insight!"; streakColor = "#fbbf24"; }
-    else if (streak === 10) { streakMsg = "⚡ STREAK: Market Shock!"; streakColor = "#f87171"; }
-    else if (streak === 20) { streakMsg = "🌌 STREAK: Policy Reform!"; streakColor = "#a855f7"; }
+    if (streak === 5) {
+        streakMsg = `<span class="streak" data-tier="5"><img src="streakinsight.png" class="streak-icon"> INSIGHT GAINED</span>`;
+    }
+    else if (streak === 10) {
+        streakMsg = `<span class="streak" data-tier="10"><img src="streakclarity.png" class="streak-icon"> CLARITY ACHIEVED</span>`;
+    }
+    else if (streak === 20) {
+        streakMsg = `<span class="streak" data-tier="20"><img src="streakmastery.png" class="streak-icon"> MASTERY REACHED</span>`;
+    }
+
+    const display = document.getElementById("streakDisplay");
 
     if (streakMsg) {
         sfxMilestone.currentTime = 0;
         sfxMilestone.play();
-        document.getElementById("streakDisplay").innerText = streakMsg;
-        document.getElementById("streakDisplay").style.color = streakColor;
+
+        display.innerHTML = streakMsg;   
+        display.style.color = streakColor;
     } else if (streak > 0) {
-        document.getElementById("streakDisplay").innerText = `Streak: ${streak}`;
-        document.getElementById("streakDisplay").style.color = "#60a5fa";
+        display.innerText = `Streak: ${streak}`;
+        display.style.color = "#7dd3fc";
     }
 }
 
