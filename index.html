@@ -2663,235 +2663,233 @@ function displayQuestion() {
 // Check for artifact names and CHANGE
      
 function answer(choice) {
+
     // --- GLOBAL MEMORY DECAY ---
-    for(let tag in conceptMemory){
-    conceptMemory[tag] *= 0.95;
+    for (let tag in conceptMemory) {
+        conceptMemory[tag] *= 0.95;
     }
+
     totalAttempts++;
+
     const isBossRoom = (room === 10 || room === 20 || room === 30);
     const msgElement = document.getElementById("message");
     const wizard = document.getElementById("wizardImage");
     const isCorrect = (choice === currentQuestion.a);
-    sendGameData({
-    game: "The Labyrinth of Choice",
-    user: username || "anonymous",
-    room: room,
-    question: currentQuestion.id || "unknown",
-    correct: isCorrect ? 1 : 0,
-    tag: currentQuestion.tag || "none",
-	type: currentQuestion.type || "none",
-    responseTime: Date.now() - questionStartTime,
-	attempt: totalAttempts,
-	streak: streak,
-	elapsedTime: Date.now() - startTime
-	});
-    if (choice === currentQuestion.a) {
-        if(isBossRoom){
-        sfxCorrect.pause();
-        sfxCorrect.currentTime = 0;
 
-        sfxBossHit.pause();
-        sfxBossHit.currentTime = 0;
-        sfxBossHit.play().catch(()=>{});
-    } else {
-        sfxBossHit.pause();
-        sfxBossHit.currentTime = 0;
-
-        sfxCorrect.pause();
-        sfxCorrect.currentTime = 0;
-        sfxCorrect.play().catch(()=>{});
-    }
-        wizardSpeak(getWizardFeedback("correct"));
-        wizard.style.transform = "scale(1.1)";
-        setTimeout(()=>{
-        wizard.style.transform = "";
-        },200);
-        // If this was a concept detour question, return player to main path
-        if(detourActive){
-        detourActive = false;
-        msgElement.innerHTML = `<span class='fade-out-text'>Correct! Concept restored. Moving deeper...</span>`;
-        room = Math.min(room + 1, detourReturnRoom);
-        localStorage.setItem("gauntletRoom", room);
-        setTimeout(loadQuestion, TIMING.normal);
-        return;
-    }
-        correctAnswers++;
+    // =============================================
+    // 🔥 UPDATE STREAK FIRST (SOURCE OF TRUTH)
+    // =============================================
+    if (isCorrect) {
         streak++;
         if (streak > maxStreak) maxStreak = streak;
+    } else {
+        streak = 0;
+    }
+
+    // =============================================
+    // 🔥 TRACK EVERYTHING (ONE LOCATION ONLY)
+    // =============================================
+    sendGameData({
+        game: "The Labyrinth of Choice",
+        event: "question",
+        user: username || "anonymous",
+        room: room,
+        question: currentQuestion.id || "unknown",
+        correct: isCorrect ? 1 : 0,
+        tag: currentQuestion.tag || "none",
+        type: currentQuestion.type || "none",
+        responseTime: Date.now() - questionStartTime,
+        attempt: totalAttempts,
+        streak: streak,
+        elapsedTime: Date.now() - startTime
+    });
+
+    // =============================================
+    // ✅ CORRECT ANSWER LOGIC
+    // =============================================
+    if (isCorrect) {
+
+        if (isBossRoom) {
+            sfxCorrect.pause();
+            sfxCorrect.currentTime = 0;
+
+            sfxBossHit.pause();
+            sfxBossHit.currentTime = 0;
+            sfxBossHit.play().catch(() => {});
+        } else {
+            sfxBossHit.pause();
+            sfxBossHit.currentTime = 0;
+
+            sfxCorrect.pause();
+            sfxCorrect.currentTime = 0;
+            sfxCorrect.play().catch(() => {});
+        }
+
+        wizardSpeak(getWizardFeedback("correct"));
+
+        wizard.style.transform = "scale(1.1)";
+        setTimeout(() => {
+            wizard.style.transform = "";
+        }, 200);
+
+        // --- DETOUR EXIT ---
+        if (detourActive) {
+            detourActive = false;
+            msgElement.innerHTML = `<span class='fade-out-text'>Correct! Concept restored. Moving deeper...</span>`;
+            room = Math.min(room + 1, detourReturnRoom);
+            localStorage.setItem("gauntletRoom", room);
+            setTimeout(loadQuestion, TIMING.normal);
+            return;
+        }
+
+        correctAnswers++;
         handleStreakVisuals();
 
         // --- LEARNING: reduce weakness ---
-        if(currentQuestion.tag){
+        if (currentQuestion.tag) {
             conceptMemory[currentQuestion.tag] =
-            (conceptMemory[currentQuestion.tag] || 0) * 0.7;
+                (conceptMemory[currentQuestion.tag] || 0) * 0.7;
         }
-     
-       // --- BOSS HIT LOGIC ---
-        if(isBossRoom){
-        bossHealth--;
-        msgElement.innerHTML = `<span style='color:#f87171;font-weight:bold;'>⚔ HIT! Boss Health: ${bossHealth}/3</span>`;
-        triggerBossShake();
-        if (bossHealth > 0) {
-        setTimeout(loadQuestion, TIMING.boss);
+
+        // --- BOSS LOGIC ---
+        if (isBossRoom) {
+            bossHealth--;
+
+            msgElement.innerHTML = `<span style='color:#f87171;font-weight:bold;'>⚔ HIT! Boss Health: ${bossHealth}/3</span>`;
+            triggerBossShake();
+
+            if (bossHealth > 0) {
+                setTimeout(loadQuestion, TIMING.boss);
+                return;
+            }
+
+            // Boss defeated
+            sendGameData({
+                game: "The Labyrinth of Choice",
+                event: "boss_defeated",
+                user: username,
+                room: room
+            });
+
+            bossPool = [];
+
+            if (room === 10) {
+                document.getElementById("vaultSeal").classList.add("unlocked");
+                localStorage.setItem("vaultSeal", "true");
+                showArtifact(artifacts.seal.img, artifacts.seal.title, artifacts.seal.text);
+            }
+
+            if (room === 20) {
+                document.getElementById("vaultPrism").classList.add("unlocked");
+                localStorage.setItem("vaultPrism", "true");
+                showArtifact(artifacts.prism.img, artifacts.prism.title, artifacts.prism.text);
+            }
+
+            if (room === 30) {
+                document.getElementById("vaultScepter").classList.add("unlocked");
+                localStorage.setItem("vaultScepter", "true");
+                showArtifact(artifacts.scepter.img, artifacts.scepter.title, artifacts.scepter.text);
+            }
+
+            showKnowledgeRoom(room);
+
+            bossHealth = 3;
+            bossPool = [];
+
+            return;
+        }
+
+        // --- NORMAL PROGRESSION ---
+        msgElement.innerHTML = "";
+        room++;
+        localStorage.setItem("gauntletRoom", room);
+        showHallwayTransition(currentQuestion.feedback);
+
         return;
-        }
-
-	sendGameData({
-    	  game: "The Labyrinth of Choice",
-          event: "boss_defeated",
-    	  user: username,
-    	  room: room
-        });
-
-         bossPool = [];
-        // Boss defeated (CHANGE ARTIFACT NAMES)
-        if(room === 10){
-        document.getElementById("vaultSeal").classList.add("unlocked");
-        localStorage.setItem("vaultSeal", "true");
-        showArtifact(artifacts.seal.img, artifacts.seal.title, artifacts.seal.text);
-        }
-
-        if(room === 20){
-        document.getElementById("vaultPrism").classList.add("unlocked");
-        localStorage.setItem("vaultPrism", "true");
-        showArtifact(artifacts.prism.img, artifacts.prism.title, artifacts.prism.text);
-        }
-
-        if(room === 30){
-        document.getElementById("vaultScepter").classList.add("unlocked");
-        localStorage.setItem("vaultScepter", "true");
-        showArtifact(artifacts.scepter.img, artifacts.scepter.title, artifacts.scepter.text);
-        }
-
-// ... (Inside the Boss Victory check)
-        showKnowledgeRoom(room);
-        bossHealth = 3;
-        bossPool = []; // Clear the pool so the next boss is fresh
-        return; 
-
-    } // <--- THIS ends the "if(isBossRoom)" block
-
-    // --- NORMAL ROOM PROGRESSION ---
-    // This code ONLY runs if choice === currentQuestion.a 
-    // AND it wasn't a Boss Room (or a Detour).
-   msgElement.innerHTML = "";
-   room++;
-   localStorage.setItem("gauntletRoom", room);
-   showHallwayTransition(currentQuestion.feedback);
-   return;
-
-// =============================================
-// ❌ WRONG ANSWER BLOCK — ALL FAILURE LOGIC
-// =============================================
-       
-    } else {
-        if(isBossRoom){
-        sfxWrong.volume = 0.7;
-        } else {
-        sfxWrong.volume = 0.5;
-        }    
-        sfxWrong.currentTime = 0;
-        sfxWrong.play().catch(()=>{});
-        wizardSpeak(getWizardFeedback("wrong"));
-        wizard.style.transform = "translateX(-6px)";
-        setTimeout(()=>{
-            wizard.style.transform = "translateX(6px)";
-            setTimeout(()=>{
-                wizard.style.transform = "";
-            },100);
-        },100);
-        streak = 0;
-
-// --- LEARNING: increase weakness (THIS DRIVES DETOURS) ---
-if(currentQuestion.tag){
-    conceptMemory[currentQuestion.tag] =
-    (conceptMemory[currentQuestion.tag] || 0) + 1;
-}
-
-// 🔍 DEBUG: verify detour trigger conditions
-console.log("WRONG TAG:", currentQuestion.tag);
-console.log("UPDATED MEMORY:", conceptMemory[currentQuestion.tag]);
-
-// =============================================
-// CONCEPT DETOUR SYSTEM — ADVANCED
-// =============================================
-// When a student repeatedly misses a concept,
-// they are forced into a focused "mini quiz"
-//
-// This is key to reinforcement learning.
-//
-// You can ADD questions to pools,
-// but do NOT change trigger logic unless advanced.
-
-console.log("DETOUR CHECK VALUE:", conceptMemory[currentQuestion.tag]);
-       
-   if(!detourActive &&currentQuestion.tag &&(conceptMemory[currentQuestion.tag] || 0) >= 2){
-
-    let conceptPool = null;
-
-    // Determine difficulty based on room
-    if(room <= 9 && easyConceptPools[currentQuestion.tag]){
-        conceptPool = easyConceptPools[currentQuestion.tag];
     }
 
-    if(room >= 11 && room <= 19 && mediumConceptPools[currentQuestion.tag]){
-        conceptPool = mediumConceptPools[currentQuestion.tag];
-    }
-
-       if(conceptPool){
-
-        detourActive = true;
-        detourReturnRoom = room;
-
-        currentQuestion = shuffleOptions(pickConceptQuestion(conceptPool));
-
-        document.getElementById("question").innerText = "Concept Check: " + currentQuestion.q;
-        document.getElementById("formulaHint").innerText = currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
-
-        msgElement.innerHTML = `<span class='fade-out-text'>You falter… The labyrinth demands a concept check.</span>`;
-
-        displayQuestion();
-        return;
-        }
-       }
-
-    // Normal failure handling
-    document.getElementById("streakDisplay").innerText = "";
-    bossHealth = 3;
-
-// =============================================
-    // SAFE FALLBACK LOGIC (NO BOSS REGRESSION)
     // =============================================
-   // 1. Reset health and CLEAR the pool 
-    // Doing this BEFORE loadQuestion() is the secret sauce.
-    bossHealth = 3;
-    bossPool = []; 
+    // ❌ WRONG ANSWER LOGIC
+    // =============================================
 
-    // 2. Normal failure handling
+    if (isBossRoom) {
+        sfxWrong.volume = 0.7;
+    } else {
+        sfxWrong.volume = 0.5;
+    }
+
+    sfxWrong.currentTime = 0;
+    sfxWrong.play().catch(() => {});
+
+    wizardSpeak(getWizardFeedback("wrong"));
+
+    wizard.style.transform = "translateX(-6px)";
+    setTimeout(() => {
+        wizard.style.transform = "translateX(6px)";
+        setTimeout(() => {
+            wizard.style.transform = "";
+        }, 100);
+    }, 100);
+
+    // --- LEARNING: increase weakness ---
+    if (currentQuestion.tag) {
+        conceptMemory[currentQuestion.tag] =
+            (conceptMemory[currentQuestion.tag] || 0) + 1;
+    }
+
+    // --- DETOUR TRIGGER ---
+    if (!detourActive && currentQuestion.tag && (conceptMemory[currentQuestion.tag] || 0) >= 2) {
+
+        let conceptPool = null;
+
+        if (room <= 9 && easyConceptPools[currentQuestion.tag]) {
+            conceptPool = easyConceptPools[currentQuestion.tag];
+        }
+
+        if (room >= 11 && room <= 19 && mediumConceptPools[currentQuestion.tag]) {
+            conceptPool = mediumConceptPools[currentQuestion.tag];
+        }
+
+        if (conceptPool) {
+            detourActive = true;
+            detourReturnRoom = room;
+
+            currentQuestion = shuffleOptions(pickConceptQuestion(conceptPool));
+
+            document.getElementById("question").innerText = "Concept Check: " + currentQuestion.q;
+            document.getElementById("formulaHint").innerText =
+                currentQuestion.hint ? "💡 Hint: " + currentQuestion.hint : "";
+
+            msgElement.innerHTML = `<span class='fade-out-text'>You falter… The labyrinth demands a concept check.</span>`;
+
+            displayQuestion();
+            return;
+        }
+    }
+
+    // --- FALLBACK LOGIC ---
     document.getElementById("streakDisplay").innerText = "";
+
+    bossHealth = 3;
+    bossPool = [];
 
     const bossRooms = [10, 20, 30];
 
-    // Original fallback amount
     let fallback = (room % 10 === 0 ? 3 : (room >= 21 ? 2 : 1));
     let newRoom = room - fallback;
 
-    // Prevent falling into boss rooms
     while (bossRooms.includes(newRoom)) {
         newRoom++;
     }
 
-    // 3. Update the room and save
     room = Math.max(1, newRoom);
     localStorage.setItem("gauntletRoom", room);
 
-    // 4. Alert the player
     alert(`Incorrect! You trip in the darkness and tumble back to Room ${room}.`);
 
-    // 5. Final Step: Load the new room state
     loadQuestion();
-    }
 }
+	 
 function unlockArtifact(key) {
     const id = "vault" + key.charAt(0).toUpperCase() + key.slice(1);
     document.getElementById(id).classList.add("unlocked");
