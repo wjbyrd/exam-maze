@@ -3433,9 +3433,7 @@ function sendGameData(payload){
     fetch("https://script.google.com/macros/s/AKfycbzEaOLUKs1snA7lN7ELjnoqKlUQhGhaHLyjjfiD5LqTP16xnJ8NmR2Q7PXydlEb3fLpUA/exec", {
         method: "POST",
         body: JSON.stringify(payload),
-        headers: {
-            "Content-Type": "application/json"
-        }
+		mode: "no-cors"
     }).catch(err => console.log("Tracking failed", err));
 }
     
