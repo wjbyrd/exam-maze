@@ -1987,7 +1987,8 @@ elasticity:[
 // =============================================   
 function shuffleOptions(question){
     let q = {
-        q: question.q,
+        id: question.id,
+		q: question.q,
         options: [...question.options],
         a: question.a,
         feedback: question.feedback,
