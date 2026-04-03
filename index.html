@@ -2477,6 +2477,7 @@ function loadQuestion() {
 
         // 2. Select the specific question based on boss health
         currentQuestion = shuffleOptions(bossPool[3 - bossHealth]);
+	    console.log("AFTER SELECT:", currentQuestion);
 
        // 3. Boss Identity UI (Logic moved ABOVE the return)
         let bTitle = room === 10 ? "WARDEN OF INDIFFERENCE" : room === 20 ? "THE DECOMPOSER OF CHOICE" : "SOVEREIGN OF ELASTICITY";
