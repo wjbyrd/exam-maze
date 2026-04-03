@@ -1135,6 +1135,7 @@ let bossPool = [];
 let correctAnswers = 0; 
 let maxStreak = 0; 
 let username = "";
+let questionStartTime = 0;
 let streak = 0; 
 let startTime; // Will be set in startGame()
 let room = localStorage.getItem("gauntletRoom") ? parseInt(localStorage.getItem("gauntletRoom")) : 1;
@@ -2403,7 +2404,8 @@ function playFinalBossMusic(){
 // Changing logic here will break progression.
      
 function loadQuestion() {
-    updateMazeTrack();
+    questionStartTime = Date.now();
+	updateMazeTrack();
     const questionElement = document.getElementById("question");
     const msgElement = document.getElementById("message");
     const gameBox = document.getElementById("gameBox");
