@@ -2669,7 +2669,7 @@ function answer(choice) {
     const isCorrect = (choice === currentQuestion.a);
     sendGameData({
     game: "The Labyrinth of Choice",
-    user: userName || "anonymous",
+    user: username || "anonymous",
     room: room,
     question: currentQuestion.id || "unknown",
     correct: isCorrect ? 1 : 0,
@@ -2730,7 +2730,7 @@ function answer(choice) {
 	sendGameData({
     	  game: "The Labyrinth of Choice",
           event: "boss_defeated",
-    	  user: userName,
+    	  user: username,
     	  room: room
         });
 
