@@ -33,7 +33,7 @@ If something breaks, check:
 <meta name="viewport" content="width=device-width, initial-scale=1">
     
 <!-- Title can be changed to whatever the game needs -->
-<title>The Archives of Microeconomics</title>
+<title>The Labyrinth of Choice</title>
    
 <style>
 /* =========================================
@@ -1406,6 +1406,11 @@ function startGame() {
     
     username = inputName;
     localStorage.setItem("gauntletUser", username);
+   sendGameData({
+    game: "The Labyrinth of Choice",
+    event: "start",
+    user: username
+});
 
 // =============================================
 // RESET CORE GAME STATE — DO NOT MODIFY STRUCTURE
@@ -2661,6 +2666,16 @@ function answer(choice) {
     const isBossRoom = (room === 10 || room === 20 || room === 30);
     const msgElement = document.getElementById("message");
     const wizard = document.getElementById("wizardImage");
+    const isCorrect = (choice === currentQuestion.a);
+    sendGameData({
+    game: "The Labyrinth of Choice",
+    user: playerName || "anonymous",
+    room: room,
+    question: currentQuestion.id || "unknown",
+    correct: isCorrect ? 1 : 0,
+    tag: currentQuestion.tag || "none",
+    responseTime: Date.now() - questionStartTime
+	});
     if (choice === currentQuestion.a) {
         if(isBossRoom){
         sfxCorrect.pause();
@@ -2711,6 +2726,14 @@ function answer(choice) {
         setTimeout(loadQuestion, TIMING.boss);
         return;
         }
+
+	sendGameData({
+    	  game: "The Labyrinth of Choice",
+          event: "boss_defeated",
+    	  user: playerName,
+    	  room: room
+        });
+
          bossPool = [];
         // Boss defeated (CHANGE ARTIFACT NAMES)
         if(room === 10){
@@ -2736,6 +2759,7 @@ function answer(choice) {
         bossHealth = 3;
         bossPool = []; // Clear the pool so the next boss is fresh
         return; 
+
     } // <--- THIS ends the "if(isBossRoom)" block
 
     // --- NORMAL ROOM PROGRESSION ---
@@ -2859,33 +2883,6 @@ console.log("DETOUR CHECK VALUE:", conceptMemory[currentQuestion.tag]);
     loadQuestion();
     }
 }
-
-// =============================================
-// UI FEEDBACK & REWARD SYSTEM — SAFE TO CUSTOMIZE
-// =============================================
-// These functions control:
-// - visual feedback (streaks, boss shake, transitions)
-// - reward display (artifacts)
-// - immersion elements (hallway transitions)
-//
-// SAFE TO EDIT:
-// - text, colors, messages
-// - images and styling
-// - timing (setTimeout delays)
-//
-// DO NOT MODIFY:
-// - function names (called elsewhere in engine)
-// - core triggers (when these are called)
-//
-// Breaking these won't destroy logic,
-// but WILL break user experience.
-//
-// This is presentation + feedback layer.
-// =============================================
-
-// Unlocks artifact in vault + saves progress
-// Requires matching ID format: "vault" + ArtifactName
-// Safe to customize artifact visuals/text only
 function unlockArtifact(key) {
     const id = "vault" + key.charAt(0).toUpperCase() + key.slice(1);
     document.getElementById(id).classList.add("unlocked");
@@ -3430,6 +3427,16 @@ function copyResults() {
             btn.style.background = originalColor;
         }, 2000);
     });
+}
+
+function sendGameData(payload){
+    fetch("https://script.google.com/macros/s/AKfycbzEaOLUKs1snA7lN7ELjnoqKlUQhGhaHLyjjfiD5LqTP16xnJ8NmR2Q7PXydlEb3fLpUA/exec", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).catch(err => console.log("Tracking failed", err));
 }
     
 // =====================================================
