@@ -2699,9 +2699,9 @@ function answer(choice) {
         tag: currentQuestion.tag || "none",
         type: currentQuestion.type || "none",
         responseTime: Date.now() - questionStartTime,
-        attempt: totalAttempts,
-        streak: streak,
-        elapsedTime: Date.now() - startTime
+		attempt: totalAttempts ?? 0,
+		streak: streak ?? 0,
+		elapsedTime: startTime ? (Date.now() - startTime) : 0
     });
 
     // =============================================
