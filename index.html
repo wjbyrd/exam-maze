@@ -2393,7 +2393,7 @@ function getMUPerDollar() {
     return {
         q: `A consumer receives MUx = ${mu} from good X. The price of X is $${price}. What is the Marginal Utility per dollar?`,
         options: [`${(mu/price).toFixed(1)}`, `${mu}`, `${price/mu}`, `${(mu*price)}`],
-        a: 0,  type: "calculation", feedback:`MU per dollar = MU / Price = ${mu} / ${price} = ${(mu/price).toFixed(1)}`
+        a: 0, tag: "consumer_equilibrium", type: "calculation", feedback:`MU per dollar = MU / Price = ${mu} / ${price} = ${(mu/price).toFixed(1)}`
     };
 }
 
@@ -2408,7 +2408,7 @@ function getEquilibriumCheck() {
     return {
         q: `A consumer is in equilibrium. MUx = ${muX} and Px = $${pX}. If the price of Good Y (Py) is $${pY}, what must be the Marginal Utility of Good Y (MUy)?`,
         options: [`${correctMUy}`, `${correctMUy / 2}`, `${correctMUy + 10}`, `${muX}`],
-        a: 0,  type: "calculation", feedback:`Consumer equilibrium requires MUx/Px = MUy/Py. ${muX}/${pX} = ${ratio}. So MUy must equal ${correctMUy}.`
+        a: 0, tag: "consumer_equilibrium", type: "calculation", feedback:`Consumer equilibrium requires MUx/Px = MUy/Py. ${muX}/${pX} = ${ratio}. So MUy must equal ${correctMUy}.`
     };
 }
     
@@ -2466,7 +2466,7 @@ return {
         "Revenue stays the same because demand is unit elastic",
         "Revenue cannot be determined from elasticity"
     ],
-    a: elasticityVal > 1 ? 1 : (elasticityVal < 1 ? 0 : 2),
+    a: elasticityVal > 1 ? 1 : (elasticityVal < 1 ? 0 : 2), tag: "elasticity",
     type: "calculation",
     hint: "Calculate elasticity, then apply the revenue rule",
     feedback: `Elasticity ≈ ${elasticity}. Demand is ${classify(elasticityVal)}, so ${elasticityVal > 1 ? "revenue falls when price rises." : elasticityVal < 1 ? "revenue rises when price rises." : "revenue stays the same."}`
@@ -2491,7 +2491,7 @@ return {
         `It does not change because willingness to pay is fixed`,
         `It decreases because price falls`
     ],
-    a: 0,
+    a: 0, tag: "consumer_surplus",
     type: "calculation",
     feedback: `Consumer surplus increases by the price drop since WTP stays constant while price falls.`
 };
