@@ -2032,7 +2032,7 @@ mediumBoss:[
 { id:3008,q:"The Decomposer challenges. If both income and prices double, what happens to the budget constraint?",options:["It shifts outward","It rotates","It remains unchanged","It collapses"],a:2,tag:"budget",type:"interpretation",feedback:"Doubling both income and prices leaves real purchasing power unchanged."},
 // ===== EQUILIBRIUM =====
 { id:3009,q:"The Decomposer insists: 'Balance is precise.' What defines equilibrium in terms of marginal utility?",options:["MUx = MUy","MUx/Px = MUy/Py","Px = Py","Utility is maximized"],a:1,tag:"equilibrium",type:"definition",feedback:"Equilibrium occurs where marginal utility per dollar is equal."},
-{ id:3010,q:"The Decomposer evaluates. MUx = 30, MUy = 15, Px = 10, Py = 5. What should the consumer do?",options:["Do nothing","Buy more X","Buy more Y","Reduce both goods"],a:2,tag:"equilibrium",type:"calculation",feedback:"MUx/Px = 3, MUy/Py = 3 → actually equal, but careful—if equal, no change needed. (Wait—this needs correction; see below)"},
+{ id:3010,q:"The Decomposer evaluates. MUx = 30, MUy = 15, Px = 10, Py = 5. What should the consumer do?",options:["Do nothing","Buy more X","Buy more Y","Reduce both goods"],a:0,tag:"equilibrium",type:"calculation",feedback:"MUx/Px = 30/10 = 3 and MUy/Py = 15/5 = 3. Because marginal utility per dollar is equal across both goods, the consumer is already maximizing utility and should not reallocate spending."},
 { id:3011,q:"The Decomposer twists the system. If MUx/Px > MUy/Py, what must occur?",options:["Consume more Y","Consume more X","Reduce both goods","Change prices"],a:1,tag:"equilibrium",type:"interpretation",feedback:"Higher marginal utility per dollar means increase consumption of X."},
 // ===== DEMAND =====
 { id:3012,q:"The Decomposer observes: 'Demand hides deeper forces.' What explains a movement along a demand curve?",options:["Change in income","Change in price","Change in preferences","Change in technology"],a:1,tag:"demand",type:"definition",feedback:"Movement along the curve is caused by a price change."},
@@ -3072,7 +3072,7 @@ function answer(choice) {
         event: "question",
         user: username || "anonymous",
         room: room,
-        question: currentQuestion.id || "unknown",
+        question: currentQuestion.id || "0",
         correct: isCorrect ? 1 : 0,
         tag: currentQuestion.tag || "none",
         type: currentQuestion.type || "none",
@@ -3612,11 +3612,22 @@ sendGameData({
     game: "The Labyrinth of Choice",
     event: "complete",
     user: username,
+    room: room,
+    questionId: 0,
+    correct: 1,
+    tag: "",
+    type: "",
+    objective: "",
+    responseTime: 0,
+    attempt: totalAttempts,
+    streak: streak,
+    elapsedTime: startTime ? (Date.now() - startTime) : 0,
+    adaptiveMode: "",
     totalTime: totalTimeMs,
-    accuracy: accuracy,
+    accuracy: accuracy / 100,
     maxStreak: maxStreak,
-    attempts: totalAttempts,
-    code: verificationCode
+    totalAttempts: totalAttempts,
+    verificationCode: verificationCode
 });
 	
     
