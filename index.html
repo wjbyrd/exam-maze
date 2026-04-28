@@ -1893,7 +1893,7 @@ function planRemediation(question, responseTime){
         active: true,
         stage: carelessMiss ? "bridge" : "repair",
         tag: question.tag,
-        objective: currentQuestion.objective || inferObjective(currentQuestion)
+        objective: currentQuestion.objective || inferObjective(currentQuestion),
         sourceType: question.type || "default",
         returnRoom: room,
         originQuestionId: question.id || null,
